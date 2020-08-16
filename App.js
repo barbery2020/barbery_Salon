@@ -5,7 +5,7 @@ export default class App extends Component {
   render() {
     return (
       <View>
-        <Text>Please only push in developer branch</Text>
+        <Text>Getting along with github desktop</Text>
       </View>
     );
   }
