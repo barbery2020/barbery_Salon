@@ -5,7 +5,7 @@ export default class App extends Component {
   render() {
     return (
       <View>
-        <Text>Getting along with github desktop</Text>
+        <Text>Created new branch for barber managment</Text>
       </View>
     );
   }
