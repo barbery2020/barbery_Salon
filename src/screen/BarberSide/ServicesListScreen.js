@@ -48,13 +48,13 @@ function ServicesListScreen(props) {
             subTitle={'Rs.' + item.price}
             status={item.status}
             image={item.image}
-            onPress={() => props.navigation.navigate('ServiceDetailsScreen')}
+            onPress={() => props.navigation.navigate('Service Details')}
           />
         )}
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => props.navigation.navigate('ServicesEditScreen')}>
+        onPress={() => props.navigation.navigate('Add New Service')}>
         <Image
           style={styles.icon}
           source={require('../../assets/icons/plus.png')}

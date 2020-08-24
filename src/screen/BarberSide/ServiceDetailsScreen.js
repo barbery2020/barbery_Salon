@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, ScrollView, Text, Image, Switch, StyleSheet} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  Image,
+  Switch,
+  StyleSheet,
+} from 'react-native';
 
 import colors from '../../styles/colors';
 import Separator from '../../components/Separator';
@@ -10,10 +18,13 @@ function ServiceDetailsScreen(props) {
   return (
     <ScrollView>
       <View>
-        <Image
-          style={styles.image}
-          source={require('../../assets/images/image_2.jpg')}
-        />
+        <TouchableWithoutFeedback
+          onPress={() => props.navigation.navigate('Image View')}>
+          <Image
+            style={styles.image}
+            source={require('../../assets/images/image_2.jpg')}
+          />
+        </TouchableWithoutFeedback>
         <View style={styles.detailsContainer}>
           <Text style={styles.titleCategory}>Category>Beard Dressing</Text>
           <Text style={styles.title}>Trending Beard Shave</Text>

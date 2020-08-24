@@ -25,7 +25,7 @@ const listings = [
   {
     id: 3,
     title: 'Appointments Completed',
-    price: 2014,
+    price: 1976,
   },
   {
     id: 4,
