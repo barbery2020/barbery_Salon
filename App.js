@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
+// import {NavigationContainer} from '@react-navigation/native';
+// import {createStackNavigator} from '@react-navigation/stack';
 
-import ServicesEditScreen from './src/screen/BarberSide/ServicesEditScreen';
+import HomeScreen from './src/screen/BarberSide/HomeScreen';
 
 export default function App() {
-  return <ServicesEditScreen />;
+  return <HomeScreen />;
 }

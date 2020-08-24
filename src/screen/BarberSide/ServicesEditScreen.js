@@ -93,7 +93,7 @@ function ServicesEditScreen(props) {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, {backgroundColor: colors.red}]}
-        onPress={() => console.log('Add Service button pressed')}>
+        onPress={() => props.navigation.navigate('ServicesListScreen')}>
         <Text style={styles.text}>Add Service</Text>
       </TouchableOpacity>
     </View>
