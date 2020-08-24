@@ -1,28 +1,32 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, TouchableHighlight} from 'react-native';
 
 import colors from '../styles/colors';
 
-function Card({title, subTitle, status, image}) {
+function Card({title, subTitle, status, image, onPress}) {
   return (
-    <View style={styles.card}>
-      <Image style={styles.image} source={image} />
-      <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subTitle}>{subTitle}</Text>
-        <Text style={styles.status}>{status}</Text>
+    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+      <View style={styles.card}>
+        <Image style={styles.image} source={image} />
+        <View style={styles.detailsContainer}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subTitle}>{subTitle}</Text>
+          <Text style={styles.status}>{status}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableHighlight>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
     borderRadius: 15,
     backgroundColor: colors.white,
+    elevation: 5,
+    flexDirection: 'row',
     marginBottom: 20,
     overflow: 'hidden',
+    shadowRadius: 20,
   },
   detailsContainer: {
     padding: 20,
@@ -33,14 +37,15 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: colors.red,
-    fontWeight: 'bold',
+    fontWeight: '200',
   },
   status: {
     color: colors.green,
-    fontWeight: 'bold',
+    fontWeight: '300',
     marginTop: 35,
   },
   title: {
+    fontWeight: 'bold',
     marginBottom: 7,
   },
 });

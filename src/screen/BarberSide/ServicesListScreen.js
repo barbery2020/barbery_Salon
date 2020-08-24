@@ -42,6 +42,7 @@ function ServicesListScreen(props) {
             subTitle={'Rs.' + item.price}
             status={item.status}
             image={item.image}
+            onPress={() => console.log(item)}
           />
         )}
       />
