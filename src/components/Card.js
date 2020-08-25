@@ -4,6 +4,11 @@ import {Text, View, StyleSheet, Image, TouchableHighlight} from 'react-native';
 import colors from '../styles/colors';
 
 function Card({title, subTitle, status, image, onPress}) {
+  const getStatus = (status) => {
+    if (status === 'Inactive') return false;
+    return true;
+  };
+
   return (
     <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
       <View style={styles.card}>
@@ -11,7 +16,13 @@ function Card({title, subTitle, status, image, onPress}) {
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subTitle}>{subTitle}</Text>
-          <Text style={styles.status}>{status}</Text>
+          <Text
+            style={[
+              getStatus(status) ? styles.active : styles.inActive,
+              styles.status,
+            ]}>
+            {status}
+          </Text>
         </View>
       </View>
     </TouchableHighlight>
@@ -19,12 +30,18 @@ function Card({title, subTitle, status, image, onPress}) {
 }
 
 const styles = StyleSheet.create({
+  active: {
+    color: colors.green,
+  },
+  inActive: {
+    color: colors.red,
+  },
   card: {
     borderRadius: 15,
     backgroundColor: colors.white,
     elevation: 5,
     flexDirection: 'row',
-    marginBottom: 20,
+    marginVertical: 10,
     overflow: 'hidden',
     shadowRadius: 20,
   },
@@ -40,13 +57,12 @@ const styles = StyleSheet.create({
     fontWeight: '200',
   },
   status: {
-    color: colors.green,
-    fontWeight: '300',
+    fontWeight: '700',
     marginTop: 35,
   },
   title: {
     fontWeight: 'bold',
-    marginBottom: 7,
+    marginBottom: 5,
   },
 });
 

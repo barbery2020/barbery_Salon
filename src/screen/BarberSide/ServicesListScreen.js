@@ -33,6 +33,48 @@ const listings = [
     status: 'Inactive',
     image: require('../../assets/images/image_3.jpg'),
   },
+  {
+    id: 4,
+    title: 'Hair Cutting',
+    price: 200,
+    status: 'Active',
+    image: require('../../assets/images/image_1.jpg'),
+  },
+  {
+    id: 5,
+    title: 'Trending Beard Dressing',
+    price: 150,
+    status: 'Active',
+    image: require('../../assets/images/image_2.jpg'),
+  },
+  {
+    id: 6,
+    title: 'Hair Dressing',
+    price: 170,
+    status: 'Inactive',
+    image: require('../../assets/images/image_3.jpg'),
+  },
+  {
+    id: 7,
+    title: 'Hair Cutting',
+    price: 200,
+    status: 'Active',
+    image: require('../../assets/images/image_1.jpg'),
+  },
+  {
+    id: 8,
+    title: 'Trending Beard Dressing',
+    price: 150,
+    status: 'Active',
+    image: require('../../assets/images/image_2.jpg'),
+  },
+  {
+    id: 9,
+    title: 'Hair Dressing',
+    price: 170,
+    status: 'Inactive',
+    image: require('../../assets/images/image_3.jpg'),
+  },
 ];
 
 function ServicesListScreen(props) {
@@ -68,7 +110,7 @@ function ServicesListScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
     backgroundColor: colors.light,
   },
   button: {

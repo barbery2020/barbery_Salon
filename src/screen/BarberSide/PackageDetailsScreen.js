@@ -13,7 +13,7 @@ import colors from '../../styles/colors';
 import Separator from '../../components/Separator';
 
 function PackageDetailsScreen(props) {
-  const [isSwitch, setSwitch] = React.useState(true);
+  const [isSwitch, setSwitch] = React.useState(false);
 
   return (
     <ScrollView>
@@ -23,13 +23,13 @@ function PackageDetailsScreen(props) {
         >
           <Image
             style={styles.image}
-            source={require('../../assets/images/image_1.jpg')}
+            source={require('../../assets/images/image_7.jpg')}
           />
         </TouchableWithoutFeedback>
         <View style={styles.detailsContainer}>
           <Text style={styles.titleCategory}>Package#01234</Text>
-          <Text style={styles.title}>Beard and Hair Dressing</Text>
-          <Text style={styles.price}>Rs. 450</Text>
+          <Text style={styles.title}>Beard Triming and Waxing</Text>
+          <Text style={styles.price}>Rs. 350</Text>
           <Separator />
           <View style={styles.switchContainer}>
             <Text style={styles.status}>Package Status</Text>
