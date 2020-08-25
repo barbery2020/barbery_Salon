@@ -14,11 +14,51 @@ import PackagesListScreen from '../screen/BarberSide/PackagesListScreen';
 import PackagesEditScreen from '../screen/BarberSide/PackagesEditScreen';
 import ProfileScreen from '../screen/BarberSide/ProfileScreen';
 import SpecialistScreen from '../screen/BarberSide/SpecialistScreen';
+import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
+import LoginScreen from '../screen/BarberSide/LoginScreen';
+import RegisterScreen from '../screen/BarberSide/RegisterScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 export default class BarberStack extends Component {
+  createWelcomeStack = () => (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          title: '',
+          headerStyle: {backgroundColor: 'black'},
+          headerTintColor: 'white',
+        }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{
+          title: '',
+          headerStyle: {backgroundColor: 'black'},
+          headerTintColor: 'white',
+        }}
+      />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+
   createServiceStack = () => (
     <Stack.Navigator>
       <Stack.Screen name="Services List" component={ServicesListScreen} />
@@ -48,11 +88,13 @@ export default class BarberStack extends Component {
     return (
       <NavigationContainer>
         <Drawer.Navigator>
+          <Drawer.Screen name="Welcome" children={this.createWelcomeStack} />
           <Drawer.Screen name="Home" component={HomeScreen} />
           <Drawer.Screen name="Profile" component={ProfileScreen} />
           <Drawer.Screen name="Services" children={this.createServiceStack} />
           <Drawer.Screen name="Packages" children={this.createPackageStack} />
           <Drawer.Screen name="Specialists" component={SpecialistScreen} />
+          <Drawer.Screen name="Logout" children={this.createWelcomeStack} />
         </Drawer.Navigator>
       </NavigationContainer>
     );
