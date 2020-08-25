@@ -28,7 +28,7 @@ function PackageDetailsScreen(props) {
         </TouchableWithoutFeedback>
         <View style={styles.detailsContainer}>
           <Text style={styles.titleCategory}>Package#01234</Text>
-          <Text style={styles.title}>Beard Triming and Waxing</Text>
+          <Text style={styles.title}>Beard Trimming and Waxing</Text>
           <Text style={styles.price}>Rs. 350</Text>
           <Separator />
           <View style={styles.switchContainer}>

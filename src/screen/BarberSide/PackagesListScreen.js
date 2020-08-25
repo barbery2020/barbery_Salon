@@ -28,7 +28,7 @@ const listings = [
   },
   {
     id: 3,
-    title: 'Beard Triming and waxing',
+    title: 'Beard Trimming and waxing',
     price: 350,
     status: 'Inactive',
     image: require('../../assets/images/image_7.jpg'),
@@ -56,7 +56,7 @@ const listings = [
   },
   {
     id: 7,
-    title: 'Beard Triming and waxing',
+    title: 'Beard Trimming and waxing',
     price: 350,
     status: 'Inactive',
     image: require('../../assets/images/image_7.jpg'),
@@ -84,7 +84,7 @@ const listings = [
   },
   {
     id: 11,
-    title: 'Beard Triming and waxing',
+    title: 'Beard Trimming and waxing',
     price: 350,
     status: 'Inactive',
     image: require('../../assets/images/image_7.jpg'),

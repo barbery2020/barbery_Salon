@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     height: 140,
   },
   subTitle: {
-    color: colors.red,
+    color: colors.dark,
     fontWeight: '200',
   },
   status: {
