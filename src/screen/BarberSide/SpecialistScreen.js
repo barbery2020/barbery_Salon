@@ -16,7 +16,7 @@ const listings = [
     id: 1,
     title: 'Tuseeq Ahmed',
     status: 'Active',
-    image: require('../../assets/images/image_1.jpg'),
+    image: require('../../assets/images/image_5.jpg'),
   },
   {
     id: 2,
@@ -34,7 +34,7 @@ const listings = [
     id: 4,
     title: 'Abdullah',
     status: 'Active',
-    image: require('../../assets/images/image_5.jpg'),
+    image: require('../../assets/images/image_9.jpg'),
   },
   {
     id: 5,
