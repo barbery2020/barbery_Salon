@@ -16,6 +16,7 @@ import PackagesListScreen from '../screen/BarberSide/PackagesListScreen';
 import PackagesEditScreen from '../screen/BarberSide/PackagesEditScreen';
 import ProfileScreen from '../screen/BarberSide/ProfileScreen';
 import SpecialistScreen from '../screen/BarberSide/SpecialistScreen';
+import SpecialistDetailsScreen from '../screen/BarberSide/SpecialistDetailsScreen';
 import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
 import LoginScreen from '../screen/BarberSide/LoginScreen';
 import RegisterScreen from '../screen/BarberSide/RegisterScreen';
@@ -86,6 +87,17 @@ export default class BarberStack extends Component {
     </Stack.Navigator>
   );
 
+  createSpecialistStack = () => (
+    <Stack.Navigator>
+      <Stack.Screen name="Specialists" component={SpecialistScreen} />
+      <Stack.Screen
+        name="Specialist Details"
+        component={SpecialistDetailsScreen}
+      />
+      <Stack.Screen name="Add New Package" component={PackagesEditScreen} />
+    </Stack.Navigator>
+  );
+
   render() {
     return (
       <NavigationContainer>
@@ -95,7 +107,10 @@ export default class BarberStack extends Component {
           <Drawer.Screen name="Profile" component={ProfileScreen} />
           <Drawer.Screen name="Services" children={this.createServiceStack} />
           <Drawer.Screen name="Packages" children={this.createPackageStack} />
-          <Drawer.Screen name="Specialists" component={SpecialistScreen} />
+          <Drawer.Screen
+            name="Specialists"
+            children={this.createSpecialistStack}
+          />
           <Drawer.Screen name="Logout" children={this.createWelcomeStack} />
         </Drawer.Navigator>
       </NavigationContainer>
