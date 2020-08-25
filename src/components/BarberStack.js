@@ -20,6 +20,7 @@ import SpecialistDetailsScreen from '../screen/BarberSide/SpecialistDetailsScree
 import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
 import LoginScreen from '../screen/BarberSide/LoginScreen';
 import RegisterScreen from '../screen/BarberSide/RegisterScreen';
+import Chat from '../screen/BarberSide/Chat';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -64,14 +65,34 @@ export default class BarberStack extends Component {
 
   createServiceStack = () => (
     <Stack.Navigator>
-      <Stack.Screen name="Services List" component={ServicesListScreen} />
-      <Stack.Screen name="Service Details" component={ServiceDetailsScreen} />
-      <Stack.Screen name="Add New Service" component={ServicesEditScreen} />
+      <Stack.Screen
+        name="Services List"
+        component={ServicesListScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
+      <Stack.Screen
+        name="Service Details"
+        component={ServiceDetailsScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
+      <Stack.Screen
+        name="Add New Service"
+        component={ServicesEditScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
       <Stack.Screen
         name="Image View"
         component={ViewImageScreen}
         options={{
-          title: '',
           headerStyle: {backgroundColor: 'black'},
           headerTintColor: 'white',
         }}
@@ -81,20 +102,51 @@ export default class BarberStack extends Component {
 
   createPackageStack = () => (
     <Stack.Navigator>
-      <Stack.Screen name="Packages List" component={PackagesListScreen} />
-      <Stack.Screen name="Package Details" component={PackageDetailsScreen} />
-      <Stack.Screen name="Add New Package" component={PackagesEditScreen} />
+      <Stack.Screen
+        name="Packages List"
+        component={PackagesListScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
+      <Stack.Screen
+        name="Package Details"
+        component={PackageDetailsScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
+      <Stack.Screen
+        name="Add New Package"
+        component={PackagesEditScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
     </Stack.Navigator>
   );
 
   createSpecialistStack = () => (
     <Stack.Navigator>
-      <Stack.Screen name="Specialists" component={SpecialistScreen} />
+      <Stack.Screen
+        name="Specialists"
+        component={SpecialistScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
       <Stack.Screen
         name="Specialist Details"
         component={SpecialistDetailsScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
       />
-      <Stack.Screen name="Add New Package" component={PackagesEditScreen} />
     </Stack.Navigator>
   );
 
@@ -111,6 +163,7 @@ export default class BarberStack extends Component {
             name="Specialists"
             children={this.createSpecialistStack}
           />
+          <Drawer.Screen name="Chat" component={Chat} />
           <Drawer.Screen name="Logout" children={this.createWelcomeStack} />
         </Drawer.Navigator>
       </NavigationContainer>
