@@ -21,7 +21,7 @@ const options = {
   },
 };
 
-function ServicesEditScreen(props) {
+function PackagesEditScreen(props) {
   const [title, setTitle] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServicesEditScreen;
+export default PackagesEditScreen;

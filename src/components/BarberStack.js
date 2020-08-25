@@ -4,6 +4,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import colors from '../styles/colors';
+
 import HomeScreen from '../screen/BarberSide/HomeScreen';
 import ServicesListScreen from '../screen/BarberSide/ServicesListScreen';
 import ServicesEditScreen from '../screen/BarberSide/ServicesEditScreen';
@@ -36,7 +38,7 @@ export default class BarberStack extends Component {
         component={LoginScreen}
         options={{
           title: '',
-          headerStyle: {backgroundColor: 'black'},
+          headerStyle: {backgroundColor: colors.red},
           headerTintColor: 'white',
         }}
       />
@@ -45,7 +47,7 @@ export default class BarberStack extends Component {
         component={RegisterScreen}
         options={{
           title: '',
-          headerStyle: {backgroundColor: 'black'},
+          headerStyle: {backgroundColor: colors.red},
           headerTintColor: 'white',
         }}
       />
