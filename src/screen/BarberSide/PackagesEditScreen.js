@@ -21,14 +21,13 @@ const options = {
   },
 };
 
-function PackagesEditScreen(props) {
+function ServicesEditScreen(props) {
   const [title, setTitle] = React.useState('');
   const [price, setPrice] = React.useState('');
-  const [category, setCategory] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [imagePicked, setImagePicked] = React.useState();
 
-  selectPhoto = async () => {
+  selectNewPhoto = async () => {
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -69,13 +68,6 @@ function PackagesEditScreen(props) {
       />
       <TextInput
         style={styles.textInput}
-        placeholder={'Category'}
-        maxLength={30}
-        onChangeText={(text) => setCategory(text)}
-        value={category}
-      />
-      <TextInput
-        style={styles.textInput}
         placeholder={'Description'}
         maxLength={255}
         numberOfLines={3}
@@ -88,13 +80,13 @@ function PackagesEditScreen(props) {
           source={require('../../assets/images/image_4.png')}
         />
       )}
-      <TouchableOpacity style={styles.button} onPress={selectPhoto}>
+      <TouchableOpacity style={styles.button} onPress={selectNewPhoto}>
         <Text style={styles.text}>Select Image</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, {backgroundColor: colors.red}]}
-        onPress={() => props.navigation.navigate('Services List')}>
-        <Text style={styles.text}>Add Service</Text>
+        onPress={() => props.navigation.navigate('Packages List')}>
+        <Text style={styles.text}>Add Package</Text>
       </TouchableOpacity>
     </View>
   );
@@ -138,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PackagesEditScreen;
+export default ServicesEditScreen;
