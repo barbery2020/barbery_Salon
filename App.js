@@ -1,15 +1,10 @@
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
 
-import Main from './src/screen/chat/Main';
-import Chat from './src/screen/chat/Chat';
-import {createAppContainer} from 'react-navigation';
+import Chat from './src/screen/chat';
 
-import { createStackNavigator } from 'react-navigation-stack'
+function App(props) {
+  return <Chat />;
+}
 
-
-const navigator = createStackNavigator({
-  Main: { screen: Main },
-  Chat: { screen: Chat },
-});
-
-
-export default createAppContainer(navigator)
+export default App;

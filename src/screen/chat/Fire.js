@@ -1,4 +1,4 @@
-import firebase from 'firebase'; 
+import firebase from 'firebase';
 class Fire {
   constructor() {
     this.init();
@@ -8,17 +8,14 @@ class Fire {
   init = () => {
     if (!firebase.apps.length) {
       firebase.initializeApp({
-            
-        apiKey: "AIzaSyCuJeuK6IjuO-WLTAW24ysW3PzszaZIU3U",
-        authDomain: "chatt-24a9b.firebaseapp.com",
-        databaseURL: "https://chatt-24a9b.firebaseio.com",
-        projectId: "chatt-24a9b",
-        storageBucket: "chatt-24a9b.appspot.com",
-        messagingSenderId: "405637392987",
-        appId: "1:405637392987:web:26c462367e913871c8ed7e",
-        measurementId: "G-SRZ28XYBHK"
-
- 
+        apiKey: 'AIzaSyCuJeuK6IjuO-WLTAW24ysW3PzszaZIU3U',
+        authDomain: 'chatt-24a9b.firebaseapp.com',
+        databaseURL: 'https://chatt-24a9b.firebaseio.com',
+        projectId: 'chatt-24a9b',
+        storageBucket: 'chatt-24a9b.appspot.com',
+        messagingSenderId: '405637392987',
+        appId: '1:405637392987:web:26c462367e913871c8ed7e',
+        measurementId: 'G-SRZ28XYBHK',
       });
     }
   };
@@ -26,11 +23,11 @@ class Fire {
   observeAuth = () =>
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
 
-  onAuthStateChanged = user => {
+  onAuthStateChanged = (user) => {
     if (!user) {
       try {
         firebase.auth().signInAnonymously();
-      } catch ({ message }) {
+      } catch ({message}) {
         alert(message);
       }
     }
@@ -44,9 +41,9 @@ class Fire {
     return firebase.database().ref('messages');
   }
 
-  parse = snapshot => {
-    const { timestamp: numberStamp, text, user } = snapshot.val();
-    const { key: _id } = snapshot;
+  parse = (snapshot) => {
+    const {timestamp: numberStamp, text, user} = snapshot.val();
+    const {key: _id} = snapshot;
     const timestamp = new Date(numberStamp);
     const message = {
       _id,
@@ -57,18 +54,18 @@ class Fire {
     return message;
   };
 
-  on = callback =>
+  on = (callback) =>
     this.ref
-      .limitToLast(20)
-      .on('child_added', snapshot => callback(this.parse(snapshot)));
+      //.limitToLast(5)
+      .on('child_added', (snapshot) => callback(this.parse(snapshot)));
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
   }
- 
-  send = messages => {
+
+  send = (messages) => {
     for (let i = 0; i < messages.length; i++) {
-      const { text, user } = messages[i];
+      const {text, user} = messages[i];
       const message = {
         text,
         user,
@@ -78,9 +75,8 @@ class Fire {
     }
   };
 
-  append = message => this.ref.push(message);
+  append = (message) => this.ref.push(message);
 
- 
   off() {
     this.ref.off();
   }
