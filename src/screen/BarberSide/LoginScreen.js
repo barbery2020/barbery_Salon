@@ -3,6 +3,7 @@ import {
   Text,
   TextInput,
   View,
+  Image,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
@@ -15,6 +16,10 @@ function LoginScreen(props) {
 
   return (
     <View style={styles.container}>
+      <Image
+        style={styles.logo}
+        source={require('../../assets/icons/barbery-W.png')}
+      />
       <TextInput
         style={styles.textInput}
         placeholder={'Email'}
@@ -52,8 +57,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignContent: 'center',
-    marginVertical: 40,
-    marginHorizontal: 20,
+    marginVertical: 20,
+    marginHorizontal: 30,
   },
   text: {
     color: colors.white,
@@ -70,6 +75,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 5,
     margin: 10,
+  },
+  logo: {
+    tintColor: colors.red,
+    width: 327,
+    height: 200,
   },
 });
 
