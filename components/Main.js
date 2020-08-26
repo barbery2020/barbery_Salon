@@ -25,18 +25,14 @@ class Main extends React.Component {
     return (
       <View>
         <Text style={styles.title}>Enter your name:</Text>
-        <TextInput
+
+          <TextInput
           style={styles.nameInput}
-          placeHolder="Barbery"
+          placeHolder="Flutter God Evan Bacon"
           onChangeText={this.onChangeText}
           value={this.state.name}
         />
-        {/* <TextInput 
-              style={styles.input}
-              placeholder="Your Name here"
-              onChangeText={(name) => {this.setState(name)}
-              value={this.state.name}
-        /> */}
+
         <TouchableOpacity onPress={this.onPress}>
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
