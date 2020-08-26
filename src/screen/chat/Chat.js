@@ -8,9 +8,9 @@ type Props = {
 };
 
 class Chat extends React.Component<Props> {
-  static navigationOptions = ({navigation}) => ({
-    title: (navigation.state.params || {}).name || 'Chat',
-  });
+  // static navigationOptions = ({navigation}) => ({
+  //   title: (navigation.state.params || {}).name || 'Chat',
+  // });
 
   state = {
     messages: [],

@@ -2,12 +2,10 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import BarberStack from './src/components/BarberStack';
-import Chat from './src/screen/chat';
+import BarberNav from './src/components/BarberStack';
 
-export default function App() {
-  return <BarberStack />;
-
+function App() {
+  return <BarberNav />;
 }
 
 export default App;

@@ -20,7 +20,7 @@ import SpecialistDetailsScreen from '../screen/BarberSide/SpecialistDetailsScree
 import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
 import LoginScreen from '../screen/BarberSide/LoginScreen';
 import RegisterScreen from '../screen/BarberSide/RegisterScreen';
-import Chat from '../screen/BarberSide/Chat';
+import Chat from '../screen/chat/Chat';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -150,6 +150,19 @@ export default class BarberStack extends Component {
     </Stack.Navigator>
   );
 
+  createChatStack = () => (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Chat"
+        component={Chat}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
+    </Stack.Navigator>
+  );
+
   render() {
     return (
       <NavigationContainer>
@@ -163,7 +176,7 @@ export default class BarberStack extends Component {
             name="Specialists"
             children={this.createSpecialistStack}
           />
-          <Drawer.Screen name="Chat" component={Chat} />
+          <Drawer.Screen name="Chat" children={this.createChatStack} />
           <Drawer.Screen name="Logout" children={this.createWelcomeStack} />
         </Drawer.Navigator>
       </NavigationContainer>
