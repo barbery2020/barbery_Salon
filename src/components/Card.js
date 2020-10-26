@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 15,
     backgroundColor: colors.white,
-    elevation: 5,
+    elevation: 10,
     flexDirection: 'row',
-    marginHorizontal: 5,
-    marginVertical: 10,
+    marginHorizontal: 10,
+    marginTop: 20,
     overflow: 'hidden',
     shadowRadius: 20,
   },

@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
     elevation: 7,
     flexDirection: 'row',
     marginHorizontal: 10,
-    marginVertical: 10,
+    marginTop: 20,
     overflow: 'hidden',
     shadowRadius: 30,
-    width: 167,
-    height: 230,
+    width: 165,
+    height: 200,
   },
   detailsContainer: {
     flex: 1,
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 160,
+    height: 130,
   },
   subTitle: {
     color: colors.orange,
@@ -72,15 +72,15 @@ const styles = StyleSheet.create({
   status: {
     fontWeight: '700',
     position: 'absolute',
-    top: 200,
-    right: 20,
+    top: 170,
+    right: 15,
   },
   title: {
     color: colors.black,
     fontSize: 18,
     fontWeight: '500',
     position: 'absolute',
-    top: 170,
+    top: 140,
     left: 10,
   },
 });

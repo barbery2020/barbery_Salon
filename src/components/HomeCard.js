@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     shadowRadius: 30,
     marginHorizontal: 10,
     marginVertical: 10,
-    width: 160,
-    height: 120,
+    width: 162,
+    height: 115,
   },
   detailsContainer: {
     flex: 1,

@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import GradientHeader from "react-native-gradient-header";
+import * as Animatable from 'react-native-animatable';
 
 
 import HomeCard from '../../components/HomeCard';
@@ -68,12 +69,15 @@ const listings = [
 function HomeScreen(props) {
   return (
     <View style={styles.screen}>
-      <GradientHeader
-        title="Ahmed Raza"
-        subtitle="Have a nice day!"
-        gradientColors={[ colors.orange, colors.red]}
-        imageSource={require("../../assets/images/image_2.jpg")}
-      />
+      <Animatable.View 
+        animation="slideInDown">
+        <GradientHeader
+          title="Hi, Ahmed Raza"
+          subtitle="Have a nice day!"
+          gradientColors={[ colors.orange, colors.red]}
+          imageSource={require("../../assets/images/image_2.jpg")}
+          />
+      </Animatable.View>
       <FlatList 
         style={styles.flatScreen}
         data={listings}
@@ -99,10 +103,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   flatScreen: {
+    // backgroundColor: colors.red,
     marginTop: 120,
-    paddingTop: 25,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    paddingTop: 35,
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
   },
 });
 
