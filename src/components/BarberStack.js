@@ -38,19 +38,20 @@ export default class BarberStack extends Component {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
+        // options={{
+        //   title: '',
+        //   headerStyle: {backgroundColor: colors.red},
+        //   headerTintColor: 'white',
+        // }}
         options={{
-          title: '',
-          headerStyle: {backgroundColor: colors.red},
-          headerTintColor: 'white',
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
         options={{
-          title: '',
-          headerStyle: {backgroundColor: colors.red},
-          headerTintColor: 'white',
+          headerShown: false,
         }}
       />
       <Stack.Screen

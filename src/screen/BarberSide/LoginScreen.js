@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import * as Animatable from 'react-native-animatable';
 
 import colors from '../../styles/colors';
 
@@ -16,73 +18,144 @@ function LoginScreen(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}> 
-      <Image
-        style={styles.logo}
-        source={require('../../assets/icons/barbery-W.png')}
-      />
-      </View>
-      <TextInput
-        style={styles.textInput}
-        placeholder={'Email'}
-        maxLength={50}
-        onChangeText={(text) => setEmail(text)}
-        value={email}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder={'Password'}
-        maxLength={20}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry={true}
-        value={password}
-      />
-      <TouchableOpacity
-        style={[styles.button, {backgroundColor: colors.red}]}
-        onPress={() => props.navigation.navigate('Home')}>
-        <Text style={styles.text}>Login</Text>
-      </TouchableOpacity>
+      <LinearGradient 
+          colors={[ colors.orange , colors.red ]} 
+          style={styles.header}> 
+        <Image
+          style={styles.logo}
+          source={require('../../assets/icons/barbery-W.png')}
+        />
+      </LinearGradient>
+      <Animatable.View 
+        animation="slideInUp"
+        style={styles.footer}>
+        <Text style={styles.textHeading}>Welcome To Barbery!</Text>
+        <Text style={styles.text}>Email</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder={'e.g. abc@gmail.com'}
+          maxLength={50}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+        />
+        <Text style={styles.text}>Password</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder={'*****'}
+          maxLength={20}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
+          value={password}
+        />
+        <TouchableOpacity
+            onPress={() => props.navigation.navigate('')}>
+            <Text style={styles.textforget}>Forget Password?</Text>
+        </TouchableOpacity>
+        <LinearGradient 
+          colors={[ colors.orange , colors.red ]} 
+          style={[styles.button]}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Home')}>
+            <Text style={styles.textBtn}>Sign In</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+        <TouchableOpacity
+          style={[styles.button,{
+            backgroundColor: colors.light,
+            borderColor: colors.red,
+            borderWidth: 1,
+          }]}
+          onPress={() => props.navigation.navigate('Register')}>
+          <Text style={styles.textBtnSignUp}>Sign Up</Text>
+        </TouchableOpacity>
+      </Animatable.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.red,
+    // backgroundColor: colors.red,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+    elevation: 5,
     marginVertical: 10,
     marginHorizontal: 10,
+  },
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5
   },
   container: {
     flex: 1,
     alignContent: 'center',
-    marginVertical: 20,
-    marginHorizontal: 30,
+    backgroundColor: colors.red,
   },
   text: {
+    color: colors.black,
+    fontSize: 14,
+    paddingHorizontal: 20,
+  },
+  textHeading: {
+    color: colors.red,
+    fontSize: 25,
+    fontWeight: "bold",
+    paddingHorizontal: 10,
+    paddingBottom: 20, 
+  },
+  textforget: {
+    color: colors.red,
+    fontSize: 14,
+    fontWeight: "bold",
+    paddingHorizontal: 20,
+    paddingBottom: 15, 
+  },
+  textBtn: {
     color: colors.white,
+    fontSize: 18,
+    textTransform: 'uppercase',
+  },
+  textBtnSignUp: {
+    color: colors.red,
     fontSize: 18,
     textTransform: 'uppercase',
   },
   textInput: {
     height: 40,
-    fontSize: 20,
-    borderColor: 'gray',
-    borderRadius: 20,
-    borderWidth: 1,
+    fontSize: 14,
+    borderRadius: 25,
+    elevation: 5,
     backgroundColor: colors.light,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     paddingVertical: 5,
-    margin: 10,
+    marginHorizontal: 10,
+    marginTop: 5,
+    marginBottom: 20,
   },
   logo: {
-    tintColor: colors.red,
-    width: 327,
-    height: 200,
+    // tintColor: colors.red,
+    width: 300,
+    height: 300,
   },
+  header: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 30,
+    paddingVertical: 30,
+  },
+  footer: {
+    flex: 3,
+    backgroundColor: colors.white,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  }
 });
 
 export default LoginScreen;

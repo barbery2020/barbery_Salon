@@ -7,39 +7,83 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import * as Animatable from 'react-native-animatable';
 
 import colors from '../../styles/colors';
 
 function WelcomeScreen(props) {
+
+  const [isLoading, setLoading] = React.useState(true);
+
   return (
-    <ImageBackground
-      blurRadius={2}
-      style={styles.background}
-      source={require('../../assets/images/image_10.jpg')}>
-      <View style={styles.logoContainer}>
-        <Image
-          style={styles.logo}
-          source={require('../../assets/icons/barbery-W.png')}
-        />
-      </View>
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={[styles.button, {backgroundColor: colors.red}]}
-          onPress={() => props.navigation.navigate('Login')}>
-          <Text style={styles.text}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, {backgroundColor: colors.red}]}
-          onPress={() => props.navigation.navigate('Register')}>
-          <Text style={styles.text}>Register</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+    <View style={styles.container}>
+      {/* {isLoading
+      ? <View style={styles.activity}>
+          <ActivityIndicator
+            size="large"
+            color={colors.red}
+            animating={isLoading}
+          />
+        </View>
+      :  */}
+      <ImageBackground
+          blurRadius={2}
+          style={styles.background}
+          source={require('../../assets/images/image_10.jpg')}
+          onLoadEnd={(isLoading) => setLoading(!isLoading)}
+          >
+          <Animatable.View 
+            animation="pulse"
+            style={styles.logoContainer}>
+            <Image
+              style={styles.logo}
+              source={require('../../assets/icons/barbery-W.png')}
+            />
+          </Animatable.View>
+          
+          <Animatable.View 
+            animation="fadeInUp" 
+            style={styles.buttonsContainer}>
+            <LinearGradient 
+              colors={[ colors.orange , colors.red ]} 
+              style={[styles.button]}>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('Login')}>
+                <Text style={styles.textBtn}>Client</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+            <LinearGradient 
+              colors={[ colors.orange , colors.red ]} 
+              style={[styles.button]}>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('Login')}>
+                <Text style={styles.textBtn}>Barber</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </Animatable.View>
+        </ImageBackground>
+      {/* } */}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignContent: 'center',
+    // marginVertical: 20,
+    // marginHorizontal: 30,
+    backgroundColor: colors.white,
+  },
+  activity: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+  },
   background: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -50,12 +94,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-    backgroundColor: colors.red,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
-    marginVertical: 10,
+    elevation: 5,
+    marginVertical: 15,
     marginHorizontal: 10,
   },
   logo: {
@@ -64,10 +108,10 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     position: 'absolute',
-    top: 5,
+    top: -25,
     alignItems: 'center',
   },
-  text: {
+  textBtn: {
     color: colors.white,
     fontSize: 18,
     textTransform: 'uppercase',

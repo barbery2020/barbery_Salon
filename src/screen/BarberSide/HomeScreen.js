@@ -6,6 +6,8 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+import GradientHeader from "react-native-gradient-header";
+
 
 import HomeCard from '../../components/HomeCard';
 import colors from '../../styles/colors';
@@ -52,6 +54,12 @@ const listings = [
 function HomeScreen(props) {
   return (
     <View style={styles.screen}>
+      <GradientHeader
+        title="Ahmed Raza"
+        subtitle="Have a nice day!"
+        gradientColors={[ colors.orange, colors.red]}
+        imageSource={require("../../assets/images/image_2.jpg")}
+      />
       <FlatList
         data={listings}
         keyExtractor={(listing) => listing.id.toString()}
@@ -70,7 +78,7 @@ function HomeScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 20,
+    padding: 15,
     backgroundColor: colors.white,
   },
 });
