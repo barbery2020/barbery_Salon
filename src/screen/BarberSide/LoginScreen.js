@@ -16,10 +16,12 @@ function LoginScreen(props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}> 
       <Image
         style={styles.logo}
         source={require('../../assets/icons/barbery-W.png')}
       />
+      </View>
       <TextInput
         style={styles.textInput}
         placeholder={'Email'}

@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     elevation: 5,
     flexDirection: 'row',
+    marginHorizontal: 5,
     marginVertical: 10,
     overflow: 'hidden',
     shadowRadius: 20,

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 15,
     backgroundColor: colors.white,
-    elevation: 10,
+    elevation: 7,
     flexDirection: 'row',
     marginHorizontal: 10,
     marginVertical: 10,
