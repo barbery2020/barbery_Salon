@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import LinearGradient from 'react-native-linear-gradient';
 
 import colors from '../../styles/colors';
 
@@ -51,32 +52,35 @@ function ServicesEditScreen(props) {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.text}>Title</Text>
       <TextInput
         style={styles.textInput}
-        placeholder={'Title'}
+        placeholder={'e.g. Hair Cutting'}
         maxLength={50}
         onChangeText={(text) => setTitle(text)}
         value={title}
       />
+      <Text style={styles.text}>Price</Text>
       <TextInput
         style={styles.textInput}
-        placeholder={'Price'}
+        placeholder={'e.g. 150'}
         keyboardType="numeric"
         maxLength={5}
         onChangeText={(text) => setPrice(text)}
         value={price}
       />
+      <Text style={styles.text}>Category</Text>
       <TextInput
         style={styles.textInput}
-        placeholder={'Category'}
+        placeholder={'e.g. Cutting'}
         maxLength={30}
         onChangeText={(text) => setCategory(text)}
         value={category}
       />
+      <Text style={styles.text}>Description</Text>
       <TextInput
         style={styles.textInput}
-        placeholder={'Description'}
         maxLength={255}
         numberOfLines={3}
         onChangeText={(text) => setDescription(text)}
@@ -88,32 +92,41 @@ function ServicesEditScreen(props) {
           source={require('../../assets/images/image_4.png')}
         />
       )}
-      <TouchableOpacity style={styles.button} onPress={selectPhoto}>
-        <Text style={styles.text}>Select Image</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, {backgroundColor: colors.red}]}
-        onPress={() => props.navigation.navigate('Services List')}>
-        <Text style={styles.text}>Add Service</Text>
-      </TouchableOpacity>
+      <LinearGradient 
+        colors={[ colors.orange , colors.red ]} 
+        style={[styles.button]}>
+        <TouchableOpacity onPress={selectPhoto}>
+          <Text style={styles.textBtn}>Select Image</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+      <LinearGradient 
+          colors={[ colors.orange , colors.red ]} 
+          style={[styles.button]}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Services List')}>
+            <Text style={styles.textBtn}>Add Service</Text>
+          </TouchableOpacity>
+        </LinearGradient>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.red,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+    elevation: 5,
     marginVertical: 10,
-    marginHorizontal: 10,
+    marginHorizontal: 70,
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: colors.white,
     alignContent: 'center',
+    marginTop: 20,
+    paddingHorizontal: 15,
   },
   image: {
     justifyContent: 'center',
@@ -122,19 +135,26 @@ const styles = StyleSheet.create({
     height: 250,
   },
   text: {
+    color: colors.black,
+    fontSize: 14,
+    paddingHorizontal: 20,
+  },
+  textBtn: {
     color: colors.white,
     fontSize: 18,
     textTransform: 'uppercase',
   },
   textInput: {
     height: 40,
-    borderColor: 'gray',
-    borderRadius: 20,
-    borderWidth: 1,
+    fontSize: 14,
+    borderRadius: 25,
+    elevation: 5,
     backgroundColor: colors.light,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     paddingVertical: 5,
-    margin: 10,
+    marginHorizontal: 10,
+    marginTop: 5,
+    marginBottom: 20,
   },
 });
 
