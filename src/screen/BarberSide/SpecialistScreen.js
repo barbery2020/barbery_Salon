@@ -110,7 +110,7 @@ function SpecialistScreen(props) {
         colors={[ colors.orange , colors.red ]} 
         style={[styles.button]}>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('')}>
+          onPress={() => props.navigation.navigate('Add Specialist')}>
           <Image
             style={styles.icon}
             source={require('../../assets/icons/plus.png')}
