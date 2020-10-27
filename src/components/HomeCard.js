@@ -14,7 +14,7 @@ const width = Dimensions.get('window').width;
 
 function HomeCard({title, subTitle, onPress}) {
   return (
-    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+    <TouchableHighlight style={styles.screen} underlayColor={colors.light} onPress={onPress}>
       <View style={styles.card}>
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>{title}</Text>
@@ -26,6 +26,12 @@ function HomeCard({title, subTitle, onPress}) {
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    // backgroundColor: colors.red,
+    paddingBottom: 20,
+    paddingHorizontal: 10,
+  },
   card: {
     backgroundColor: colors.white,
     borderRadius: 15,
@@ -33,8 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     overflow: 'hidden',
     shadowRadius: 30,
-    marginHorizontal: 10,
-    marginVertical: 10,
+    // marginHorizontal: 10,
+    // marginVertical: 10,
     width: 162,
     height: 115,
   },

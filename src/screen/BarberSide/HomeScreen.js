@@ -99,15 +99,14 @@ function HomeScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 15,
     backgroundColor: colors.white,
   },
   flatScreen: {
+    flex: 1,
     // backgroundColor: colors.red,
     marginTop: 120,
-    paddingTop: 35,
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
+    paddingTop: 50,
+    padding: 15,
   },
 });
 

@@ -19,7 +19,7 @@ function SpecialistCard({title, status, image, onPress}) {
   };
 
   return (
-    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+    <TouchableHighlight style={styles.screen} underlayColor={colors.light} onPress={onPress}>
       <View style={styles.card}>
         <Image style={styles.image} source={image} />
         <Text style={styles.title}>{title}</Text>
@@ -42,13 +42,19 @@ const styles = StyleSheet.create({
   inActive: {
     color: colors.red,
   },
+  screen: {
+    flex: 1,
+    // backgroundColor: colors.red,
+    paddingBottom: 20,
+    paddingHorizontal: 15,
+  },
   card: {
     borderRadius: 15,
     backgroundColor: colors.white,
     elevation: 7,
     flexDirection: 'row',
-    marginHorizontal: 10,
-    marginTop: 20,
+    // marginHorizontal: 10,
+    // marginTop: 20,
     overflow: 'hidden',
     shadowRadius: 30,
     width: 165,

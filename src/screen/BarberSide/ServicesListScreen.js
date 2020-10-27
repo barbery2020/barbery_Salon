@@ -104,6 +104,7 @@ function ServicesListScreen(props) {
     //<Screen style={styles.screen}>
     <View style={styles.screen}>
       <FlatList
+        style={styles.flatScreen}
         data={listings}
         keyExtractor={(listing) => listing.id.toString()}
         renderItem={({item}) => (
@@ -135,8 +136,11 @@ function ServicesListScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    paddingHorizontal: 10,
-    backgroundColor: colors.light,
+    backgroundColor: colors.white,
+  },
+  flatScreen: {
+    flex: 1,
+    paddingTop: 15,
   },
   button: {
     backgroundColor: colors.red,

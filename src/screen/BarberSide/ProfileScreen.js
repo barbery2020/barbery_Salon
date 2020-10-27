@@ -1,27 +1,32 @@
 import React from 'react';
-import {View, StyleSheet, Image, Text, TextInput, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Image, ScrollView, Text, TextInput, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import colors from '../../styles/colors';
 
 function ProfileScreen(props) {
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [phone, setPhone] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [conPassword, setConPassword] = React.useState('');
+  const [firstName, setFirstName] = React.useState('Ahmed');
+  const [lastName, setLastName] = React.useState('Raza');
+  const [email, setEmail] = React.useState('ahmedraza1@gmail.com');
+  const [phone, setPhone] = React.useState('+923167512234');
+  const [password, setPassword] = React.useState('12345raza');
+  const [salonName, setSalonName] = React.useState('HaioSol');
+  const [location, setLocation] = React.useState('G-9, Lane 3, Islamabad');
 
 
   return(
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
         <Image 
-          style={styles.profileImage}
+          style={styles.CoverImage}
           source={require('../../assets/images/image_2.jpg')}
         />
+        <Image 
+          style={styles.profileImage}
+          source={require('../../assets/images/image_5.jpg')}
+        />
       </View>
-      <View styles={styles.profileData}>
+      <View style={styles.profileData}>
         <View style={styles.row}>
           <View style={styles.rowInput}>
           <Text style={styles.text}>First Name</Text>
@@ -62,6 +67,22 @@ function ProfileScreen(props) {
           onChangeText={(text) => setPhone(text)}
           value={phone}
         />
+        <Text style={styles.text}>Shop/Saloon Name</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder={'e.g. HairoSol'}
+          maxLength={50}
+          onChangeText={(text) => setSalonName(text)}
+          value={salonName}
+        />
+        <Text style={styles.text}>Location</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder={'e.g. G-9, Lane 3, Islamabad '}
+          maxLength={50}
+          onChangeText={(text) => setLocation(text)}
+          value={location}
+        />
         <Text style={styles.text}>Password</Text>
         <TextInput
           style={styles.textInput}
@@ -75,13 +96,12 @@ function ProfileScreen(props) {
           colors={[ colors.orange , colors.red ]} 
           style={[styles.button]}>
           <TouchableOpacity
-            // onPress={() => props.navigation.navigate('Home')}
-            >
-            <Text style={styles.textBtn}>Edit</Text>
+            onPress={() => alert('Profile is updated.')}>
+            <Text style={styles.textBtn}>Save</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -100,12 +120,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: 'center',
     backgroundColor: colors.white,
-    paddingHorizontal: 15,
-    // paddingVertical: 30,
+    // paddingHorizontal: 15,
   },
   imageContainer: {
-    // flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   profileImage: {
     height: 180,
@@ -113,10 +131,20 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     borderColor: colors.red,
     borderWidth: 3,
-    marginVertical: 30,
+    marginLeft: 15,
+    marginTop: 160,
+    marginBottom: 30,
+  },
+  CoverImage: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    height: 250,
+    width: '100%',
+    borderBottomRightRadius: 50,
   },
   profileData: {
-    backgroundColor: colors.red,
+    paddingHorizontal: 15,
   },
   row: {
     flexDirection: 'row',

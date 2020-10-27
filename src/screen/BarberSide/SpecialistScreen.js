@@ -125,10 +125,10 @@ function SpecialistScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingTop: 15,
     // alignContent: 'space-between',
     // justifyContent: 'space-between',
-    backgroundColor: colors.light,
+    backgroundColor: colors.white,
   },
   button: {
     backgroundColor: colors.red,

@@ -24,7 +24,6 @@ const options = {
 
 function SpecialistEditScreen(props) {
   const [title, setTitle] = React.useState('');
-  const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [imagePicked, setImagePicked] = React.useState();
 
@@ -34,6 +33,7 @@ function SpecialistEditScreen(props) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('Image Picker Error: ', response.error);
+        setImagePicked(true);
       } else {
         const uri = response.uri;
         const type = 'image/jpg';
@@ -77,7 +77,7 @@ function SpecialistEditScreen(props) {
       <LinearGradient 
         colors={[ colors.orange , colors.red ]} 
         style={[styles.button]}>
-        <TouchableOpacity onPress={selectPhoto}>
+        <TouchableOpacity onPress={selectNewPhoto}>
           <Text style={styles.textBtn}>Select Image</Text>
         </TouchableOpacity>
       </LinearGradient>
@@ -116,6 +116,9 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     width: '100%',
     height: 250,
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: colors.red,
   },
   text: {
     color: colors.black,
