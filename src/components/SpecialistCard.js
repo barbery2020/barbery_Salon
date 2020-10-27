@@ -10,8 +10,6 @@ import {
 
 import colors from '../styles/colors';
 
-const width = Dimensions.get('window').width;
-
 function SpecialistCard({title, status, image, onPress}) {
   const getStatus = (status) => {
     if (status === 'Inactive') return false;
@@ -44,7 +42,6 @@ const styles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-    // backgroundColor: colors.red,
     paddingBottom: 20,
     paddingHorizontal: 15,
   },
@@ -53,8 +50,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     elevation: 7,
     flexDirection: 'row',
-    // marginHorizontal: 10,
-    // marginTop: 20,
     overflow: 'hidden',
     shadowRadius: 30,
     width: 165,

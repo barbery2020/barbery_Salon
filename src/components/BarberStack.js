@@ -201,7 +201,7 @@ export default class BarberStack extends Component {
             name="Specialists"
             children={this.createSpecialistStack}
           />
-          <Drawer.Screen name="Appointment" children={this.createAppointmentStack} />
+          <Drawer.Screen name="Appointments" children={this.createAppointmentStack} />
           {/* <Drawer.Screen name="Chat" children={this.createChatStack} /> */}
           <Drawer.Screen name="Logout" children={this.createWelcomeStack} />
         </Drawer.Navigator>

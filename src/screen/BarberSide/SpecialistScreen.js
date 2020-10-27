@@ -125,10 +125,11 @@ function SpecialistScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    paddingTop: 15,
-    // alignContent: 'space-between',
-    // justifyContent: 'space-between',
     backgroundColor: colors.white,
+  },
+  card: {
+    // flex: 1,
+    paddingVertical: 15,
   },
   button: {
     backgroundColor: colors.red,
@@ -141,9 +142,6 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
   },
-  // card: {
-  //   flex: ,
-  // },
   icon: {
     tintColor: colors.white,
     padding: 10,

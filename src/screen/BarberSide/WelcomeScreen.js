@@ -74,8 +74,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignContent: 'center',
-    // marginVertical: 20,
-    // marginHorizontal: 30,
     backgroundColor: colors.white,
   },
   activity: {

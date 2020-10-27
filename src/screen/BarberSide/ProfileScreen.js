@@ -1,6 +1,14 @@
 import React from 'react';
-import {View, StyleSheet, Image, ScrollView, Text, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View, 
+  StyleSheet, 
+  Image, 
+  ScrollView, 
+  Text, 
+  TextInput, 
+  TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import * as Animatable from 'react-native-animatable';
 
 import colors from '../../styles/colors';
 
@@ -10,13 +18,15 @@ function ProfileScreen(props) {
   const [email, setEmail] = React.useState('ahmedraza1@gmail.com');
   const [phone, setPhone] = React.useState('+923167512234');
   const [password, setPassword] = React.useState('12345raza');
-  const [salonName, setSalonName] = React.useState('HaioSol');
+  const [salonName, setSalonName] = React.useState('HairoSol');
   const [location, setLocation] = React.useState('G-9, Lane 3, Islamabad');
 
 
   return(
     <ScrollView style={styles.container}>
-      <View style={styles.imageContainer}>
+      <Animatable.View 
+        animation="slideInDown"
+        style={styles.imageContainer}>
         <Image 
           style={styles.CoverImage}
           source={require('../../assets/images/image_2.jpg')}
@@ -25,7 +35,7 @@ function ProfileScreen(props) {
           style={styles.profileImage}
           source={require('../../assets/images/image_5.jpg')}
         />
-      </View>
+      </Animatable.View>
       <View style={styles.profileData}>
         <View style={styles.row}>
           <View style={styles.rowInput}>
@@ -126,13 +136,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   profileImage: {
-    height: 180,
-    width: 180,
-    borderRadius: 90,
+    height: 160,
+    width: 160,
+    borderRadius: 80,
     borderColor: colors.red,
     borderWidth: 3,
     marginLeft: 15,
-    marginTop: 160,
+    marginTop: 170,
     marginBottom: 30,
   },
   CoverImage: {

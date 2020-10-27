@@ -74,6 +74,38 @@ const appointment = [
         status: 'Completed',
         time: 'Oct 16, 2020 11:50 AM',
         image: require('../../assets/images/image_9.jpg'),
+    },
+    {
+        id: 9,
+        name: 'Tuseeq Raza',
+        price: 200,
+        status: 'Active',
+        time: 'Oct 23, 2020 4:50 PM',
+        image: require('../../assets/images/image_1.jpg'),
+    },
+    {
+        id: 10,
+        name: 'Tuseeq Ahmed',
+        price: 300,
+        status: 'Active',
+        time: 'Oct 17, 2020 9:50 AM',
+        image: require('../../assets/images/image_2.jpg'),
+    },
+    {
+        id: 11,
+        name: 'Abdullah',
+        price: 100,
+        status: 'Completed',
+        time: 'Oct 23, 2020 4:50 PM',
+        image: require('../../assets/images/image_3.jpg'),
+    },
+    {
+        id: 12,
+        name: 'Humza Jameel',
+        price: 250,
+        status: 'Completed',
+        time: 'Oct 16, 2020 11:50 AM',
+        image: require('../../assets/images/image_5.jpg'),
     },    
   ];
 
