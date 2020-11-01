@@ -43,21 +43,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   card: {
-    borderRadius: 15,
     backgroundColor: colors.white,
+    borderRadius: 15,
     elevation: 10,
     flexDirection: 'row',
-    // marginHorizontal: 10,
-    // marginTop: 20,
     overflow: 'hidden',
     shadowRadius: 20,
   },
   detailsContainer: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
   },
   image: {
     width: '40%',
-    height: 140,
+    height: 120,
   },
   subTitle: {
     color: colors.dark,
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
   },
   status: {
     fontWeight: '700',
-    marginTop: 35,
+    marginTop: 25,
   },
   title: {
     fontWeight: 'bold',

@@ -101,7 +101,6 @@ const listings = [
 
 function ServicesListScreen(props) {
   return (
-    //<Screen style={styles.screen}>
     <View style={styles.screen}>
       <FlatList
         style={styles.flatScreen}
@@ -129,7 +128,6 @@ function ServicesListScreen(props) {
         </TouchableOpacity>
       </LinearGradient>
     </View>
-    //</Screen>
   );
 }
 

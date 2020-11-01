@@ -118,13 +118,13 @@ function SpecialistScreen(props) {
         </TouchableOpacity>
       </LinearGradient>
     </View>
-    //</Screen>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    // paddingBottom: 10,
     backgroundColor: colors.white,
   },
   card: {

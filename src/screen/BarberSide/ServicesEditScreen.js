@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     alignContent: 'center',
-    marginTop: 20,
+    paddingTop: 20,
     paddingHorizontal: 15,
   },
   image: {

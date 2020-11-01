@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     overflow: 'hidden',
     shadowRadius: 30,
-    width: 165,
+    width: '100%',
     height: 200,
   },
   detailsContainer: {
