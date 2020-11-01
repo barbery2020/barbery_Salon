@@ -28,44 +28,6 @@ const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 export default class BarberStack extends Component {
-  createWelcomeStack = () => (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        // options={{
-        //   title: '',
-        //   headerStyle: {backgroundColor: colors.red},
-        //   headerTintColor: 'white',
-        // }}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Register"
-        component={RegisterScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Stack.Navigator>
-  );
-
   createServiceStack = () => (
     <Stack.Navigator>
       <Stack.Screen
@@ -190,22 +152,19 @@ export default class BarberStack extends Component {
 
   render() {
     return (
-      <NavigationContainer>
-        <Drawer.Navigator>
-          <Drawer.Screen name="Welcome" children={this.createWelcomeStack} />
-          <Drawer.Screen name="Home" component={HomeScreen} />
-          <Drawer.Screen name="Profile" component={ProfileScreen} />
-          <Drawer.Screen name="Services" children={this.createServiceStack} />
-          <Drawer.Screen name="Packages" children={this.createPackageStack} />
-          <Drawer.Screen
-            name="Specialists"
-            children={this.createSpecialistStack}
-          />
-          <Drawer.Screen name="Appointments" children={this.createAppointmentStack} />
-          {/* <Drawer.Screen name="Chat" children={this.createChatStack} /> */}
-          <Drawer.Screen name="Logout" children={this.createWelcomeStack} />
-        </Drawer.Navigator>
-      </NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="Profile" component={ProfileScreen} />
+        <Drawer.Screen name="Services" children={this.createServiceStack} />
+        <Drawer.Screen name="Packages" children={this.createPackageStack} />
+        <Drawer.Screen
+          name="Specialists"
+          children={this.createSpecialistStack}
+        />
+        <Drawer.Screen name="Appointments" children={this.createAppointmentStack} />
+        {/* <Drawer.Screen name="Chat" children={this.createChatStack} /> */}
+        {/* <Drawer.Screen name="Logout" component={AuthStack} /> */}
+      </Drawer.Navigator>
     );
   }
 }

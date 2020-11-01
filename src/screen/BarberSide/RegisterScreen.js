@@ -95,7 +95,7 @@ function RegisterScreen(props) {
           colors={[ colors.orange , colors.red ]} 
           style={[styles.button]}>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('Home')}>
+            onPress={() => props.navigation.navigate('MainApp')}>
             <Text style={styles.textBtn}>Register</Text>
           </TouchableOpacity>
         </LinearGradient>

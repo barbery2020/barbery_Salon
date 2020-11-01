@@ -2,10 +2,10 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import BarberNav from './src/components/BarberStack';
+import BarberAuth from './src/components/AuthStack';
 
 function App() {
-  return <BarberNav />;
+  return <BarberAuth />;
 }
 
 export default App;
