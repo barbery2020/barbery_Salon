@@ -13,7 +13,7 @@ import { Root, Popup } from 'popup-ui';
 
 import colors from '../../styles/colors';
 
-function PackagesEditScreen(props) {
+function PackagesAddScreen(props) {
 	const [title, setTitle] = React.useState('');
 	const [price, setPrice] = React.useState('');
 	const [description, setDescription] = React.useState('');
@@ -100,9 +100,9 @@ function PackagesEditScreen(props) {
 							() => {
 								Popup.show({
 									type: 'Success',
-									title: 'Package Updated',
+									title: 'Package Added',
 									// button: false,
-									textBody: 'Package updated successfully.',
+									textBody: 'New package added successfully.',
 									buttonText: 'Ok',
 									callback: () => Popup.hide(),
 								});
@@ -110,7 +110,7 @@ function PackagesEditScreen(props) {
 							// props.navigation.navigate('Services List')}
 						}
 					>
-						<Text style={styles.textBtn}>Update Package</Text>
+						<Text style={styles.textBtn}>Add Package</Text>
 					</TouchableOpacity>
 				</LinearGradient>
 			</View>
@@ -166,4 +166,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PackagesEditScreen;
+export default PackagesAddScreen;
