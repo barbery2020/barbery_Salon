@@ -13,8 +13,8 @@ import * as Animatable from 'react-native-animatable';
 import colors from '../../styles/colors';
 
 function LoginScreen(props) {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('ahmedraza1@gmail.com');
+  const [password, setPassword] = React.useState('raza1234');
 
   return (
     <View style={styles.container}>

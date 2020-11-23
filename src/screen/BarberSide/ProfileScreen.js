@@ -107,7 +107,7 @@ function ProfileScreen(props) {
           style={[styles.button]}>
           <TouchableOpacity
             onPress={() => alert('Profile is updated.')}>
-            <Text style={styles.textBtn}>Save</Text>
+            <Text style={styles.textBtn}>Edit</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>

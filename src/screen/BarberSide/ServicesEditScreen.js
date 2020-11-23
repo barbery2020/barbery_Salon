@@ -7,107 +7,136 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
+import { Root, Popup, Toast } from 'popup-ui';
+import PopUp from '../../components/PopUp';
 
 import colors from '../../styles/colors';
-
-const options = {
-  title: 'Select Photo',
-  takePhotoButtonTitle: 'Take photo with your camera',
-  chooseFromLibraryButtonTitle: 'Choose photo from library',
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-};
 
 function ServicesEditScreen(props) {
   const [title, setTitle] = React.useState('');
   const [price, setPrice] = React.useState('');
-  const [category, setCategory] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [imagePicked, setImagePicked] = React.useState();
+  const [selectedValue, setSelectedValue] = React.useState('');
 
-  selectPhoto = async () => {
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
+  const callBack = (props) => {
+    console.log('Hello')
+    props.navigation.navigate('Services List')
+  };
+
+  const selectFile = () => {
+    var options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, res => {
+      console.log('Response = ', res);
+
+      if (res.didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('Image Picker Error: ', response.error);
+      } else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
       } else {
-        const uri = response.uri;
+        const uri = res.uri;
         const type = 'image/jpg';
-        const name = response.fileName;
+        const name = res.fileName;
         const source = {uri, type, name};
-        console.log(source);
-
-        // let source = {uri: response.uri};
         setImagePicked({
           imageURI: uri,
         });
-        //console.log(source);
       }
     });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Title</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder={'e.g. Hair Cutting'}
-        maxLength={50}
-        onChangeText={(text) => setTitle(text)}
-        value={title}
-      />
-      <Text style={styles.text}>Price</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder={'e.g. 150'}
-        keyboardType="numeric"
-        maxLength={5}
-        onChangeText={(text) => setPrice(text)}
-        value={price}
-      />
-      <Text style={styles.text}>Category</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder={'e.g. Cutting'}
-        maxLength={30}
-        onChangeText={(text) => setCategory(text)}
-        value={category}
-      />
-      <Text style={styles.text}>Description</Text>
-      <TextInput
-        style={styles.textInput}
-        maxLength={255}
-        numberOfLines={3}
-        onChangeText={(text) => setDescription(text)}
-        value={description}
-      />
-      {imagePicked && (
-        <Image
-          style={styles.image}
-          source={require('../../assets/images/image_4.png')}
+    <Root>
+      <View style={styles.container}>
+        <Text style={styles.text}>Title</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder={'e.g. Hair Cutting'}
+          maxLength={50}
+          onChangeText={(text) => setTitle(text)}
+          value={title}
         />
-      )}
-      <LinearGradient 
-        colors={[ colors.orange , colors.red ]} 
-        style={[styles.button]}>
-        <TouchableOpacity onPress={selectPhoto}>
-          <Text style={styles.textBtn}>Select Image</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-      <LinearGradient 
+        <Text style={styles.text}>Price</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder={'e.g. 150'}
+          keyboardType="numeric"
+          maxLength={5}
+          onChangeText={(text) => setPrice(text)}
+          value={price}
+        />
+        <Text style={styles.text}>Category</Text>
+        <View style={styles.textInput}>
+          <Picker
+            selectedValue={selectedValue}
+            style={{ flex: 1 }}
+            onValueChange={(itemValue) => setSelectedValue(itemValue)}
+            itemStyle={styles.picker}
+            mode={'dropdown'}
+          >
+            <Picker.Item label="Hair" value="hair" />
+            <Picker.Item label="Shaves" value="shaves" />
+            <Picker.Item label="Styling" value="styling" />
+            <Picker.Item label="Hair Color" value="hairColor" />
+            <Picker.Item label="Waxing" value="waxing" />
+            <Picker.Item label="Men's Services" value="menServices" />
+            <Picker.Item label="Nails" value="nails" />
+            <Picker.Item label="Other" value="other" />
+          </Picker>
+        </View>
+        <Text style={styles.text}>Description</Text>
+        <TextInput
+          style={styles.textInput}
+          maxLength={255}
+          numberOfLines={3}
+          onChangeText={(text) => setDescription(text)}
+          value={description}
+        />
+        {imagePicked && (
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Image
+            style={styles.image}
+            source={{ uri: imagePicked.imageURI }}
+          />
+          </View>
+        )}
+        <LinearGradient 
           colors={[ colors.orange , colors.red ]} 
           style={[styles.button]}>
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('Services List')}>
-            <Text style={styles.textBtn}>Add Service</Text>
+          <TouchableOpacity onPress={selectFile}>
+            <Text style={styles.textBtn}>Select Image</Text>
           </TouchableOpacity>
+        </LinearGradient>    
+        <LinearGradient 
+          colors={[ colors.orange , colors.red ]} 
+          style={[styles.button]}>
+            <TouchableOpacity
+              onPress={() => {
+                Popup.show({
+                type: 'Success',
+                title: 'Service Added',
+                // button: false,
+                textBody: 'New service added successfully.',
+                buttonText: 'Ok',
+                callback: () => Popup.hide()
+              }); }
+                // props.navigation.navigate('Services List')}
+              }>
+              <Text style={styles.textBtn}>Add Service</Text>
+            </TouchableOpacity>
         </LinearGradient>
-    </View>
+      </View>
+    </Root>
   );
 }
 
@@ -129,10 +158,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   image: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    width: '100%',
-    height: 250,
+    height: 170,
+    width: 170,
+    borderRadius: 10,
+    borderColor: colors.red,
+    borderWidth: 1,
   },
   text: {
     color: colors.black,
@@ -156,6 +186,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 20,
   },
+  picker: {
+    fontSize: 14,
+    height: 40,
+    color: 'black',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  }
 });
 
 export default ServicesEditScreen;
