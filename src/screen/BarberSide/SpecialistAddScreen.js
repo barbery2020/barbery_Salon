@@ -13,9 +13,8 @@ import { Root, Popup } from 'popup-ui';
 
 import colors from '../../styles/colors';
 
-function PackagesEditScreen(props) {
+function SpecialistAddScreen(props) {
 	const [title, setTitle] = React.useState('');
-	const [price, setPrice] = React.useState('');
 	const [description, setDescription] = React.useState('');
 	const [imagePicked, setImagePicked] = React.useState();
 
@@ -50,24 +49,15 @@ function PackagesEditScreen(props) {
 	return (
 		<Root>
 			<View style={styles.container}>
-				<Text style={styles.text}>Title</Text>
+				<Text style={styles.text}>Name</Text>
 				<TextInput
 					style={styles.textInput}
-					placeholder={'e.g. Hair Cutting'}
+					placeholder={'e.g. Ahmed'}
 					maxLength={50}
 					onChangeText={(text) => setTitle(text)}
 					value={title}
 				/>
-				<Text style={styles.text}>Price</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder={'e.g. 150'}
-					keyboardType="numeric"
-					maxLength={5}
-					onChangeText={(text) => setPrice(text)}
-					value={price}
-				/>
-				<Text style={styles.text}>Description</Text>
+				<Text style={styles.text}>About</Text>
 				<TextInput
 					style={styles.textInput}
 					maxLength={255}
@@ -96,21 +86,18 @@ function PackagesEditScreen(props) {
 					style={[styles.button]}
 				>
 					<TouchableOpacity
-						onPress={
-							() => {
-								Popup.show({
-									type: 'Success',
-									title: 'Package Updated',
-									// button: false,
-									textBody: 'Package updated successfully.',
-									buttonText: 'Ok',
-									callback: () => Popup.hide(),
-								});
-							}
-							// props.navigation.navigate('Services List')}
+						onPress={() =>
+							Popup.show({
+								type: 'Success',
+								title: 'Package Added',
+								// button: false,
+								textBody: 'New Package Added successfully.',
+								buttonText: 'Ok',
+								callback: () => Popup.hide(),
+							})
 						}
 					>
-						<Text style={styles.textBtn}>Update Package</Text>
+						<Text style={styles.textBtn}>Add Specialist</Text>
 					</TouchableOpacity>
 				</LinearGradient>
 			</View>
@@ -166,4 +153,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PackagesEditScreen;
+export default SpecialistAddScreen;

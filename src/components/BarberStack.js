@@ -20,10 +20,11 @@ import ProfileScreen from '../screen/BarberSide/ProfileScreen';
 import SpecialistScreen from '../screen/BarberSide/SpecialistScreen';
 import SpecialistDetailsScreen from '../screen/BarberSide/SpecialistDetailsScreen';
 import SpecialistEditScreen from '../screen/BarberSide/SpecialistEditScreen';
-import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
-import LoginScreen from '../screen/BarberSide/LoginScreen';
-import RegisterScreen from '../screen/BarberSide/RegisterScreen';
+import SpecialistAddScreen from '../screen/BarberSide/SpecialistAddScreen';
 import AppointmentScreen from '../screen/BarberSide/AppointmentScreen';
+// import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
+// import LoginScreen from '../screen/BarberSide/LoginScreen';
+// import RegisterScreen from '../screen/BarberSide/RegisterScreen';
 // import Chat from '../screen/chat/Chat';
 
 const Drawer = createDrawerNavigator();
@@ -131,8 +132,16 @@ export default class BarberStack extends Component {
 				}}
 			/>
 			<Stack.Screen
-				name="Add Specialist"
+				name="Update Specialist"
 				component={SpecialistEditScreen}
+				options={{
+					headerStyle: { backgroundColor: colors.red },
+					headerTintColor: 'white',
+				}}
+			/>
+			<Stack.Screen
+				name="Add Specialist"
+				component={SpecialistAddScreen}
 				options={{
 					headerStyle: { backgroundColor: colors.red },
 					headerTintColor: 'white',
