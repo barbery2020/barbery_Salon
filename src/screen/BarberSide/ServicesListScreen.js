@@ -120,7 +120,7 @@ function ServicesListScreen(props) {
         colors={[ colors.orange , colors.red ]} 
         style={[styles.button]}>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('Add New Service')}>
+          onPress={() => props.navigation.navigate('Add Service')}>
           <Image
             style={styles.icon}
             source={require('../../assets/icons/plus.png')}

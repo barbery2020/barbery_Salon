@@ -9,6 +9,7 @@ import colors from '../styles/colors';
 import HomeScreen from '../screen/BarberSide/HomeScreen';
 import ServicesListScreen from '../screen/BarberSide/ServicesListScreen';
 import ServicesEditScreen from '../screen/BarberSide/ServicesEditScreen';
+import ServicesAddScreen from '../screen/BarberSide/ServicesAddScreen';
 import ServiceDetailsScreen from '../screen/BarberSide/ServiceDetailsScreen';
 import ViewImageScreen from '../screen/BarberSide/ViewImageScreen';
 import PackageDetailsScreen from '../screen/BarberSide/PackageDetailsScreen';
@@ -47,7 +48,15 @@ export default class BarberStack extends Component {
         }}
       />
       <Stack.Screen
-        name="Add New Service"
+        name="Add Service"
+        component={ServicesAddScreen}
+        options={{
+          headerStyle: {backgroundColor: colors.red},
+          headerTintColor: 'white',
+        }}
+      />
+      <Stack.Screen
+        name="Update Service"
         component={ServicesEditScreen}
         options={{
           headerStyle: {backgroundColor: colors.red},

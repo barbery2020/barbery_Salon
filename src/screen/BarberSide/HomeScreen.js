@@ -2,17 +2,13 @@ import React from 'react';
 import {
   View,
   FlatList,
-  TouchableOpacity,
-  Image,
   StyleSheet,
 } from 'react-native';
 import GradientHeader from "react-native-gradient-header";
 import * as Animatable from 'react-native-animatable';
 
-
 import HomeCard from '../../components/HomeCard';
 import colors from '../../styles/colors';
-//
 
 const listings = [
   {
@@ -69,29 +65,34 @@ const listings = [
 function HomeScreen(props) {
   return (
     <View style={styles.screen}>
-      <Animatable.View 
-        animation="slideInDown">
-        <GradientHeader
-          title="Hi, Ahmed Raza"
-          subtitle="Have a nice day!"
-          gradientColors={[ colors.orange, colors.red]}
-          imageSource={require("../../assets/images/image_2.jpg")}
+      <View style={styles.headerScreen}>
+        <Animatable.View 
+          animation="slideInDown">
+          <GradientHeader
+            title="Hi, Ahmed Raza"
+            subtitle="Have a nice day!"
+            gradientColors={[ colors.orange, colors.red]}
+            imageSource={require("../../assets/images/image_2.jpg")}
           />
-      </Animatable.View>
-      <FlatList 
+        </Animatable.View>
+      </View>
+      <View
         style={styles.flatScreen}
-        data={listings}
-        numColumns={2}
-        keyExtractor={(listing) => listing.id.toString()}
-        renderItem={({item}) => (
-          <HomeCard
-            title={item.title}
-            subTitle={item.price}
-            bgImage={item.image}
-            onPress={() => console.log(item)}
-          />
-        )}
-      />
+      >
+        <FlatList 
+          data={listings}
+          numColumns={2}
+          keyExtractor={(listing) => listing.id.toString()}
+          renderItem={({item}) => (
+            <HomeCard
+              title={item.title}
+              subTitle={item.price}
+              bgImage={item.image}
+              onPress={() => console.log(item)}
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }
@@ -101,12 +102,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
-  flatScreen: {
+  headerScreen: {
     flex: 1,
-    // backgroundColor: colors.red,
-    marginTop: 120,
-    paddingTop: 50,
-    padding: 15,
+    // backgroundColor: colors.black,
+  },
+  flatScreen: {
+    flex: 3,
+    zIndex: -1,
+    marginTop: 10,
+    paddingHorizontal: 20,
   },
 });
 

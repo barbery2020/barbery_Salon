@@ -86,7 +86,7 @@ function PackagesEditScreen(props) {
       <LinearGradient 
         colors={[ colors.orange , colors.red ]} 
         style={[styles.button]}>
-        <TouchableOpacity onPress={selectPhoto}>
+        <TouchableOpacity onPress={selectNewPhoto}>
           <Text style={styles.textBtn}>Select Image</Text>
         </TouchableOpacity>
       </LinearGradient>

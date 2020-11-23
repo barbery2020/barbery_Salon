@@ -52,15 +52,7 @@ function WelcomeScreen(props) {
               style={[styles.button]}>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('Login')}>
-                <Text style={styles.textBtn}>Client</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-            <LinearGradient 
-              colors={[ colors.orange , colors.red ]} 
-              style={[styles.button]}>
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate('Login')}>
-                <Text style={styles.textBtn}>Barber</Text>
+                <Text style={styles.textBtn}>Login</Text>
               </TouchableOpacity>
             </LinearGradient>
           </Animatable.View>

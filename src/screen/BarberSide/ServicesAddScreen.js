@@ -10,18 +10,19 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
-import { Root, Popup } from 'popup-ui';
+import { Root, Popup, Toast } from 'popup-ui';
+import PopUp from '../../components/PopUp';
 
 import colors from '../../styles/colors';
 
-function ServicesEditScreen(props) {
+function ServicesAddScreen(props) {
   const [title, setTitle] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [imagePicked, setImagePicked] = React.useState();
   const [selectedValue, setSelectedValue] = React.useState('');
 
-  const selectImage = () => {
+  const selectFile = () => {
     var options = {
       title: 'Select Image',
       storageOptions: {
@@ -107,7 +108,7 @@ function ServicesEditScreen(props) {
         <LinearGradient 
           colors={[ colors.orange , colors.red ]} 
           style={[styles.button]}>
-          <TouchableOpacity onPress={selectImage}>
+          <TouchableOpacity onPress={selectFile}>
             <Text style={styles.textBtn}>Select Image</Text>
           </TouchableOpacity>
         </LinearGradient>    
@@ -118,15 +119,15 @@ function ServicesEditScreen(props) {
               onPress={() => {
                 Popup.show({
                 type: 'Success',
-                title: 'Service Updated',
+                title: 'Service Added',
                 // button: false,
-                textBody: 'Service updated successfully.',
+                textBody: 'New service added successfully.',
                 buttonText: 'Ok',
                 callback: () => Popup.hide()
               }); }
                 // props.navigation.navigate('Services List')}
               }>
-              <Text style={styles.textBtn}>Update Service</Text>
+              <Text style={styles.textBtn}>Add Service</Text>
             </TouchableOpacity>
         </LinearGradient>
       </View>
@@ -189,4 +190,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ServicesEditScreen;
+export default ServicesAddScreen;
