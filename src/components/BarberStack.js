@@ -22,6 +22,7 @@ import SpecialistDetailsScreen from '../screen/BarberSide/SpecialistDetailsScree
 import SpecialistEditScreen from '../screen/BarberSide/SpecialistEditScreen';
 import SpecialistAddScreen from '../screen/BarberSide/SpecialistAddScreen';
 import AppointmentScreen from '../screen/BarberSide/AppointmentScreen';
+import AppointmentDetailScreen from '../screen/BarberSide/AppoinmentDetailScreen';
 // import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
 // import LoginScreen from '../screen/BarberSide/LoginScreen';
 // import RegisterScreen from '../screen/BarberSide/RegisterScreen';
@@ -155,6 +156,14 @@ export default class BarberStack extends Component {
 			<Stack.Screen
 				name="Appointment"
 				component={AppointmentScreen}
+				options={{
+					headerStyle: { backgroundColor: colors.red },
+					headerTintColor: 'white',
+				}}
+			/>
+			<Stack.Screen
+				name="Appointment Details"
+				component={AppointmentDetailScreen}
 				options={{
 					headerStyle: { backgroundColor: colors.red },
 					headerTintColor: 'white',
