@@ -178,7 +178,11 @@ function ActiveAppointmentsScreen(props) {
 				<TouchableOpacity onPress={showDatePicker} style={styles.rowInput}>
 					<View style={styles.textInput}>
 						<TextInput
-							style={{ fontSize: 16, color: colors.dark, paddingVertical: 8 }}
+							style={{
+								fontSize: 16,
+								color: colors.dark,
+								paddingVertical: 8,
+							}}
 							editable={false}
 							maxLength={50}
 							value={isDate}
@@ -304,5 +308,6 @@ const styles = StyleSheet.create({
 		margin: 15,
 		borderWidth: 1,
 		borderColor: colors.red,
+		backgroundColor: colors.white,
 	},
 });
