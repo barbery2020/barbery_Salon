@@ -7,38 +7,36 @@ import {
 	TouchableHighlight,
 } from 'react-native';
 
+import { Rating, AirbnbRating } from 'react-native-ratings';
+
 import colors from '../styles/colors';
 
-function Card({ title, subTitle, time, status, image, selectedDate, onPress }) {
-	const getStatus = (status) => {
-		if (status === 'Completed') return false;
-		return true;
-	};
-
+function ReviewCard({ title, text, rated, time, image }) {
 	return (
 		<TouchableHighlight
 			style={styles.screen}
 			underlayColor={colors.light}
-			onPress={onPress}
+			// onPress={onPress}
 		>
 			<View style={styles.card}>
 				<Image style={styles.image} source={image} />
-				<View style={styles.detailsContainer}>
-					<View style={styles.leftContainer}>
-						<Text style={styles.title}>{title}</Text>
-						<Text style={styles.time}>{time}</Text>
+				<View style={{ flex: 1 }}>
+					<View style={styles.detailsContainer}>
+						<View style={styles.leftContainer}>
+							<Text style={styles.title}>{title}</Text>
+							<Text style={styles.time}>{time}</Text>
+						</View>
+						<View style={styles.rightContainer}>
+							<Rating
+								style={styles.rating}
+								imageSize={14}
+								ratingCount={5}
+								startingValue={rated}
+								readonly={true}
+							/>
+						</View>
 					</View>
-					<View style={styles.rightContainer}>
-						<Text style={styles.subTitle}>{subTitle}</Text>
-						<Text
-							style={[
-								getStatus(status) ? styles.active : styles.completed,
-								styles.status,
-							]}
-						>
-							{status}
-						</Text>
-					</View>
+					<Text style={styles.text}>{text}</Text>
 				</View>
 			</View>
 		</TouchableHighlight>
@@ -46,15 +44,11 @@ function Card({ title, subTitle, time, status, image, selectedDate, onPress }) {
 }
 
 const styles = StyleSheet.create({
-	active: {
-		color: colors.green,
-	},
 	completed: {
 		color: colors.orange,
 	},
 	screen: {
 		flex: 1,
-		// backgroundColor: colors.red,
 		paddingVertical: 8,
 		paddingHorizontal: 15,
 	},
@@ -72,7 +66,8 @@ const styles = StyleSheet.create({
 	detailsContainer: {
 		flex: 1,
 		flexDirection: 'row',
-		padding: 5,
+		paddingBottom: 10,
+		paddingHorizontal: 10,
 	},
 	leftContainer: {
 		flex: 2,
@@ -82,9 +77,12 @@ const styles = StyleSheet.create({
 	},
 	rightContainer: {
 		flex: 1,
-		alignItems: 'flex-end',
-		marginVertical: 10,
-		marginRight: 10,
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		// alignItems: 'flex-end',
+		// marginVertical: 10,
+		// marginRight: 10,
 		// backgroundColor: colors.red,
 	},
 	image: {
@@ -95,18 +93,29 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontWeight: 'bold',
-		marginBottom: 5,
 	},
 	time: {
 		color: colors.medium,
 		fontWeight: '100',
 		fontSize: 12,
-		marginTop: 15,
+		marginTop: 5,
 	},
-	subTitle: {
+	text: {
+		textAlign: 'justify',
 		color: colors.dark,
-		fontWeight: '200',
-		marginBottom: 6,
+		paddingBottom: 10,
+		marginRight: 5,
+		paddingHorizontal: 10,
+		// backgroundColor: colors.red,
+	},
+	rating: {
+		// color: colors.dark,
+		// fontWeight: '200',
+		// marginBottom: 6,
+		alignItems: 'flex-end',
+		marginTop: 10,
+		marginHorizontal: 20,
+		// backgroundColor: colors.red,
 	},
 	status: {
 		fontWeight: '700',
@@ -115,4 +124,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Card;
+export default ReviewCard;

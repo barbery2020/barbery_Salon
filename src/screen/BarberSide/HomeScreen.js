@@ -71,8 +71,10 @@ function HomeScreen(props) {
 					/>
 				</Animatable.View>
 			</View>
-			<View style={styles.flatScreen}>
+			<View style={styles.flatContainer}>
 				<FlatList
+					contentContainerStyle={{ paddingBottom: 15 }}
+					style={styles.flatScreen}
 					data={listings}
 					numColumns={2}
 					showsVerticalScrollIndicator={false}
@@ -98,13 +100,15 @@ const styles = StyleSheet.create({
 	},
 	headerScreen: {
 		flex: 1,
-		// backgroundColor: colors.black,
 	},
-	flatScreen: {
+	flatContainer: {
 		flex: 3,
 		zIndex: -1,
-		marginTop: 10,
 		paddingHorizontal: 20,
+	},
+	flatScreen: {
+		flex: 1,
+		paddingTop: 10,
 	},
 });
 

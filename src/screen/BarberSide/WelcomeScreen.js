@@ -47,6 +47,7 @@ function WelcomeScreen(props) {
 						style={[styles.button]}
 					>
 						<TouchableOpacity
+							style={{ width: '100%', alignItems: 'center' }}
 							onPress={() => props.navigation.navigate('Login')}
 						>
 							<Text style={styles.textBtn}>Login</Text>

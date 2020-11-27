@@ -203,6 +203,7 @@ function ActiveAppointmentsScreen(props) {
 				onCancel={hideDatePicker}
 			/>
 			<FlatList
+				contentContainerStyle={{ paddingBottom: 15 }}
 				style={styles.flatScreen}
 				data={appointment1}
 				keyExtractor={(appointment1) => appointment1.id.toString()}
@@ -226,6 +227,7 @@ function CompletedAppointmentsScreen() {
 	return (
 		<View style={styles.screen}>
 			<FlatList
+				contentContainerStyle={{ paddingBottom: 15 }}
 				style={styles.flatScreen}
 				data={appointment2}
 				keyExtractor={(appointment2) => appointment2.id.toString()}

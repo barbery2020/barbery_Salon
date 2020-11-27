@@ -103,6 +103,7 @@ function ServicesListScreen(props) {
 	return (
 		<View style={styles.screen}>
 			<FlatList
+				contentContainerStyle={{ paddingBottom: 15 }}
 				style={styles.flatScreen}
 				data={listings}
 				keyExtractor={(listing) => listing.id.toString()}
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
 	},
 	flatScreen: {
 		flex: 1,
-		paddingTop: 15,
+		paddingTop: 10,
 	},
 	button: {
 		backgroundColor: colors.red,
