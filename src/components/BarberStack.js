@@ -187,7 +187,7 @@ export default class BarberStack extends Component {
 
 	render() {
 		return (
-			<Drawer.Navigator>
+			<Drawer.Navigator edgeWidth={200}>
 				<Drawer.Screen name="Home" component={HomeScreen} />
 				<Drawer.Screen name="Profile" component={ProfileScreen} />
 				<Drawer.Screen name="Services" children={this.createServiceStack} />

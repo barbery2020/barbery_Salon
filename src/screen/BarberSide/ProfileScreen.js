@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	View,
 	StyleSheet,
@@ -12,10 +12,13 @@ import {
 
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-picker';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
 import * as Animatable from 'react-native-animatable';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import ReviewCard from '../../components/ReviewCard';
+
 import colors from '../../styles/colors';
 
 const Tab = createMaterialTopTabNavigator();
@@ -89,14 +92,48 @@ const appointment1 = [
 ];
 
 function barberAbout() {
-	const [image, setImage] = React.useState('');
-	const [firstName, setFirstName] = React.useState('Ahmed');
-	const [lastName, setLastName] = React.useState('Raza');
-	const [email, setEmail] = React.useState('ahmedraza1@gmail.com');
-	const [phone, setPhone] = React.useState('+923167512234');
-	const [password, setPassword] = React.useState('12345raza');
-	const [salonName, setSalonName] = React.useState('HairoSol');
-	const [location, setLocation] = React.useState('G-9, Lane 3, Islamabad');
+	const [image, setImage] = useState('');
+	const [firstName, setFirstName] = useState('Ahmed');
+	const [lastName, setLastName] = useState('Raza');
+	const [email, setEmail] = useState('ahmedraza1@gmail.com');
+	const [phone, setPhone] = useState('+923167512234');
+	const [password, setPassword] = useState('12345raza');
+	const [salonName, setSalonName] = useState('HairoSol');
+	const [location, setLocation] = useState('G-9, Lane 3, Islamabad');
+	const [getmarginBottom, setMarginBottom] = useState(1);
+	const [getCoordinate, setCoordinate] = useState({
+		latitude: 37.78825,
+		longitude: -122.4324,
+	});
+
+	useEffect(() => {
+		Geolocation.getCurrentPosition(
+			(position) => {
+				console.log('wokeeey');
+				console.log(position);
+				setCoordinate({
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude,
+					error: null,
+				});
+			},
+			(error) => this.setState({ error: error.message }),
+			{ enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+		);
+	}, []);
+
+	// const getCurrentPosition = () => {
+	// 	<MapView
+	// 		region={{
+	// 			latitude: { getLatitude },
+	// 			longitude: { getLongitude },
+	// 			latitudeDelta: 0.0922,
+	// 			longitudeDelta: 0.0421,
+	// 		}}
+	// 	>
+	// 		<Marker coordinate={(getLatitude, getLongitude)}></Marker>
+	// 	</MapView>;
+	// };
 
 	const selectFile = () => {
 		var options = {
@@ -108,8 +145,6 @@ function barberAbout() {
 		};
 
 		ImagePicker.showImagePicker(options, (res) => {
-			// console.log('Response = ', res);
-
 			if (res.didCancel) {
 				console.log('User cancelled image picker');
 			} else if (res.error) {
@@ -212,6 +247,25 @@ function barberAbout() {
 					value={location}
 				/>
 
+				<View style={styles.mapContainer}>
+					<MapView
+						provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+						style={[styles.map, { marginBottom: getmarginBottom }]}
+						region={{
+							latitude: getCoordinate.latitude,
+							longitude: getCoordinate.longitude,
+							latitudeDelta: 0.015,
+							longitudeDelta: 0.0121,
+						}}
+						showsUserLocation={true}
+						showsMyLocationButton={true}
+						onMapReady={() => {
+							setMarginBottom(0);
+						}}
+					>
+						<Marker coordinate={getCoordinate} draggable={true} />
+					</MapView>
+				</View>
 				<LinearGradient
 					colors={[colors.orange, colors.red]}
 					style={[styles.button]}
@@ -353,6 +407,26 @@ const styles = StyleSheet.create({
 		marginHorizontal: 10,
 		marginTop: 5,
 		marginBottom: 15,
+	},
+	getLocation: {
+		fontSize: 14,
+		color: colors.white,
+		backgroundColor: colors.red,
+		justifyContent: 'center',
+		alignItems: 'center',
+		textAlign: 'center',
+	},
+	mapContainer: {
+		// ...StyleSheet.absoluteFillObject,
+		height: 400,
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	map: {
+		...StyleSheet.absoluteFillObject,
+		margin: 10,
+		borderRadius: 10,
 	},
 });
 

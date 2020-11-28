@@ -14,9 +14,9 @@ const width = Dimensions.get('window').width;
 
 function HomeCard({ title, subTitle, onPress }) {
 	return (
-		<TouchableHighlight
+		<View
 			style={styles.screen}
-			underlayColor={colors.light}
+			// underlayColor={colors.light}
 			onPress={onPress}
 		>
 			<View style={styles.card}>
@@ -25,7 +25,7 @@ function HomeCard({ title, subTitle, onPress }) {
 					<Text style={styles.subTitle}>{subTitle}</Text>
 				</View>
 			</View>
-		</TouchableHighlight>
+		</View>
 	);
 }
 
