@@ -20,6 +20,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ReviewCard from '../../components/ReviewCard';
 
 import colors from '../../styles/colors';
+import { onChange } from 'react-native-reanimated';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -104,36 +105,37 @@ function barberAbout() {
 	const [getCoordinate, setCoordinate] = useState({
 		latitude: 37.78825,
 		longitude: -122.4324,
+		latitudeDelta: 0.001,
+		longitudeDelta: 0.001,
 	});
 
 	useEffect(() => {
 		Geolocation.getCurrentPosition(
 			(position) => {
-				console.log('wokeeey');
 				console.log(position);
 				setCoordinate({
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
+					latitudeDelta: 0.001,
+					longitudeDelta: 0.001,
 					error: null,
 				});
 			},
-			(error) => this.setState({ error: error.message }),
+			(error) => setCoordinate({ error: error.message }),
 			{ enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
 		);
 	}, []);
 
-	// const getCurrentPosition = () => {
-	// 	<MapView
-	// 		region={{
-	// 			latitude: { getLatitude },
-	// 			longitude: { getLongitude },
-	// 			latitudeDelta: 0.0922,
-	// 			longitudeDelta: 0.0421,
-	// 		}}
-	// 	>
-	// 		<Marker coordinate={(getLatitude, getLongitude)}></Marker>
-	// 	</MapView>;
-	// };
+	const onChangeLocation = (region) => {
+		console.log(region);
+		setCoordinate({
+			latitude: region.latitude,
+			longitude: region.longitude,
+			latitudeDelta: region.latitudeDelta,
+			longitudeDelta: region.longitudeDelta,
+			error: null,
+		});
+	};
 
 	const selectFile = () => {
 		var options = {
@@ -251,26 +253,43 @@ function barberAbout() {
 					<MapView
 						provider={PROVIDER_GOOGLE} // remove if not using Google Maps
 						style={[styles.map, { marginBottom: getmarginBottom }]}
-						region={{
+						initialRegion={{
 							latitude: getCoordinate.latitude,
 							longitude: getCoordinate.longitude,
-							latitudeDelta: 0.015,
-							longitudeDelta: 0.0121,
+							latitudeDelta: getCoordinate.latitudeDelta,
+							longitudeDelta: getCoordinate.longitudeDelta,
 						}}
 						showsUserLocation={true}
 						showsMyLocationButton={true}
 						onMapReady={() => {
 							setMarginBottom(0);
 						}}
+						onRegionChangeComplete={(region) => onChangeLocation(region)}
+					></MapView>
+					<View
+						style={{
+							top: '50%',
+							left: '50%',
+							marginLeft: -24,
+							marginTop: -40,
+							position: 'absolute',
+						}}
 					>
-						<Marker coordinate={getCoordinate} draggable={true} />
-					</MapView>
+						<Image
+							style={{ height: 40, width: 40 }}
+							source={require('../../assets/icons/pointer.png')}
+						/>
+						{/* <Marker coordinate={getCoordinate} draggable /> */}
+					</View>
 				</View>
 				<LinearGradient
 					colors={[colors.orange, colors.red]}
-					style={[styles.button]}
+					style={styles.button}
 				>
-					<TouchableOpacity onPress={() => alert('Profile is updated.')}>
+					<TouchableOpacity
+						style={{ width: '100%', alignItems: 'center' }}
+						onPress={() => alert('Profile is updated.')}
+					>
 						<Text style={styles.textBtn}>Edit</Text>
 					</TouchableOpacity>
 				</LinearGradient>
