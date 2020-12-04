@@ -8,14 +8,19 @@ import {
 	TextInput,
 	TouchableOpacity,
 	FlatList,
+	ToastAndroid,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import WeekdayPicker from 'react-native-weekday-picker';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
-import * as Animatable from 'react-native-animatable';
+import Geocoder from 'react-native-geocoding';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+// import * as Animatable from 'react-native-animatable';
 
 import ReviewCard from '../../components/ReviewCard';
 
@@ -93,7 +98,7 @@ const appointment1 = [
 ];
 
 function barberAbout() {
-	const [image, setImage] = useState('');
+	const [image, setImage] = useState(null);
 	const [firstName, setFirstName] = useState('Ahmed');
 	const [lastName, setLastName] = useState('Raza');
 	const [email, setEmail] = useState('ahmedraza1@gmail.com');
@@ -108,6 +113,23 @@ function barberAbout() {
 		latitudeDelta: 0.001,
 		longitudeDelta: 0.001,
 	});
+	const [isOpenTimePickerVisible, setOpenTimePickerVisibility] = useState(
+		false,
+	);
+	const [isCloseTimePickerVisible, setCloseTimePickerVisibility] = useState(
+		false,
+	);
+	const [isOpenTime, setOpenTime] = useState();
+	const [isCloseTime, setCloseTime] = useState();
+	const [getDay, setDay] = useState({
+		0: 0,
+		1: 0,
+		2: 0,
+		3: 0,
+		4: 0,
+		5: 0,
+		6: 0,
+	});
 
 	useEffect(() => {
 		Geolocation.getCurrentPosition(
@@ -118,7 +140,6 @@ function barberAbout() {
 					longitude: position.coords.longitude,
 					latitudeDelta: 0.001,
 					longitudeDelta: 0.001,
-					error: null,
 				});
 			},
 			(error) => setCoordinate({ error: error.message }),
@@ -133,8 +154,73 @@ function barberAbout() {
 			longitude: region.longitude,
 			latitudeDelta: region.latitudeDelta,
 			longitudeDelta: region.longitudeDelta,
-			error: null,
 		});
+
+		// Geocoder.init('AIzaSyCUa5Cp53aa9O7XQ_okuAod6Kyq1J0z-BU');
+		// Geocoder.from([getCoordinate.latitude, getCoordinate.longitude])
+		// 	.then((json) => {
+		// 		var location = json.results[0].geometry.location;
+		// 		console.log(location);
+		// 	})
+		// 	.catch((error) => console.warn(error));
+	};
+
+	const showOpenTimePicker = () => {
+		setOpenTimePickerVisibility(true);
+	};
+
+	const hideOpenTimePicker = () => {
+		setOpenTimePickerVisibility(false);
+	};
+
+	const showCloseTimePicker = () => {
+		setCloseTimePickerVisibility(true);
+	};
+
+	const hideCloseTimePicker = () => {
+		setCloseTimePickerVisibility(false);
+	};
+
+	const handleOpenTimeConfirm = (selectedTime) => {
+		const date = new Date(selectedTime);
+		const hours = date.getHours();
+		const min = date.getMinutes();
+
+		if (isCloseTime && hours <= isCloseTime.Hours) {
+			ToastAndroid.show(
+				'Close Time should be greater than Open time.',
+				ToastAndroid.LONG,
+			);
+		} else {
+			setOpenTime({
+				Hours: hours,
+				Minutes: min,
+			});
+			console.log(hours + ':' + min);
+		}
+
+		hideOpenTimePicker();
+	};
+
+	const handleCloseTimeConfirm = (selectedTime) => {
+		const date = new Date(selectedTime);
+		const hours = date.getHours();
+		const min = date.getMinutes();
+
+		if (isOpenTime && hours <= isOpenTime.Hours) {
+			ToastAndroid.show(
+				'Close Time should be greater than Open time.',
+				ToastAndroid.LONG,
+			);
+		} else {
+			setCloseTime({
+				Hours: hours,
+				Minutes: min,
+			});
+			console.log(hours + ':' + min);
+		}
+
+		hideCloseTimePicker();
 	};
 
 	const selectFile = () => {
@@ -152,14 +238,8 @@ function barberAbout() {
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
-				const uri = res.uri;
-				const type = 'image/jpg';
-				const name = res.fileName;
-				const source = { uri, type, name };
-				console.log(uri);
-				setImage({
-					imageURI: uri,
-				});
+				const uri = `data:${res.type};base64,${res.data}`;
+				setImage(uri);
 			}
 		});
 	};
@@ -167,7 +247,7 @@ function barberAbout() {
 	return (
 		<ScrollView style={styles.container}>
 			<TouchableOpacity style={styles.imageContainer} onPress={selectFile}>
-				<Image style={styles.profileImage} source={{ uri: image.imageURI }} />
+				<Image style={styles.profileImage} source={{ uri: image }} />
 			</TouchableOpacity>
 			<View style={styles.profileData}>
 				<View style={styles.row}>
@@ -240,6 +320,91 @@ function barberAbout() {
 					onChangeText={(text) => setSalonName(text)}
 					value={salonName}
 				/>
+				<View style={styles.row}>
+					<View style={styles.rowInput}>
+						<Text style={styles.text}>Opening Time</Text>
+						<TouchableOpacity
+							onPress={showOpenTimePicker}
+							style={styles.rowInput}
+						>
+							<View style={styles.timeRow}>
+								<TextInput
+									style={{
+										color: colors.dark,
+									}}
+									editable={false}
+									maxLength={50}
+									value={
+										isOpenTime
+											? isOpenTime.Hours + ':' + isOpenTime.Minutes
+											: 'Select Time'
+									}
+								/>
+								<Icon
+									name="clock-o"
+									style={{ paddingVertical: 10 }}
+									color={colors.dark}
+									size={20}
+								/>
+							</View>
+						</TouchableOpacity>
+					</View>
+					<View style={styles.rowInput}>
+						<Text style={styles.text}>Closing Time</Text>
+						<TouchableOpacity
+							onPress={showCloseTimePicker}
+							style={styles.rowInput}
+						>
+							<View style={styles.timeRow}>
+								<TextInput
+									style={{
+										color: colors.dark,
+									}}
+									editable={false}
+									maxLength={50}
+									value={
+										isCloseTime
+											? isCloseTime.Hours + ':' + isCloseTime.Minutes
+											: 'Select Time'
+									}
+								/>
+								<Icon
+									name="clock-o"
+									style={{ paddingVertical: 10 }}
+									color={colors.dark}
+									size={20}
+								/>
+							</View>
+						</TouchableOpacity>
+					</View>
+				</View>
+
+				<DateTimePickerModal
+					isVisible={isOpenTimePickerVisible}
+					mode="time"
+					minuteInterval={30}
+					onConfirm={handleOpenTimeConfirm}
+					onCancel={hideOpenTimePicker}
+				/>
+
+				<DateTimePickerModal
+					isVisible={isCloseTimePickerVisible}
+					mode="time"
+					minuteInterval={30}
+					onConfirm={handleCloseTimeConfirm}
+					onCancel={hideCloseTimePicker}
+				/>
+
+				<Text style={styles.text}>Week Days</Text>
+				<WeekdayPicker
+					days={getDay}
+					onChange={(days) => {
+						setDay({ ...days });
+					}}
+					style={styles.weekPicker}
+					dayStyle={styles.day}
+				/>
+
 				<Text style={styles.text}>Location</Text>
 				<TextInput
 					style={styles.textInput}
@@ -253,7 +418,7 @@ function barberAbout() {
 					<MapView
 						provider={PROVIDER_GOOGLE} // remove if not using Google Maps
 						style={[styles.map, { marginBottom: getmarginBottom }]}
-						initialRegion={{
+						region={{
 							latitude: getCoordinate.latitude,
 							longitude: getCoordinate.longitude,
 							latitudeDelta: getCoordinate.latitudeDelta,
@@ -403,7 +568,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	rowInput: {
-		width: 170,
+		width: 180,
 	},
 	text: {
 		color: colors.black,
@@ -427,6 +592,20 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		marginBottom: 15,
 	},
+	timeRow: {
+		flexDirection: 'row',
+		height: 40,
+		fontSize: 14,
+		borderRadius: 25,
+		elevation: 5,
+		backgroundColor: colors.light,
+		paddingHorizontal: 15,
+		marginHorizontal: 10,
+		marginTop: 5,
+		marginBottom: 15,
+
+		justifyContent: 'space-between',
+	},
 	getLocation: {
 		fontSize: 14,
 		color: colors.white,
@@ -446,6 +625,16 @@ const styles = StyleSheet.create({
 		...StyleSheet.absoluteFillObject,
 		margin: 10,
 		borderRadius: 10,
+	},
+	weekPicker: {
+		paddingVertical: 30,
+		paddingHorizontal: 10,
+		justifyContent: 'space-between',
+	},
+	day: {
+		margin: 5,
+		elevation: 5,
+		backgroundColor: colors.light,
 	},
 });
 
