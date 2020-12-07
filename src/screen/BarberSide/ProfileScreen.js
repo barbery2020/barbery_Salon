@@ -25,7 +25,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ReviewCard from '../../components/ReviewCard';
 
 import colors from '../../styles/colors';
-import { onChange } from 'react-native-reanimated';
+import profileImg from '../../utils/profileImg';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -98,7 +98,7 @@ const appointment1 = [
 ];
 
 function barberAbout() {
-	const [image, setImage] = useState(null);
+	const [image, setImage] = useState(profileImg.img);
 	const [firstName, setFirstName] = useState('Ahmed');
 	const [lastName, setLastName] = useState('Raza');
 	const [email, setEmail] = useState('ahmedraza1@gmail.com');
@@ -122,9 +122,9 @@ function barberAbout() {
 	const [isOpenTime, setOpenTime] = useState();
 	const [isCloseTime, setCloseTime] = useState();
 	const [getDay, setDay] = useState({
-		0: 0,
-		1: 0,
-		2: 0,
+		0: 1,
+		1: 1,
+		2: 1,
 		3: 0,
 		4: 0,
 		5: 0,
