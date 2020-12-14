@@ -23,6 +23,7 @@ import SpecialistEditScreen from '../screen/BarberSide/SpecialistEditScreen';
 import SpecialistAddScreen from '../screen/BarberSide/SpecialistAddScreen';
 import AppointmentScreen from '../screen/BarberSide/AppointmentScreen';
 import AppointmentDetailScreen from '../screen/BarberSide/AppoinmentDetailScreen';
+import GalleryScreen from '../screen/BarberSide/GalleryScreen';
 // import WelcomeScreen from '../screen/BarberSide/WelcomeScreen';
 // import LoginScreen from '../screen/BarberSide/LoginScreen';
 // import RegisterScreen from '../screen/BarberSide/RegisterScreen';
@@ -190,6 +191,7 @@ export default class BarberStack extends Component {
 			<Drawer.Navigator edgeWidth={200}>
 				<Drawer.Screen name="Home" component={HomeScreen} />
 				<Drawer.Screen name="Profile" component={ProfileScreen} />
+				<Drawer.Screen name="Gallery" component={GalleryScreen} />
 				<Drawer.Screen name="Services" children={this.createServiceStack} />
 				<Drawer.Screen name="Packages" children={this.createPackageStack} />
 				<Drawer.Screen
