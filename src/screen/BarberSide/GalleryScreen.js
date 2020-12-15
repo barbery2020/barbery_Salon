@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import LinearGradient from 'react-native-linear-gradient';
-import { Picker } from '@react-native-picker/picker';
 import ImagePicker from 'react-native-image-picker';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,6 +39,12 @@ export default function GalleryScreen(props) {
 	useEffect(() => {
 		setPhotos(photosList);
 	}, []);
+
+	const deleteHandle = (id) => {
+		console.log(id + ' clicked');
+		const updatedPhotoList = photos.filter((photo) => photo.id !== id);
+		setPhotos(updatedPhotoList);
+	};
 
 	const selectFile = () => {
 		var options = {
@@ -85,6 +90,7 @@ export default function GalleryScreen(props) {
 							setIsVisible(true);
 							setImageIndex(index);
 						}}
+						onDelete={() => deleteHandle(item.id)}
 					/>
 				)}
 			/>
