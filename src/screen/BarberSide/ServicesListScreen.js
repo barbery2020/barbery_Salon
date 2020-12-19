@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	View,
 	FlatList,
@@ -10,7 +10,9 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import Card from '../../components/Card';
 import colors from '../../styles/colors';
-//
+
+import { connect } from 'react-redux';
+import { getServices } from '../../redux/actions/serviceAction';
 
 const listings = [
 	{
@@ -99,21 +101,31 @@ const listings = [
 	},
 ];
 
-function ServicesListScreen(props) {
+function ServicesListScreen({
+	navigation: { navigate },
+	services,
+	getServices,
+	loading,
+}) {
+	useEffect(() => {
+		getServices();
+		return () => {};
+	}, []);
+
 	return (
 		<View style={styles.screen}>
 			<FlatList
 				contentContainerStyle={{ paddingBottom: 15 }}
 				style={styles.flatScreen}
-				data={listings}
-				keyExtractor={(listing) => listing.id.toString()}
+				data={services}
+				keyExtractor={(service, index) => index.toString()}
 				renderItem={({ item }) => (
 					<Card
-						title={item.title}
-						subTitle={'Rs.' + item.price}
+						title={item.name}
+						subTitle={'Rs.' + item.cost}
 						status={item.status}
-						image={item.image}
-						onPress={() => props.navigation.navigate('Service Details')}
+						image={`data:${item.picture.type};base64,${item.picture.data}`}
+						onPress={() => navigate('Service Details', item)}
 					/>
 				)}
 			/>
@@ -121,9 +133,7 @@ function ServicesListScreen(props) {
 				colors={[colors.orange, colors.red]}
 				style={[styles.button]}
 			>
-				<TouchableOpacity
-					onPress={() => props.navigation.navigate('Add Service')}
-				>
+				<TouchableOpacity onPress={() => navigate('Add Service')}>
 					<Image
 						style={styles.icon}
 						source={require('../../assets/icons/plus.png')}
@@ -162,4 +172,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ServicesListScreen;
+const mapStateToProps = ({ serviceReducer: { services, loading } }) => ({
+	services,
+	loading,
+});
+
+const mapActionToProps = { getServices };
+
+export default connect(mapStateToProps, mapActionToProps)(ServicesListScreen);

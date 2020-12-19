@@ -10,11 +10,6 @@ import {
 import colors from '../styles/colors';
 
 function Card({ title, subTitle, status, image, onPress }) {
-	const getStatus = (status) => {
-		if (status === 'Inactive') return false;
-		return true;
-	};
-
 	return (
 		<TouchableHighlight
 			style={styles.screen}
@@ -22,17 +17,14 @@ function Card({ title, subTitle, status, image, onPress }) {
 			onPress={onPress}
 		>
 			<View style={styles.card}>
-				<Image style={styles.image} source={image} />
+				<Image style={styles.image} source={{ uri: image }} />
 				<View style={styles.detailsContainer}>
 					<Text style={styles.title}>{title}</Text>
 					<Text style={styles.subTitle}>{subTitle}</Text>
 					<Text
-						style={[
-							getStatus(status) ? styles.active : styles.inActive,
-							styles.status,
-						]}
+						style={[status ? styles.active : styles.inActive, styles.status]}
 					>
-						{status}
+						{status ? 'Active' : 'Inactive'}
 					</Text>
 				</View>
 			</View>

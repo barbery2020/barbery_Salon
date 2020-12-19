@@ -11,10 +11,10 @@ export const GET_RECORDS = 'GET_RECORDS';
 
 // Services
 export const GET_SERVICES = 'GET_SERVICES';
-export const VIEW_SERVICE = 'VIEW_SERVICE';
 export const ADD_SERVICE = 'ADD_SERVICE';
 export const UPDATE_SERVICE = 'UPDATE_SERVICE';
 export const DELETE_SERVICE = 'DELETE_SERVICE';
+export const SET_SERVICE_LOADING = 'SET_SERVICE_LOADING';
 
 // Error
 export const SET_ERROR = 'SET_ERROR';
