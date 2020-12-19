@@ -23,8 +23,10 @@ import ReviewCard from '../../components/ReviewCard';
 
 import colors from '../../styles/colors';
 import profileImg from '../../utils/profileImg';
+import LoadingIndicator from '../../components/LoadingIndicator';
+
 import { connect } from 'react-redux';
-import { updateUser } from '../../redux/actions/user';
+import { getUser, updateUser } from '../../redux/actions/mainRecords';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -96,7 +98,7 @@ const appointment1 = [
 	},
 ];
 
-function BarberAbout({ user, updateUser }) {
+function BarberAbout({ user, updateUser, loading }) {
 	// console.log(user.image);
 	const [apiMage, setApiMage] = useState({});
 	const [image, setImage] = useState(
@@ -112,8 +114,8 @@ function BarberAbout({ user, updateUser }) {
 	const [location, setLocation] = useState(user?.address);
 	const [getmarginBottom, setMarginBottom] = useState(1);
 	const [getCoordinate, setCoordinate] = useState({
-		latitude: Number(user?.latitude) || 37.78825,
-		longitude: Number(user?.longitude) || -122.4324,
+		latitude: Number(user?.latitude),
+		longitude: Number(user?.longitude),
 		latitudeDelta: 0.001,
 		longitudeDelta: 0.001,
 	});
@@ -141,34 +143,39 @@ function BarberAbout({ user, updateUser }) {
 		6: 0,
 	});
 
-	const updateCurrentUser = {
-		image: apiMage,
-		firstName,
-		lastName,
-		email,
-		phoneNo: phone,
-		shopTitle: salonName,
-		openTiming: isOpenTime.Hours + ':' + isOpenTime.Minutes,
-		closeTiming: isCloseTime.Hours + ':' + isCloseTime.Minutes,
-		address: location,
-		latitude: getCoordinate.latitude,
-		longitude: getCoordinate.longitude,
+	const update = () => {
+		const updateCurrentUser = {
+			image: apiMage,
+			firstName,
+			lastName,
+			email,
+			phoneNo: phone,
+			shopTitle: salonName,
+			openTiming: isOpenTime.Hours + ':' + isOpenTime.Minutes,
+			closeTiming: isCloseTime.Hours + ':' + isCloseTime.Minutes,
+			address: location,
+			latitude: getCoordinate.latitude.toString(),
+			longitude: getCoordinate.longitude.toString(),
+		};
+		updateUser(updateCurrentUser);
 	};
 
 	useEffect(() => {
-		Geolocation.getCurrentPosition(
-			(position) => {
-				console.log(position);
-				setCoordinate({
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude,
-					latitudeDelta: 0.001,
-					longitudeDelta: 0.001,
-				});
-			},
-			(error) => setCoordinate({ error: error.message }),
-			{ enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-		);
+		if (getCoordinate.latitude == 0 && getCoordinate.longitude == 0) {
+			Geolocation.getCurrentPosition(
+				(position) => {
+					console.log(position);
+					setCoordinate({
+						latitude: position.coords.latitude,
+						longitude: position.coords.longitude,
+						latitudeDelta: 0.001,
+						longitudeDelta: 0.001,
+					});
+				},
+				(error) => setCoordinate({ error: error.message }),
+				{ enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+			);
+		}
 	}, []);
 
 	const onChangeLocation = (region) => {
@@ -263,198 +270,201 @@ function BarberAbout({ user, updateUser }) {
 
 	return (
 		<ScrollView style={styles.container}>
+			{loading && <LoadingIndicator />}
 			<TouchableOpacity style={styles.imageContainer} onPress={selectFile}>
 				<Image style={styles.profileImage} source={{ uri: image }} />
 			</TouchableOpacity>
-			<View style={styles.profileData}>
-				<View style={styles.row}>
-					<View style={styles.rowInput}>
-						<Text style={styles.text}>First Name</Text>
-						<TextInput
-							style={styles.textInput}
-							placeholder={'Ahmed'}
-							maxLength={50}
-							onChangeText={(text) => setFirstName(text)}
-							value={firstName}
-						/>
+			{!loading && (
+				<View style={styles.profileData}>
+					<View style={styles.row}>
+						<View style={styles.rowInput}>
+							<Text style={styles.text}>First Name</Text>
+							<TextInput
+								style={styles.textInput}
+								placeholder={'Ahmed'}
+								maxLength={50}
+								onChangeText={(text) => setFirstName(text)}
+								value={firstName}
+							/>
+						</View>
+						<View style={styles.rowInput}>
+							<Text style={styles.text}>Last Name</Text>
+							<TextInput
+								style={styles.textInput}
+								placeholder={'Raza'}
+								maxLength={50}
+								onChangeText={(text) => setLastName(text)}
+								value={lastName}
+							/>
+						</View>
 					</View>
-					<View style={styles.rowInput}>
-						<Text style={styles.text}>Last Name</Text>
-						<TextInput
-							style={styles.textInput}
-							placeholder={'Raza'}
-							maxLength={50}
-							onChangeText={(text) => setLastName(text)}
-							value={lastName}
-						/>
-					</View>
-				</View>
-				<Text style={styles.text}>Email</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder={'e.g. abc@gmail.com'}
-					maxLength={50}
-					onChangeText={(text) => setEmail(text)}
-					value={email}
-				/>
-				<Text style={styles.text}>Phone no.</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder={'+92'}
-					keyboardType={'numeric'}
-					maxLength={13}
-					minLength={11}
-					onChangeText={(text) => setPhone(text)}
-					value={phone}
-				/>
-				<Text
-					style={[
-						styles.text,
-						{
-							fontSize: 20,
-							fontWeight: 'bold',
-							marginTop: 30,
-							marginBottom: 15,
-						},
-					]}
-				>
-					Salon Details
-				</Text>
-				<Text style={styles.text}>Shop/Saloon Name</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder={'e.g. HairoSol'}
-					maxLength={50}
-					onChangeText={(text) => setSalonName(text)}
-					value={salonName}
-				/>
-				<View style={styles.row}>
-					<View style={styles.rowInput}>
-						<Text style={styles.text}>Opening Time</Text>
-						<TouchableOpacity
-							onPress={showOpenTimePicker}
-							style={styles.rowInput}
-						>
-							<View style={styles.timeRow}>
-								<TextInput
-									style={{
-										color: colors.dark,
-									}}
-									editable={false}
-									maxLength={50}
-									value={
-										isOpenTime
-											? isOpenTime.Hours + ':' + isOpenTime.Minutes
-											: 'Select Time'
-									}
-								/>
-								<Icon
-									name="clock-o"
-									style={{ paddingVertical: 10 }}
-									color={colors.dark}
-									size={20}
-								/>
-							</View>
-						</TouchableOpacity>
-					</View>
-					<View style={styles.rowInput}>
-						<Text style={styles.text}>Closing Time</Text>
-						<TouchableOpacity
-							onPress={showCloseTimePicker}
-							style={styles.rowInput}
-						>
-							<View style={styles.timeRow}>
-								<TextInput
-									style={{
-										color: colors.dark,
-									}}
-									editable={false}
-									maxLength={50}
-									value={
-										isCloseTime
-											? isCloseTime.Hours + ':' + isCloseTime.Minutes
-											: 'Select Time'
-									}
-								/>
-								<Icon
-									name="clock-o"
-									style={{ paddingVertical: 10 }}
-									color={colors.dark}
-									size={20}
-								/>
-							</View>
-						</TouchableOpacity>
-					</View>
-				</View>
-
-				<DateTimePickerModal
-					isVisible={isOpenTimePickerVisible}
-					mode="time"
-					minuteInterval={30}
-					onConfirm={handleOpenTimeConfirm}
-					onCancel={hideOpenTimePicker}
-				/>
-
-				<DateTimePickerModal
-					isVisible={isCloseTimePickerVisible}
-					mode="time"
-					minuteInterval={30}
-					onConfirm={handleCloseTimeConfirm}
-					onCancel={hideCloseTimePicker}
-				/>
-				<Text style={styles.text}>Location</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder={'e.g. G-9, Lane 3, Islamabad '}
-					maxLength={50}
-					onChangeText={(text) => setLocation(text)}
-					value={location}
-				/>
-
-				<View style={styles.mapContainer}>
-					<MapView
-						provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-						style={[styles.map, { marginBottom: getmarginBottom }]}
-						region={{
-							latitude: getCoordinate.latitude,
-							longitude: getCoordinate.longitude,
-							latitudeDelta: getCoordinate.latitudeDelta,
-							longitudeDelta: getCoordinate.longitudeDelta,
-						}}
-						showsUserLocation={true}
-						showsMyLocationButton={true}
-						onMapReady={() => {
-							setMarginBottom(0);
-						}}
-						onRegionChangeComplete={(region) => onChangeLocation(region)}
-					></MapView>
-					<View
-						style={{
-							top: '50%',
-							left: '50%',
-							marginLeft: -24,
-							marginTop: -40,
-							position: 'absolute',
-						}}
+					<Text style={styles.text}>Email</Text>
+					<TextInput
+						style={styles.textInput}
+						placeholder={'e.g. abc@gmail.com'}
+						maxLength={50}
+						onChangeText={(text) => setEmail(text)}
+						value={email}
+					/>
+					<Text style={styles.text}>Phone no.</Text>
+					<TextInput
+						style={styles.textInput}
+						placeholder={'+92'}
+						keyboardType={'numeric'}
+						maxLength={13}
+						minLength={11}
+						onChangeText={(text) => setPhone(text)}
+						value={phone}
+					/>
+					<Text
+						style={[
+							styles.text,
+							{
+								fontSize: 20,
+								fontWeight: 'bold',
+								marginTop: 30,
+								marginBottom: 15,
+							},
+						]}
 					>
-						<Image
-							style={{ height: 40, width: 40 }}
-							source={require('../../assets/icons/pointer.png')}
-						/>
+						Salon Details
+					</Text>
+					<Text style={styles.text}>Shop/Saloon Name</Text>
+					<TextInput
+						style={styles.textInput}
+						placeholder={'e.g. HairoSol'}
+						maxLength={50}
+						onChangeText={(text) => setSalonName(text)}
+						value={salonName}
+					/>
+					<View style={styles.row}>
+						<View style={styles.rowInput}>
+							<Text style={styles.text}>Opening Time</Text>
+							<TouchableOpacity
+								onPress={showOpenTimePicker}
+								style={styles.rowInput}
+							>
+								<View style={styles.timeRow}>
+									<TextInput
+										style={{
+											color: colors.dark,
+										}}
+										editable={false}
+										maxLength={50}
+										value={
+											isOpenTime
+												? isOpenTime.Hours + ':' + isOpenTime.Minutes
+												: 'Select Time'
+										}
+									/>
+									<Icon
+										name="clock-o"
+										style={{ paddingVertical: 10 }}
+										color={colors.dark}
+										size={20}
+									/>
+								</View>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.rowInput}>
+							<Text style={styles.text}>Closing Time</Text>
+							<TouchableOpacity
+								onPress={showCloseTimePicker}
+								style={styles.rowInput}
+							>
+								<View style={styles.timeRow}>
+									<TextInput
+										style={{
+											color: colors.dark,
+										}}
+										editable={false}
+										maxLength={50}
+										value={
+											isCloseTime
+												? isCloseTime.Hours + ':' + isCloseTime.Minutes
+												: 'Select Time'
+										}
+									/>
+									<Icon
+										name="clock-o"
+										style={{ paddingVertical: 10 }}
+										color={colors.dark}
+										size={20}
+									/>
+								</View>
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
-				<LinearGradient
-					colors={[colors.orange, colors.red]}
-					style={styles.button}
-				>
-					<TouchableOpacity
-						style={{ width: '100%', alignItems: 'center' }}
-						onPress={() => updateUser(updateCurrentUser)}
+
+					<DateTimePickerModal
+						isVisible={isOpenTimePickerVisible}
+						mode="time"
+						minuteInterval={30}
+						onConfirm={handleOpenTimeConfirm}
+						onCancel={hideOpenTimePicker}
+					/>
+
+					<DateTimePickerModal
+						isVisible={isCloseTimePickerVisible}
+						mode="time"
+						minuteInterval={30}
+						onConfirm={handleCloseTimeConfirm}
+						onCancel={hideCloseTimePicker}
+					/>
+					<Text style={styles.text}>Location</Text>
+					<TextInput
+						style={styles.textInput}
+						placeholder={'e.g. G-9, Lane 3, Islamabad '}
+						maxLength={50}
+						onChangeText={(text) => setLocation(text)}
+						value={location}
+					/>
+
+					<View style={styles.mapContainer}>
+						<MapView
+							provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+							style={[styles.map, { marginBottom: getmarginBottom }]}
+							region={{
+								latitude: getCoordinate.latitude,
+								longitude: getCoordinate.longitude,
+								latitudeDelta: getCoordinate.latitudeDelta,
+								longitudeDelta: getCoordinate.longitudeDelta,
+							}}
+							showsUserLocation={true}
+							showsMyLocationButton={true}
+							onMapReady={() => {
+								setMarginBottom(0);
+							}}
+							onRegionChangeComplete={(region) => onChangeLocation(region)}
+						></MapView>
+						<View
+							style={{
+								top: '50%',
+								left: '50%',
+								marginLeft: -24,
+								marginTop: -40,
+								position: 'absolute',
+							}}
+						>
+							<Image
+								style={{ height: 40, width: 40 }}
+								source={require('../../assets/icons/pointer.png')}
+							/>
+						</View>
+					</View>
+					<LinearGradient
+						colors={[colors.orange, colors.red]}
+						style={styles.button}
 					>
-						<Text style={styles.textBtn}>Save</Text>
-					</TouchableOpacity>
-				</LinearGradient>
-			</View>
+						<TouchableOpacity
+							style={{ width: '100%', alignItems: 'center' }}
+							onPress={update}
+						>
+							<Text style={styles.textBtn}>Save</Text>
+						</TouchableOpacity>
+					</LinearGradient>
+				</View>
+			)}
 		</ScrollView>
 	);
 }
@@ -481,7 +491,13 @@ function barberReviews(props) {
 	);
 }
 
-function ProfileScreen({ user, updateUser }) {
+function ProfileScreen({ user, updateUser, loading }) {
+	useEffect(() => {
+		if (!user) {
+			getUser();
+		}
+		return () => {};
+	}, []);
 	return (
 		<Tab.Navigator
 			initialRouteName="About"
@@ -500,7 +516,12 @@ function ProfileScreen({ user, updateUser }) {
 				}}
 			>
 				{(props) => (
-					<BarberAbout {...props} user={user} updateUser={updateUser} />
+					<BarberAbout
+						{...props}
+						user={user}
+						updateUser={updateUser}
+						loading={loading}
+					/>
 				)}
 			</Tab.Screen>
 			<Tab.Screen
@@ -637,8 +658,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ user: { user } }) => ({ user });
+const mapStateToProps = ({ mainRecords: { user, loading } }) => ({
+	user,
+	loading,
+});
 
-const mapActionToProps = { updateUser };
+const mapActionToProps = { getUser, updateUser };
 
 export default connect(mapStateToProps, mapActionToProps)(ProfileScreen);

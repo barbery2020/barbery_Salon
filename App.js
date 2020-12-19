@@ -8,12 +8,13 @@ import setAuthToken from './config';
 import { StatusBar } from 'react-native';
 import colors from './src/styles/colors';
 
-axios.defaults.baseURL = 'http://barbery.herokuapp.com/api';
+// axios.defaults.baseURL = 'http://barbery.herokuapp.com/api';
 
 function App({ token }) {
-	if (token) {
-		setAuthToken(token);
-	}
+	// if (token) {
+	// 	console.log('object');
+	// 	setAuthToken(token);
+	// }
 	return (
 		<>
 			<StatusBar backgroundColor={colors.red} />

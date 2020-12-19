@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	View,
 	Text,
@@ -10,75 +10,38 @@ import GradientHeader from 'react-native-gradient-header';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 
+import profileImg from '../../utils/profileImg';
 import HomeCard from '../../components/HomeCard';
+import LoadingIndicator from '../../components/LoadingIndicator';
 import colors from '../../styles/colors';
+
 import { connect } from 'react-redux';
-import { getUser, logout } from '../../redux/actions/user';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { logout } from '../../redux/actions/user';
+import { getUser, getRecords } from '../../redux/actions/mainRecords';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const listings = [
-	{
-		id: 1,
-		title: 'Total Customers',
-		price: 984,
-		color: '#4287f5',
-		image: require('../../assets/icons/profile.png'),
-	},
-	{
-		id: 2,
-		title: 'Total Specialists',
-		price: 14,
-		color: '#f5424b',
-		image: require('../../assets/icons/profile.png'),
-	},
-	{
-		id: 3,
-		title: 'Appointments Completed',
-		price: 1976,
-		color: '#4dc94b',
-		image: require('../../assets/icons/calendar.png'),
-	},
-	{
-		id: 4,
-		title: 'Appointments Pending',
-		price: 70,
-		color: '#b342f5',
-		image: require('../../assets/icons/calendar.png'),
-	},
-	{
-		id: 5,
-		title: 'Total Services',
-		price: 68,
-		color: '#c9c742',
-		image: require('../../assets/icons/services.png'),
-	},
-	{
-		id: 6,
-		title: 'Total Packages',
-		price: 21,
-		color: '#cc841f',
-		image: require('../../assets/icons/services.png'),
-	},
-	{
-		id: 7,
-		title: 'Revenue',
-		price: 100345,
-		color: '#1fb5ab',
-		image: require('../../assets/icons/dollar.png'),
-	},
-];
-
-function HomeScreen({ getUser, navigation: { goBack }, user, logout }) {
+function HomeScreen({
+	navigation: { goBack },
+	user,
+	records,
+	loading,
+	getUser,
+	getRecords,
+	logout,
+	token,
+}) {
 	useEffect(() => {
 		if (!user) {
 			getUser();
 		}
+		getRecords();
+
 		return () => {};
 	}, []);
 
 	return (
 		<View style={styles.screen}>
+			{loading && <LoadingIndicator />}
 			<View style={styles.headerScreen}>
 				<Animatable.View animation="slideInDown">
 					<GradientHeader
@@ -97,34 +60,32 @@ function HomeScreen({ getUser, navigation: { goBack }, user, logout }) {
 				<FlatList
 					contentContainerStyle={{ paddingBottom: 15 }}
 					style={styles.flatScreen}
-					data={listings}
+					data={records}
 					numColumns={2}
 					showsVerticalScrollIndicator={false}
-					keyExtractor={(listing) => listing.id.toString()}
+					keyExtractor={(listing, index) => index.toString()}
 					renderItem={({ item }) => (
-						<HomeCard
-							title={item.title}
-							subTitle={item.price}
-							bgImage={item.image}
-							onPress={() => console.log(item)}
-						/>
+						<HomeCard title={item.title} subTitle={item.value} />
 					)}
 				/>
 			</View>
-			<LinearGradient
-				colors={[colors.orange, colors.red]}
-				style={styles.button}
-			>
-				<TouchableOpacity
-					style={{ width: '100%', alignItems: 'center' }}
-					onPress={() => {
-						logout();
-						goBack();
-					}}
+			{!loading && (
+				<LinearGradient
+					colors={[colors.orange, colors.red]}
+					style={styles.button}
 				>
-					<Text style={styles.textBtn}>Logout</Text>
-				</TouchableOpacity>
-			</LinearGradient>
+					<TouchableOpacity
+						style={{ width: '100%', alignItems: 'center' }}
+						onPress={() => {
+							logout();
+							goBack();
+							AsyncStorage.removeItem('@Token');
+						}}
+					>
+						<Text style={styles.textBtn}>Logout</Text>
+					</TouchableOpacity>
+				</LinearGradient>
+			)}
 		</View>
 	);
 }
@@ -163,8 +124,16 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ user: { user, token } }) => ({ user, token });
+const mapStateToProps = ({
+	user: { token },
+	mainRecords: { user, records, loading },
+}) => ({
+	token,
+	user,
+	records,
+	loading,
+});
 
-const mapActionToProps = { getUser, logout };
+const mapActionToProps = { getUser, getRecords, logout };
 
 export default connect(mapStateToProps, mapActionToProps)(HomeScreen);

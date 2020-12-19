@@ -1,24 +1,13 @@
 import React from 'react';
-import {
-	Text,
-	View,
-	StyleSheet,
-	Image,
-	TouchableHighlight,
-	Dimensions,
-} from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 
 import colors from '../styles/colors';
 
 const width = Dimensions.get('window').width;
 
-function HomeCard({ title, subTitle, onPress }) {
+function HomeCard({ title, subTitle }) {
 	return (
-		<View
-			style={styles.screen}
-			// underlayColor={colors.light}
-			onPress={onPress}
-		>
+		<View style={styles.screen}>
 			<View style={styles.card}>
 				<View style={styles.detailsContainer}>
 					<Text style={styles.title}>{title}</Text>
