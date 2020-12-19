@@ -26,9 +26,6 @@ function ServicesAddScreen({
 }) {
 	const [apiMage, setApiMage] = useState({});
 	const [imagePicked, setImagePicked] = useState();
-	// servi?.image
-	// ? `data:${user?.image?.type};base64,${user?.image?.data}`
-	// : profileImg.img,
 	const [title, setTitle] = React.useState('');
 	const [price, setPrice] = React.useState('');
 	const [description, setDescription] = React.useState('');

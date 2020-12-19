@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Image,
 	Text,
@@ -13,11 +13,21 @@ import { Root, Popup } from 'popup-ui';
 
 import colors from '../../styles/colors';
 
-function PackagesAddScreen(props) {
+import { connect } from 'react-redux';
+import { addPackage } from '../../redux/actions/packageAction';
+import { getRecords } from '../../redux/actions/mainRecords';
+
+function PackagesAddScreen({
+	navigation: { navigate, goBack },
+	packages,
+	addPackage,
+	getRecords,
+}) {
+	const [apiMage, setApiMage] = useState({});
+	const [imagePicked, setImagePicked] = useState();
 	const [title, setTitle] = React.useState('');
 	const [price, setPrice] = React.useState('');
 	const [description, setDescription] = React.useState('');
-	const [imagePicked, setImagePicked] = React.useState();
 
 	const selectFile = () => {
 		var options = {
@@ -36,15 +46,22 @@ function PackagesAddScreen(props) {
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
-				const uri = res.uri;
-				const type = 'image/jpg';
-				const name = res.fileName;
-				const source = { uri, type, name };
-				setImagePicked({
-					imageURI: uri,
-				});
+				setApiMage({ type: res.type, data: res.data });
+				const uri = `data:${res.type};base64,${res.data}`;
+				setImagePicked(uri);
 			}
 		});
+	};
+
+	const addNewPackage = () => {
+		const newPackage = {
+			name: title,
+			cost: price,
+			picture: apiMage,
+			status: true,
+			description,
+		};
+		addPackage(newPackage);
 	};
 
 	return (
@@ -77,10 +94,7 @@ function PackagesAddScreen(props) {
 				/>
 				{imagePicked && (
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image
-							style={styles.image}
-							source={{ uri: imagePicked.imageURI }}
-						/>
+						<Image style={styles.image} source={{ uri: imagePicked }} />
 					</View>
 				)}
 				<LinearGradient
@@ -96,19 +110,21 @@ function PackagesAddScreen(props) {
 					style={[styles.button]}
 				>
 					<TouchableOpacity
-						onPress={
-							() => {
-								Popup.show({
-									type: 'Success',
-									title: 'Package Added',
-									// button: false,
-									textBody: 'New package added successfully.',
-									buttonText: 'Ok',
-									callback: () => Popup.hide(),
-								});
-							}
-							// props.navigation.navigate('Services List')}
-						}
+						onPress={() => {
+							addNewPackage();
+							getRecords();
+							Popup.show({
+								type: 'Success',
+								title: 'Package Added',
+								// button: false,
+								textBody: 'New package added successfully.',
+								buttonText: 'Ok',
+								callback: () => {
+									Popup.hide();
+									goBack();
+								},
+							});
+						}}
 					>
 						<Text style={styles.textBtn}>Add Package</Text>
 					</TouchableOpacity>
@@ -166,4 +182,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PackagesAddScreen;
+const mapStateToProps = ({ packageReducer: { packages, loading } }) => ({
+	packages,
+	loading,
+});
+
+const mapActionToProps = { addPackage, getRecords };
+
+export default connect(mapStateToProps, mapActionToProps)(PackagesAddScreen);

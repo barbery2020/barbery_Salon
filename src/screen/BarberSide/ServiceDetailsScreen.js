@@ -3,7 +3,6 @@ import {
 	View,
 	ScrollView,
 	Text,
-	TouchableWithoutFeedback,
 	TouchableOpacity,
 	Image,
 	Switch,
@@ -44,7 +43,7 @@ function ServiceDetailsScreen({
 							{`Category/${service.category}`}
 						</Text>
 						<Text style={styles.title}>{service.name}</Text>
-						<Text style={styles.price}>{`Rs.${service.cost}`}</Text>
+						<Text style={styles.price}>{`Rs. ${service.cost}`}</Text>
 						<Separator />
 						<View style={styles.switchContainer}>
 							<Text style={styles.status}>Service Status</Text>

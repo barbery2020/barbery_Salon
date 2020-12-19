@@ -14,7 +14,7 @@ import { Root, Popup } from 'popup-ui';
 
 import { connect } from 'react-redux';
 import { updateService } from '../../redux/actions/serviceAction';
-import { getRecords, updateUser } from '../../redux/actions/mainRecords';
+import { getRecords } from '../../redux/actions/mainRecords';
 
 import colors from '../../styles/colors';
 
@@ -69,8 +69,6 @@ function ServicesEditScreen({
 		};
 
 		ImagePicker.showImagePicker(options, (res) => {
-			console.log('Response = ', res);
-
 			if (res.didCancel) {
 				console.log('User cancelled image picker');
 			} else if (res.error) {
@@ -159,7 +157,6 @@ function ServicesEditScreen({
 								buttonText: 'Ok',
 								callback: () => {
 									Popup.hide();
-									// goBack('Services List');
 									navigate('Services List');
 								},
 							});

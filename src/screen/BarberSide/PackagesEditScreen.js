@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Image,
 	Text,
@@ -13,11 +13,45 @@ import { Root, Popup } from 'popup-ui';
 
 import colors from '../../styles/colors';
 
-function PackagesEditScreen(props) {
+import { connect } from 'react-redux';
+import { updatePackage } from '../../redux/actions/packageAction';
+import { getRecords } from '../../redux/actions/mainRecords';
+
+function PackagesEditScreen({
+	navigation: { navigate, goBack },
+	loading,
+	updatePackage,
+	getRecords,
+	route,
+}) {
+	const [pkg, setPackage] = useState(route.params.pkg);
+
+	const [apiMage, setApiMage] = useState({});
+	const [imagePicked, setImagePicked] = useState();
 	const [title, setTitle] = React.useState('');
 	const [price, setPrice] = React.useState('');
 	const [description, setDescription] = React.useState('');
-	const [imagePicked, setImagePicked] = React.useState();
+
+	useEffect(() => {
+		setImagePicked(`data:${pkg.picture.type};base64,${pkg.picture.data}`);
+		setTitle(pkg.name);
+		setPrice(pkg.cost);
+		setDescription(pkg.description);
+		return () => {};
+	}, []);
+
+	const updateCurrentPackage = {
+		_id: pkg._id,
+		name: title,
+		cost: price,
+		picture: apiMage,
+		status: true,
+		description,
+	};
+
+	const update = () => {
+		updatePackage(updateCurrentPackage);
+	};
 
 	const selectFile = () => {
 		var options = {
@@ -36,13 +70,9 @@ function PackagesEditScreen(props) {
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
-				const uri = res.uri;
-				const type = 'image/jpg';
-				const name = res.fileName;
-				const source = { uri, type, name };
-				setImagePicked({
-					imageURI: uri,
-				});
+				setApiMage({ type: res.type, data: res.data });
+				const uri = `data:${res.type};base64,${res.data}`;
+				setImagePicked(uri);
 			}
 		});
 	};
@@ -77,10 +107,7 @@ function PackagesEditScreen(props) {
 				/>
 				{imagePicked && (
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image
-							style={styles.image}
-							source={{ uri: imagePicked.imageURI }}
-						/>
+						<Image style={styles.image} source={{ uri: imagePicked }} />
 					</View>
 				)}
 				<LinearGradient
@@ -96,19 +123,21 @@ function PackagesEditScreen(props) {
 					style={[styles.button]}
 				>
 					<TouchableOpacity
-						onPress={
-							() => {
-								Popup.show({
-									type: 'Success',
-									title: 'Package Updated',
-									// button: false,
-									textBody: 'Package updated successfully.',
-									buttonText: 'Ok',
-									callback: () => Popup.hide(),
-								});
-							}
-							// props.navigation.navigate('Services List')}
-						}
+						onPress={() => {
+							update();
+							getRecords();
+							Popup.show({
+								type: 'Success',
+								title: 'Package Updated',
+								// button: false,
+								textBody: 'Package updated successfully.',
+								buttonText: 'Ok',
+								callback: () => {
+									Popup.hide();
+									navigate('Packages List');
+								},
+							});
+						}}
 					>
 						<Text style={styles.textBtn}>Update Package</Text>
 					</TouchableOpacity>
@@ -166,4 +195,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PackagesEditScreen;
+const mapStateToProps = ({ packageReducer: { packages, loading } }) => ({
+	packages,
+	loading,
+});
+
+const mapActionToProps = { updatePackage, getRecords };
+
+export default connect(mapStateToProps, mapActionToProps)(PackagesEditScreen);

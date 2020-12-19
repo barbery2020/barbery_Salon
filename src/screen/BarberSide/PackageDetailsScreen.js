@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	View,
 	ScrollView,
 	Text,
-	TouchableWithoutFeedback,
 	TouchableOpacity,
 	Image,
 	Switch,
@@ -15,63 +14,61 @@ import { Root, Popup } from 'popup-ui';
 import colors from '../../styles/colors';
 import Separator from '../../components/Separator';
 
-function PackageDetailsScreen(props) {
-	const [isSwitch, setSwitch] = React.useState(false);
+import { connect } from 'react-redux';
+import {
+	updatePackageStatus,
+	deletePackage,
+} from '../../redux/actions/packageAction';
+import { getRecords } from '../../redux/actions/mainRecords';
+
+function PackageDetailsScreen({
+	navigation: { navigate, goBack },
+	updatePackageStatus,
+	deletePackage,
+	getRecords,
+	loading,
+	route,
+}) {
+	const [pkg, setPackage] = useState(route.params.pkg);
 
 	return (
 		<Root>
 			<ScrollView>
 				<View>
-					<TouchableWithoutFeedback
-					//onPress={() => props.navigation.navigate('Image View')}
-					>
-						<Image
-							style={styles.image}
-							source={require('../../assets/images/image_7.jpg')}
-						/>
-					</TouchableWithoutFeedback>
+					<Image
+						style={styles.image}
+						source={{
+							uri: `data:${pkg.picture.type};base64,${pkg.picture.data}`,
+						}}
+					/>
 					<View style={styles.detailsContainer}>
-						<Text style={styles.titleCategory}>Package#01234</Text>
-						<Text style={styles.title}>Beard Trimming and Waxing</Text>
-						<Text style={styles.price}>Rs. 350</Text>
+						<Text style={styles.titleCategory}>{`Package#${pkg._id}`}</Text>
+						<Text style={styles.title}>{pkg.name}</Text>
+						<Text style={styles.price}>{`Rs. ${pkg.cost}`}</Text>
 						<Separator />
 						<View style={styles.switchContainer}>
 							<Text style={styles.status}>Package Status</Text>
 							<Switch
-								value={isSwitch}
-								onValueChange={(value) => setSwitch(value)}
+								value={pkg.status}
+								onValueChange={(value) => {
+									updatePackageStatus({
+										_id: pkg._id,
+										status: value,
+									});
+									setPackage({ ...pkg, status: value });
+								}}
 							/>
 						</View>
 						<Separator />
 						<Text style={styles.status}>Package Description</Text>
-						<Text style={styles.description}>
-							Lorem Ipsum is simply dummy text of the printing and typesetting
-							industry. Lorem Ipsum has been the industry's standard dummy text
-							ever since the 1500s, when an unknown printer took a galley of
-							type and scrambled it to make a type specimen book. It has
-							survived not only five centuries, but also the leap into
-							electronic typesetting, remaining essentially unchanged. It was
-							popularised in the 1960s with the release of Letraset sheets
-							containing Lorem Ipsum passages, and more recently with desktop
-							publishing software like Aldus PageMaker including versions of
-							Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and
-							typesetting industry. Lorem Ipsum has been the industry's standard
-							dummy text ever since the 1500s, when an unknown printer took a
-							galley of type and scrambled it to make a type specimen book. It
-							has survived not only five centuries, but also the leap into
-							electronic typesetting, remaining essentially unchanged. It was
-							popularised in the 1960s with the release of Letraset sheets
-							containing Lorem Ipsum passages, and more recently with desktop
-							publishing software like Aldus PageMaker including versions of
-							Lorem Ipsum.
-						</Text>
+						<Text style={styles.description}>{pkg.description}</Text>
 						<View style={styles.editBtn}>
 							<LinearGradient
 								colors={[colors.orange, colors.red]}
 								style={styles.button}
 							>
 								<TouchableOpacity
-									onPress={() => props.navigation.navigate('Update Package')}
+									onPress={() => navigate('Update Package', { pkg })}
 								>
 									<Text style={styles.textBtn}>Edit</Text>
 								</TouchableOpacity>
@@ -81,16 +78,21 @@ function PackageDetailsScreen(props) {
 								style={styles.button}
 							>
 								<TouchableOpacity
-									onPress={() =>
+									onPress={() => {
+										deletePackage({ _id: pkg._id });
+										getRecords();
 										Popup.show({
 											type: 'Success',
 											title: 'Package Deleted',
 											// button: false,
 											textBody: 'Package deleted successfully.',
 											buttonText: 'Ok',
-											callback: () => Popup.hide(),
-										})
-									}
+											callback: () => {
+												Popup.hide();
+												goBack();
+											},
+										});
+									}}
 								>
 									<Text style={styles.textBtn}>Delete</Text>
 								</TouchableOpacity>
@@ -164,4 +166,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PackageDetailsScreen;
+const mapStateToProps = ({ packageReducer: { packages, loading } }) => ({
+	packages,
+	loading,
+});
+
+const mapActionToProps = { updatePackageStatus, deletePackage, getRecords };
+
+export default connect(mapStateToProps, mapActionToProps)(PackageDetailsScreen);

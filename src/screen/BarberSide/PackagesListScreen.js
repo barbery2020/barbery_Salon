@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	View,
 	FlatList,
@@ -8,123 +8,49 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+import LoadingIndicator from '../../components/LoadingIndicator';
 import Card from '../../components/Card';
 import colors from '../../styles/colors';
-//
 
-const listings = [
-	{
-		id: 1,
-		title: 'Hair and Beard Dressing',
-		price: 450,
-		status: 'Active',
-		image: require('../../assets/images/image_6.jpg'),
-	},
-	{
-		id: 2,
-		title: 'Hair Cutting And Styling',
-		price: 300,
-		status: 'Active',
-		image: require('../../assets/images/image_5.jpg'),
-	},
-	{
-		id: 3,
-		title: 'Beard Trimming and waxing',
-		price: 350,
-		status: 'Inactive',
-		image: require('../../assets/images/image_7.jpg'),
-	},
-	{
-		id: 4,
-		title: 'Faded Cut & Light Ash Hair',
-		price: 500,
-		status: 'Inactive',
-		image: require('../../assets/images/image_8.jpg'),
-	},
-	{
-		id: 5,
-		title: 'Hair and Beard Dressing',
-		price: 450,
-		status: 'Active',
-		image: require('../../assets/images/image_6.jpg'),
-	},
-	{
-		id: 6,
-		title: 'Hair Cutting And Styling',
-		price: 300,
-		status: 'Active',
-		image: require('../../assets/images/image_5.jpg'),
-	},
-	{
-		id: 7,
-		title: 'Beard Trimming and waxing',
-		price: 350,
-		status: 'Inactive',
-		image: require('../../assets/images/image_7.jpg'),
-	},
-	{
-		id: 8,
-		title: 'Faded Cut & Light Ash Hair',
-		price: 500,
-		status: 'Inactive',
-		image: require('../../assets/images/image_8.jpg'),
-	},
-	{
-		id: 9,
-		title: 'Hair and Beard Dressing',
-		price: 450,
-		status: 'Active',
-		image: require('../../assets/images/image_6.jpg'),
-	},
-	{
-		id: 10,
-		title: 'Hair Cutting And Styling',
-		price: 300,
-		status: 'Active',
-		image: require('../../assets/images/image_5.jpg'),
-	},
-	{
-		id: 11,
-		title: 'Beard Trimming and waxing',
-		price: 350,
-		status: 'Inactive',
-		image: require('../../assets/images/image_7.jpg'),
-	},
-	{
-		id: 12,
-		title: 'Faded Cut & Light Ash Hair',
-		price: 500,
-		status: 'Inactive',
-		image: require('../../assets/images/image_8.jpg'),
-	},
-];
+import { connect } from 'react-redux';
+import { getPackages } from '../../redux/actions/packageAction';
 
-function PackagesListScreen(props) {
+function PackagesListScreen({
+	navigation: { navigate },
+	packages,
+	getPackages,
+	loading,
+}) {
+	useEffect(() => {
+		getPackages();
+		return () => {};
+	}, []);
+
 	return (
-		//<Screen style={styles.screen}>
 		<View style={styles.screen}>
-			<FlatList
-				contentContainerStyle={{ paddingBottom: 15 }}
-				style={styles.flatScreen}
-				data={listings}
-				keyExtractor={(listing) => listing.id.toString()}
-				renderItem={({ item }) => (
-					<Card
-						title={item.title}
-						subTitle={'Rs.' + item.price}
-						status={item.status}
-						image={item.image}
-						onPress={() => props.navigation.navigate('Package Details')}
-					/>
-				)}
-			/>
+			{loading && <LoadingIndicator />}
+			{!loading && (
+				<FlatList
+					contentContainerStyle={{ paddingBottom: 15 }}
+					style={styles.flatScreen}
+					data={packages}
+					keyExtractor={(pkg, index) => index.toString()}
+					renderItem={({ item }) => (
+						<Card
+							title={item.name}
+							subTitle={'Rs.' + item.cost}
+							status={item.status}
+							image={`data:${item.picture.type};base64,${item.picture.data}`}
+							onPress={() => navigate('Package Details', { pkg: item })}
+						/>
+					)}
+				/>
+			)}
 			<LinearGradient
 				colors={[colors.orange, colors.red]}
 				style={[styles.button]}
 			>
-				<TouchableOpacity
-					onPress={() => props.navigation.navigate('Add Package')}
-				>
+				<TouchableOpacity onPress={() => navigate('Add Package')}>
 					<Image
 						style={styles.icon}
 						source={require('../../assets/icons/plus.png')}
@@ -132,7 +58,6 @@ function PackagesListScreen(props) {
 				</TouchableOpacity>
 			</LinearGradient>
 		</View>
-		//</Screen>
 	);
 }
 
@@ -164,4 +89,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PackagesListScreen;
+const mapStateToProps = ({ packageReducer: { packages, loading } }) => ({
+	packages,
+	loading,
+});
+
+const mapActionToProps = { getPackages };
+
+export default connect(mapStateToProps, mapActionToProps)(PackagesListScreen);

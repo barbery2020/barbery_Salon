@@ -8,98 +8,12 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+import LoadingIndicator from '../../components/LoadingIndicator';
 import Card from '../../components/Card';
 import colors from '../../styles/colors';
 
 import { connect } from 'react-redux';
 import { getServices } from '../../redux/actions/serviceAction';
-
-const listings = [
-	{
-		id: 1,
-		title: 'Hair Cutting',
-		price: 200,
-		status: 'Active',
-		image: require('../../assets/images/image_1.jpg'),
-	},
-	{
-		id: 2,
-		title: 'Trending Beard Dressing',
-		price: 150,
-		status: 'Active',
-		image: require('../../assets/images/image_2.jpg'),
-	},
-	{
-		id: 3,
-		title: 'Hair Dressing',
-		price: 170,
-		status: 'Inactive',
-		image: require('../../assets/images/image_3.jpg'),
-	},
-	{
-		id: 4,
-		title: 'Faded Hair Cut',
-		price: 200,
-		status: 'Active',
-		image: require('../../assets/images/image_9.jpg'),
-	},
-	{
-		id: 5,
-		title: 'Hair Cutting',
-		price: 200,
-		status: 'Active',
-		image: require('../../assets/images/image_1.jpg'),
-	},
-	{
-		id: 6,
-		title: 'Trending Beard Dressing',
-		price: 150,
-		status: 'Active',
-		image: require('../../assets/images/image_2.jpg'),
-	},
-	{
-		id: 7,
-		title: 'Hair Dressing',
-		price: 170,
-		status: 'Inactive',
-		image: require('../../assets/images/image_3.jpg'),
-	},
-	{
-		id: 8,
-		title: 'Faded Hair Cut',
-		price: 200,
-		status: 'Active',
-		image: require('../../assets/images/image_9.jpg'),
-	},
-	{
-		id: 9,
-		title: 'Hair Cutting',
-		price: 200,
-		status: 'Active',
-		image: require('../../assets/images/image_1.jpg'),
-	},
-	{
-		id: 10,
-		title: 'Trending Beard Dressing',
-		price: 150,
-		status: 'Active',
-		image: require('../../assets/images/image_2.jpg'),
-	},
-	{
-		id: 11,
-		title: 'Hair Dressing',
-		price: 170,
-		status: 'Inactive',
-		image: require('../../assets/images/image_3.jpg'),
-	},
-	{
-		id: 12,
-		title: 'Faded Hair Cut',
-		price: 200,
-		status: 'Active',
-		image: require('../../assets/images/image_9.jpg'),
-	},
-];
 
 function ServicesListScreen({
 	navigation: { navigate },
@@ -114,21 +28,24 @@ function ServicesListScreen({
 
 	return (
 		<View style={styles.screen}>
-			<FlatList
-				contentContainerStyle={{ paddingBottom: 15 }}
-				style={styles.flatScreen}
-				data={services}
-				keyExtractor={(service, index) => index.toString()}
-				renderItem={({ item }) => (
-					<Card
-						title={item.name}
-						subTitle={'Rs.' + item.cost}
-						status={item.status}
-						image={`data:${item.picture.type};base64,${item.picture.data}`}
-						onPress={() => navigate('Service Details', { service: item })}
-					/>
-				)}
-			/>
+			{loading && <LoadingIndicator />}
+			{!loading && (
+				<FlatList
+					contentContainerStyle={{ paddingBottom: 15 }}
+					style={styles.flatScreen}
+					data={services}
+					keyExtractor={(service, index) => index.toString()}
+					renderItem={({ item }) => (
+						<Card
+							title={item.name}
+							subTitle={'Rs.' + item.cost}
+							status={item.status}
+							image={`data:${item.picture.type};base64,${item.picture.data}`}
+							onPress={() => navigate('Service Details', { service: item })}
+						/>
+					)}
+				/>
+			)}
 			<LinearGradient
 				colors={[colors.orange, colors.red]}
 				style={[styles.button]}
