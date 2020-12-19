@@ -39,8 +39,9 @@ export default class BarberStack extends Component {
 				name="Services List"
 				component={ServicesListScreen}
 				options={{
-					headerStyle: { backgroundColor: colors.red },
-					headerTintColor: 'white',
+					// headerStyle: { backgroundColor: colors.red },
+					// headerTintColor: 'white',
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
@@ -84,8 +85,9 @@ export default class BarberStack extends Component {
 				name="Packages List"
 				component={PackagesListScreen}
 				options={{
-					headerStyle: { backgroundColor: colors.red },
-					headerTintColor: 'white',
+					// headerStyle: { backgroundColor: colors.red },
+					// headerTintColor: 'white',
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
@@ -121,8 +123,9 @@ export default class BarberStack extends Component {
 				name="Specialists"
 				component={SpecialistScreen}
 				options={{
-					headerStyle: { backgroundColor: colors.red },
-					headerTintColor: 'white',
+					// headerStyle: { backgroundColor: colors.red },
+					// headerTintColor: 'white',
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
@@ -158,8 +161,9 @@ export default class BarberStack extends Component {
 				name="Appointment"
 				component={AppointmentScreen}
 				options={{
-					headerStyle: { backgroundColor: colors.red },
-					headerTintColor: 'white',
+					// headerStyle: { backgroundColor: colors.red },
+					// headerTintColor: 'white',
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen

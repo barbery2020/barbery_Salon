@@ -14,6 +14,7 @@ import { Root, Popup } from 'popup-ui';
 
 import { connect } from 'react-redux';
 import { addService } from '../../redux/actions/serviceAction';
+import { getRecords } from '../../redux/actions/mainRecords';
 
 import colors from '../../styles/colors';
 
@@ -21,6 +22,7 @@ function ServicesAddScreen({
 	navigation: { navigate, goBack },
 	services,
 	addService,
+	getRecords,
 }) {
 	const [apiMage, setApiMage] = useState({});
 	const [imagePicked, setImagePicked] = useState();
@@ -30,7 +32,7 @@ function ServicesAddScreen({
 	const [title, setTitle] = React.useState('');
 	const [price, setPrice] = React.useState('');
 	const [description, setDescription] = React.useState('');
-	const [selectedValue, setSelectedValue] = React.useState('');
+	const [selectedValue, setSelectedValue] = React.useState('hair');
 
 	const selectFile = () => {
 		var options = {
@@ -134,17 +136,19 @@ function ServicesAddScreen({
 				>
 					<TouchableOpacity
 						onPress={() => {
-							// Popup.show({
-							// 	type: 'Success',
-							// 	title: 'Service Added',
-							// 	// button: false,
-							// 	textBody: 'New service added successfully.',
-							// 	buttonText: 'Ok',
-							// 	callback: () => Popup.hide(),
-							// });
-							// navigate('Services List');
 							addNewService();
-							goBack();
+							getRecords();
+							Popup.show({
+								type: 'Success',
+								title: 'Service Added',
+								// button: false,
+								textBody: 'New service added successfully.',
+								buttonText: 'Ok',
+								callback: () => {
+									Popup.hide();
+									goBack();
+								},
+							});
 						}}
 					>
 						<Text style={styles.textBtn}>Add Service</Text>
@@ -215,6 +219,6 @@ const mapStateToProps = ({ serviceReducer: { services, loading } }) => ({
 	loading,
 });
 
-const mapActionToProps = { addService };
+const mapActionToProps = { addService, getRecords };
 
 export default connect(mapStateToProps, mapActionToProps)(ServicesAddScreen);

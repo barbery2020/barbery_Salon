@@ -37,7 +37,7 @@ function HomeScreen({
 		getRecords();
 
 		return () => {};
-	}, []);
+	}, [goBack]);
 
 	return (
 		<View style={styles.screen}>

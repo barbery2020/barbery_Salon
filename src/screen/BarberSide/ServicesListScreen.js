@@ -125,7 +125,7 @@ function ServicesListScreen({
 						subTitle={'Rs.' + item.cost}
 						status={item.status}
 						image={`data:${item.picture.type};base64,${item.picture.data}`}
-						onPress={() => navigate('Service Details', item)}
+						onPress={() => navigate('Service Details', { service: item })}
 					/>
 				)}
 			/>

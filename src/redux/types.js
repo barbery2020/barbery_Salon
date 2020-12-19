@@ -14,6 +14,8 @@ export const GET_SERVICES = 'GET_SERVICES';
 export const ADD_SERVICE = 'ADD_SERVICE';
 export const UPDATE_SERVICE = 'UPDATE_SERVICE';
 export const DELETE_SERVICE = 'DELETE_SERVICE';
+export const UPDATE_STATUS = 'UPDATE_STATUS';
+export const UPDATE_RECORDS = 'UPDATE_RECORDS';
 export const SET_SERVICE_LOADING = 'SET_SERVICE_LOADING';
 
 // Error

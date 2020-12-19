@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Image,
 	Text,
@@ -12,14 +12,52 @@ import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import { Root, Popup } from 'popup-ui';
 
+import { connect } from 'react-redux';
+import { updateService } from '../../redux/actions/serviceAction';
+import { getRecords, updateUser } from '../../redux/actions/mainRecords';
+
 import colors from '../../styles/colors';
 
-function ServicesEditScreen(props) {
-	const [title, setTitle] = React.useState('');
-	const [price, setPrice] = React.useState('');
-	const [description, setDescription] = React.useState('');
-	const [imagePicked, setImagePicked] = React.useState();
-	const [selectedValue, setSelectedValue] = React.useState('');
+function ServicesEditScreen({
+	navigation: { navigate, goBack },
+	loading,
+	updateService,
+	getRecords,
+	route,
+}) {
+	const [service, setService] = useState(route.params.service);
+
+	const [apiMage, setApiMage] = useState({});
+	const [imagePicked, setImagePicked] = useState();
+	const [title, setTitle] = useState('');
+	const [price, setPrice] = useState('');
+	const [description, setDescription] = useState('');
+	const [selectedValue, setSelectedValue] = useState('');
+
+	useEffect(() => {
+		setImagePicked(
+			`data:${service.picture.type};base64,${service.picture.data}`,
+		);
+		setTitle(service.name);
+		setPrice(service.cost);
+		setDescription(service.description);
+		setSelectedValue(service.category);
+		return () => {};
+	}, []);
+
+	const updateCurrentService = {
+		_id: service._id,
+		name: title,
+		cost: price,
+		picture: apiMage,
+		status: true,
+		description,
+		category: selectedValue,
+	};
+
+	const update = () => {
+		updateService(updateCurrentService);
+	};
 
 	const selectImage = () => {
 		var options = {
@@ -38,13 +76,9 @@ function ServicesEditScreen(props) {
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
-				const uri = res.uri;
-				const type = 'image/jpg';
-				const name = res.fileName;
-				const source = { uri, type, name };
-				setImagePicked({
-					imageURI: uri,
-				});
+				setApiMage({ type: res.type, data: res.data });
+				const uri = `data:${res.type};base64,${res.data}`;
+				setImagePicked(uri);
 			}
 		});
 	};
@@ -98,10 +132,7 @@ function ServicesEditScreen(props) {
 				/>
 				{imagePicked && (
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image
-							style={styles.image}
-							source={{ uri: imagePicked.imageURI }}
-						/>
+						<Image style={styles.image} source={{ uri: imagePicked }} />
 					</View>
 				)}
 				<LinearGradient
@@ -117,19 +148,22 @@ function ServicesEditScreen(props) {
 					style={[styles.button]}
 				>
 					<TouchableOpacity
-						onPress={
-							() => {
-								Popup.show({
-									type: 'Success',
-									title: 'Service Updated',
-									// button: false,
-									textBody: 'Service updated successfully.',
-									buttonText: 'Ok',
-									callback: () => Popup.hide(),
-								});
-							}
-							// props.navigation.navigate('Services List')}
-						}
+						onPress={() => {
+							update();
+							getRecords();
+							Popup.show({
+								type: 'Success',
+								title: 'Service Updated',
+								// button: false,
+								textBody: 'Service updated successfully.',
+								buttonText: 'Ok',
+								callback: () => {
+									Popup.hide();
+									// goBack('Services List');
+									navigate('Services List');
+								},
+							});
+						}}
 					>
 						<Text style={styles.textBtn}>Update Service</Text>
 					</TouchableOpacity>
@@ -194,4 +228,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ServicesEditScreen;
+const mapStateToProps = ({ serviceReducer: { services, loading } }) => ({
+	services,
+	loading,
+});
+
+const mapActionToProps = { updateService, getRecords };
+
+export default connect(mapStateToProps, mapActionToProps)(ServicesEditScreen);

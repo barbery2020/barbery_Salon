@@ -3,6 +3,7 @@ import {
 	SET_UPDATE_LOADING,
 	UPDATE_CURRENT_USER,
 	GET_RECORDS,
+	UPDATE_RECORDS,
 	LOGOUT,
 } from '../types';
 
@@ -34,6 +35,11 @@ export default (state = initialState, action) => {
 				...state,
 				loading: payload,
 			};
+		// case UPDATE_RECORDS:
+		//   return{
+		//     ...state,
+		//     records: state.records.map((record) => ())
+		//   }
 		case LOGOUT:
 			return initialState;
 		default:

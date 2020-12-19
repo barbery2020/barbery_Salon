@@ -3,6 +3,7 @@ import {
 	ADD_SERVICE,
 	UPDATE_SERVICE,
 	DELETE_SERVICE,
+	UPDATE_STATUS,
 	SET_SERVICE_LOADING,
 	LOGOUT,
 } from '../types';
@@ -25,13 +26,14 @@ export default (state = initialState, action) => {
 		case ADD_SERVICE:
 			return {
 				...state,
-				services: [...services, payload],
+				services: [...state.services, payload],
 				loading: false,
 			};
+		case UPDATE_STATUS:
 		case UPDATE_SERVICE:
 			return {
 				...state,
-				services: services.map((service) =>
+				services: state.services.map((service) =>
 					service._id === payload._id ? payload : service,
 				),
 				loading: false,
@@ -39,7 +41,7 @@ export default (state = initialState, action) => {
 		case DELETE_SERVICE:
 			return {
 				...state,
-				services: services.filter((service) => service._id !== payload),
+				services: state.services.filter((service) => service._id !== payload),
 				loading: false,
 			};
 		case SET_SERVICE_LOADING:
