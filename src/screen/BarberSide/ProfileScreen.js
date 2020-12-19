@@ -14,18 +14,17 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import WeekdayPicker from 'react-native-weekday-picker';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
-import Geocoder from 'react-native-geocoding';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Geolocation from '@react-native-community/geolocation';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-// import * as Animatable from 'react-native-animatable';
 
 import ReviewCard from '../../components/ReviewCard';
 
 import colors from '../../styles/colors';
 import profileImg from '../../utils/profileImg';
+import { connect } from 'react-redux';
+import { updateUser } from '../../redux/actions/user';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -97,19 +96,24 @@ const appointment1 = [
 	},
 ];
 
-function barberAbout() {
-	const [image, setImage] = useState(profileImg.img);
-	const [firstName, setFirstName] = useState('Ahmed');
-	const [lastName, setLastName] = useState('Raza');
-	const [email, setEmail] = useState('ahmedraza1@gmail.com');
-	const [phone, setPhone] = useState('+923167512234');
-	const [password, setPassword] = useState('12345raza');
-	const [salonName, setSalonName] = useState('HairoSol');
-	const [location, setLocation] = useState('G-9, Lane 3, Islamabad');
+function BarberAbout({ user, updateUser }) {
+	// console.log(user.image);
+	const [apiMage, setApiMage] = useState({});
+	const [image, setImage] = useState(
+		user?.image
+			? `data:${user?.image?.type};base64,${user?.image?.data}`
+			: profileImg.img,
+	);
+	const [firstName, setFirstName] = useState(user?.firstName || '');
+	const [lastName, setLastName] = useState(user?.lastName);
+	const [email, setEmail] = useState(user?.email);
+	const [phone, setPhone] = useState(user?.phoneNo);
+	const [salonName, setSalonName] = useState(user?.shopTitle);
+	const [location, setLocation] = useState(user?.address);
 	const [getmarginBottom, setMarginBottom] = useState(1);
 	const [getCoordinate, setCoordinate] = useState({
-		latitude: 37.78825,
-		longitude: -122.4324,
+		latitude: Number(user?.latitude) || 37.78825,
+		longitude: Number(user?.longitude) || -122.4324,
 		latitudeDelta: 0.001,
 		longitudeDelta: 0.001,
 	});
@@ -119,8 +123,14 @@ function barberAbout() {
 	const [isCloseTimePickerVisible, setCloseTimePickerVisibility] = useState(
 		false,
 	);
-	const [isOpenTime, setOpenTime] = useState();
-	const [isCloseTime, setCloseTime] = useState();
+	const [isOpenTime, setOpenTime] = useState({
+		Hours: Number(user?.openTiming.split(':')[0]),
+		Minutes: Number(user?.openTiming.split(':')[1]),
+	});
+	const [isCloseTime, setCloseTime] = useState({
+		Hours: Number(user?.closeTiming.split(':')[0]),
+		Minutes: Number(user?.closeTiming.split(':')[1]),
+	});
 	const [getDay, setDay] = useState({
 		0: 1,
 		1: 1,
@@ -130,6 +140,20 @@ function barberAbout() {
 		5: 0,
 		6: 0,
 	});
+
+	const updateCurrentUser = {
+		image: apiMage,
+		firstName,
+		lastName,
+		email,
+		phoneNo: phone,
+		shopTitle: salonName,
+		openTiming: isOpenTime.Hours + ':' + isOpenTime.Minutes,
+		closeTiming: isCloseTime.Hours + ':' + isCloseTime.Minutes,
+		address: location,
+		latitude: getCoordinate.latitude,
+		longitude: getCoordinate.longitude,
+	};
 
 	useEffect(() => {
 		Geolocation.getCurrentPosition(
@@ -155,14 +179,6 @@ function barberAbout() {
 			latitudeDelta: region.latitudeDelta,
 			longitudeDelta: region.longitudeDelta,
 		});
-
-		// Geocoder.init('AIzaSyCUa5Cp53aa9O7XQ_okuAod6Kyq1J0z-BU');
-		// Geocoder.from([getCoordinate.latitude, getCoordinate.longitude])
-		// 	.then((json) => {
-		// 		var location = json.results[0].geometry.location;
-		// 		console.log(location);
-		// 	})
-		// 	.catch((error) => console.warn(error));
 	};
 
 	const showOpenTimePicker = () => {
@@ -186,7 +202,7 @@ function barberAbout() {
 		const hours = date.getHours();
 		const min = date.getMinutes();
 
-		if (isCloseTime && hours <= isCloseTime.Hours) {
+		if (isCloseTime && hours >= isCloseTime.Hours) {
 			ToastAndroid.show(
 				'Close Time should be greater than Open time.',
 				ToastAndroid.LONG,
@@ -238,6 +254,7 @@ function barberAbout() {
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
+				setApiMage({ type: res.type, data: res.data });
 				const uri = `data:${res.type};base64,${res.data}`;
 				setImage(uri);
 			}
@@ -289,15 +306,6 @@ function barberAbout() {
 					minLength={11}
 					onChangeText={(text) => setPhone(text)}
 					value={phone}
-				/>
-				<Text style={styles.text}>Password</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder={'***'}
-					maxLength={20}
-					onChangeText={(text) => setPassword(text)}
-					secureTextEntry={true}
-					value={password}
 				/>
 				<Text
 					style={[
@@ -394,17 +402,6 @@ function barberAbout() {
 					onConfirm={handleCloseTimeConfirm}
 					onCancel={hideCloseTimePicker}
 				/>
-
-				<Text style={styles.text}>Week Days</Text>
-				<WeekdayPicker
-					days={getDay}
-					onChange={(days) => {
-						setDay({ ...days });
-					}}
-					style={styles.weekPicker}
-					dayStyle={styles.day}
-				/>
-
 				<Text style={styles.text}>Location</Text>
 				<TextInput
 					style={styles.textInput}
@@ -444,7 +441,6 @@ function barberAbout() {
 							style={{ height: 40, width: 40 }}
 							source={require('../../assets/icons/pointer.png')}
 						/>
-						{/* <Marker coordinate={getCoordinate} draggable /> */}
 					</View>
 				</View>
 				<LinearGradient
@@ -453,9 +449,9 @@ function barberAbout() {
 				>
 					<TouchableOpacity
 						style={{ width: '100%', alignItems: 'center' }}
-						onPress={() => alert('Profile is updated.')}
+						onPress={() => updateUser(updateCurrentUser)}
 					>
-						<Text style={styles.textBtn}>Edit</Text>
+						<Text style={styles.textBtn}>Save</Text>
 					</TouchableOpacity>
 				</LinearGradient>
 			</View>
@@ -485,7 +481,7 @@ function barberReviews(props) {
 	);
 }
 
-function ProfileScreen() {
+function ProfileScreen({ user, updateUser }) {
 	return (
 		<Tab.Navigator
 			initialRouteName="About"
@@ -499,11 +495,14 @@ function ProfileScreen() {
 		>
 			<Tab.Screen
 				name="About"
-				component={barberAbout}
 				options={{
 					tabBarLabel: 'About',
 				}}
-			/>
+			>
+				{(props) => (
+					<BarberAbout {...props} user={user} updateUser={updateUser} />
+				)}
+			</Tab.Screen>
 			<Tab.Screen
 				name="Reviews"
 				component={barberReviews}
@@ -524,6 +523,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: 10,
 	},
+	textBtn: {
+		color: colors.white,
+		fontSize: 18,
+		textTransform: 'uppercase',
+	},
 	button: {
 		backgroundColor: colors.red,
 		borderRadius: 25,
@@ -538,10 +542,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignContent: 'center',
 		backgroundColor: colors.white,
-		// paddingHorizontal: 15,
 	},
 	imageContainer: {
 		alignItems: 'center',
+		marginHorizontal: 100,
 	},
 	profileImage: {
 		height: 160,
@@ -574,11 +578,6 @@ const styles = StyleSheet.create({
 		color: colors.black,
 		fontSize: 14,
 		paddingHorizontal: 20,
-	},
-	textBtn: {
-		color: colors.white,
-		fontSize: 18,
-		textTransform: 'uppercase',
 	},
 	textInput: {
 		height: 40,
@@ -638,4 +637,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ProfileScreen;
+const mapStateToProps = ({ user: { user } }) => ({ user });
+
+const mapActionToProps = { updateUser };
+
+export default connect(mapStateToProps, mapActionToProps)(ProfileScreen);

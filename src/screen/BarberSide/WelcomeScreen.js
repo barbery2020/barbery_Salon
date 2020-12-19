@@ -13,9 +13,23 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 
 import colors from '../../styles/colors';
+import { connect } from 'react-redux';
+import { useEffect } from 'react';
 
-function WelcomeScreen(props) {
+function WelcomeScreen({ navigation: { navigate }, token }) {
 	const [isLoading, setLoading] = React.useState(true);
+
+	useEffect(() => {
+		setTimeout(() => {
+			if (token) {
+				navigate('MainApp');
+			} else {
+				navigate('Login');
+			}
+		}, 3000);
+
+		return () => {};
+	}, [token]);
 
 	return (
 		<View style={styles.container}>
@@ -41,7 +55,7 @@ function WelcomeScreen(props) {
 					/>
 				</Animatable.View>
 
-				<Animatable.View animation="fadeInUp" style={styles.buttonsContainer}>
+				{/* <Animatable.View animation="fadeInUp" style={styles.buttonsContainer}>
 					<LinearGradient
 						colors={[colors.orange, colors.red]}
 						style={[styles.button]}
@@ -53,7 +67,7 @@ function WelcomeScreen(props) {
 							<Text style={styles.textBtn}>Login</Text>
 						</TouchableOpacity>
 					</LinearGradient>
-				</Animatable.View>
+				</Animatable.View> */}
 			</ImageBackground>
 			{/* } */}
 		</View>
@@ -106,4 +120,6 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default WelcomeScreen;
+const mapStateToProps = ({ user: { token } }) => ({ token });
+
+export default connect(mapStateToProps)(WelcomeScreen);

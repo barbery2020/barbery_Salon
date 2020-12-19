@@ -11,10 +11,20 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 
 import colors from '../../styles/colors';
+import { connect } from 'react-redux';
+import { login } from '../../redux/actions/user';
+import { useEffect } from 'react';
 
-function LoginScreen(props) {
-	const [email, setEmail] = React.useState('ahmedraza1@gmail.com');
-	const [password, setPassword] = React.useState('raza1234');
+function LoginScreen({ navigation: { navigate }, token, login }) {
+	const [email, setEmail] = React.useState('tuseeq@gmail.com');
+	const [password, setPassword] = React.useState('123456');
+
+	useEffect(() => {
+		if (token) {
+			navigate('MainApp');
+		}
+		return () => {};
+	}, [token]);
 
 	return (
 		<View style={styles.container}>
@@ -31,6 +41,8 @@ function LoginScreen(props) {
 				<Text style={styles.textHeading}>Welcome To Barbery!</Text>
 				<Text style={styles.text}>Email</Text>
 				<TextInput
+					autoCapitalize="none"
+					keyboardType="email-address"
 					style={styles.textInput}
 					placeholder={'e.g. abc@gmail.com'}
 					maxLength={50}
@@ -46,7 +58,7 @@ function LoginScreen(props) {
 					secureTextEntry={true}
 					value={password}
 				/>
-				<TouchableOpacity onPress={() => props.navigation.navigate('Forget')}>
+				<TouchableOpacity onPress={() => navigate('Forget')}>
 					<Text style={styles.textforget}>Forget Password?</Text>
 				</TouchableOpacity>
 				<LinearGradient
@@ -55,7 +67,7 @@ function LoginScreen(props) {
 				>
 					<TouchableOpacity
 						style={{ width: '100%', alignItems: 'center' }}
-						onPress={() => props.navigation.navigate('MainApp')}
+						onPress={() => login({ email, password })}
 					>
 						<Text style={styles.textBtn}>Sign In</Text>
 					</TouchableOpacity>
@@ -69,7 +81,7 @@ function LoginScreen(props) {
 							borderWidth: 1,
 						},
 					]}
-					onPress={() => props.navigation.navigate('Register')}
+					onPress={() => navigate('Register')}
 				>
 					<Text style={styles.textBtnSignUp}>Sign Up</Text>
 				</TouchableOpacity>
@@ -163,4 +175,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default LoginScreen;
+const mapStateToProps = ({ user: { token } }) => ({ token });
+
+const mapActionToProps = { login };
+
+export default connect(mapStateToProps, mapActionToProps)(LoginScreen);

@@ -6,20 +6,29 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Image,
-	KeyboardAvoidingView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 
 import colors from '../../styles/colors';
+import { connect } from 'react-redux';
+import { signup } from '../../redux/actions/user';
+import { useEffect } from 'react';
 
-function RegisterScreen(props) {
+function RegisterScreen({ navigation: { navigate }, token, signup }) {
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
 	const [email, setEmail] = React.useState('');
 	const [phone, setPhone] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const [conPassword, setConPassword] = React.useState('');
+
+	useEffect(() => {
+		if (token) {
+			navigate('MainApp');
+		}
+		return () => {};
+	}, [token]);
 
 	return (
 		<View style={styles.container}>
@@ -58,6 +67,8 @@ function RegisterScreen(props) {
 				<Text style={styles.text}>Email</Text>
 				<TextInput
 					style={styles.textInput}
+					autoCapitalize="none"
+					keyboardType="email-address"
 					placeholder={'e.g. abc@gmail.com'}
 					maxLength={50}
 					onChangeText={(text) => setEmail(text)}
@@ -67,7 +78,7 @@ function RegisterScreen(props) {
 				<TextInput
 					style={styles.textInput}
 					placeholder={'+92'}
-					keyboardType={'numeric'}
+					keyboardType={'phone-pad'}
 					maxLength={13}
 					minLength={11}
 					onChangeText={(text) => setPhone(text)}
@@ -97,7 +108,9 @@ function RegisterScreen(props) {
 				>
 					<TouchableOpacity
 						style={{ width: '100%', alignItems: 'center' }}
-						onPress={() => props.navigation.navigate('MainApp')}
+						onPress={() =>
+							signup({ firstName, lastName, email, phoneNo: phone, password })
+						}
 					>
 						<Text style={styles.textBtn}>Register</Text>
 					</TouchableOpacity>
@@ -178,4 +191,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default RegisterScreen;
+const mapStateToProps = ({ user: { token } }) => ({ token });
+
+const mapActionToProps = { signup };
+
+export default connect(mapStateToProps, mapActionToProps)(RegisterScreen);

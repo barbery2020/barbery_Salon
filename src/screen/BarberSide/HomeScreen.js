@@ -1,10 +1,21 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import {
+	View,
+	Text,
+	FlatList,
+	StyleSheet,
+	TouchableOpacity,
+} from 'react-native';
 import GradientHeader from 'react-native-gradient-header';
 import * as Animatable from 'react-native-animatable';
+import LinearGradient from 'react-native-linear-gradient';
 
 import HomeCard from '../../components/HomeCard';
 import colors from '../../styles/colors';
+import { connect } from 'react-redux';
+import { getUser, logout } from '../../redux/actions/user';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const listings = [
 	{
@@ -58,16 +69,27 @@ const listings = [
 	},
 ];
 
-function HomeScreen(props) {
+function HomeScreen({ getUser, navigation: { goBack }, user, logout }) {
+	useEffect(() => {
+		if (!user) {
+			getUser();
+		}
+		return () => {};
+	}, []);
+
 	return (
 		<View style={styles.screen}>
 			<View style={styles.headerScreen}>
 				<Animatable.View animation="slideInDown">
 					<GradientHeader
-						title="Hi, Ahmed Raza"
+						title={`Hi, ${user?.firstName}`}
 						subtitle="Have a nice day!"
 						gradientColors={[colors.orange, colors.red]}
-						imageSource={require('../../assets/images/image_2.jpg')}
+						imageSource={{
+							uri: user?.image
+								? `data:${user?.image?.type};base64,${user?.image?.data}`
+								: profileImg.img,
+						}}
 					/>
 				</Animatable.View>
 			</View>
@@ -89,6 +111,20 @@ function HomeScreen(props) {
 					)}
 				/>
 			</View>
+			<LinearGradient
+				colors={[colors.orange, colors.red]}
+				style={styles.button}
+			>
+				<TouchableOpacity
+					style={{ width: '100%', alignItems: 'center' }}
+					onPress={() => {
+						logout();
+						goBack();
+					}}
+				>
+					<Text style={styles.textBtn}>Logout</Text>
+				</TouchableOpacity>
+			</LinearGradient>
 		</View>
 	);
 }
@@ -110,6 +146,25 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: 10,
 	},
+	textBtn: {
+		color: colors.white,
+		fontSize: 18,
+		textTransform: 'uppercase',
+	},
+	button: {
+		backgroundColor: colors.red,
+		borderRadius: 25,
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 10,
+		elevation: 5,
+		marginBottom: 10,
+		marginHorizontal: 90,
+	},
 });
 
-export default HomeScreen;
+const mapStateToProps = ({ user: { user, token } }) => ({ user, token });
+
+const mapActionToProps = { getUser, logout };
+
+export default connect(mapStateToProps, mapActionToProps)(HomeScreen);
