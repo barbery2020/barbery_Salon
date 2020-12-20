@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Image,
 	Text,
@@ -13,10 +13,44 @@ import { Root, Popup } from 'popup-ui';
 
 import colors from '../../styles/colors';
 
-function SpecialistEditScreen(props) {
+import { connect } from 'react-redux';
+import { updateSpecialist } from '../../redux/actions/specialistAction';
+import { getRecords } from '../../redux/actions/mainRecords';
+
+function SpecialistEditScreen({
+	navigation: { navigate, goBack },
+	loading,
+	updateSpecialist,
+	getRecords,
+	route,
+}) {
+	const [specialist, setSpecialist] = useState(route.params.specialist);
+
+	const [apiMage, setApiMage] = useState({});
+	const [imagePicked, setImagePicked] = useState();
 	const [title, setTitle] = React.useState('');
 	const [description, setDescription] = React.useState('');
-	const [imagePicked, setImagePicked] = React.useState();
+
+	useEffect(() => {
+		setImagePicked(
+			`data:${specialist.picture.type};base64,${specialist.picture.data}`,
+		);
+		setTitle(specialist.name);
+		setDescription(specialist.description);
+		return () => {};
+	}, []);
+
+	const updateCurrentSpecialist = {
+		_id: specialist._id,
+		name: title,
+		picture: apiMage,
+		status: true,
+		description,
+	};
+
+	const update = () => {
+		updateSpecialist(updateCurrentSpecialist);
+	};
 
 	const selectFile = () => {
 		var options = {
@@ -28,20 +62,14 @@ function SpecialistEditScreen(props) {
 		};
 
 		ImagePicker.showImagePicker(options, (res) => {
-			// console.log('Response = ', res);
-
 			if (res.didCancel) {
 				console.log('User cancelled image picker');
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
-				const uri = res.uri;
-				const type = 'image/jpg';
-				const name = res.fileName;
-				const source = { uri, type, name };
-				setImagePicked({
-					imageURI: uri,
-				});
+				setApiMage({ type: res.type, data: res.data });
+				const uri = `data:${res.type};base64,${res.data}`;
+				setImagePicked(uri);
 			}
 		});
 	};
@@ -67,10 +95,7 @@ function SpecialistEditScreen(props) {
 				/>
 				{imagePicked && (
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image
-							style={styles.image}
-							source={{ uri: imagePicked.imageURI }}
-						/>
+						<Image style={styles.image} source={{ uri: imagePicked }} />
 					</View>
 				)}
 				<LinearGradient
@@ -86,16 +111,21 @@ function SpecialistEditScreen(props) {
 					style={[styles.button]}
 				>
 					<TouchableOpacity
-						onPress={() =>
+						onPress={() => {
+							update();
+							getRecords();
 							Popup.show({
 								type: 'Success',
-								title: 'Package Updated',
+								title: 'Specialist Updated',
 								// button: false,
-								textBody: 'Package Updated successfully.',
+								textBody: 'Specialist updated successfully.',
 								buttonText: 'Ok',
-								callback: () => Popup.hide(),
-							})
-						}
+								callback: () => {
+									Popup.hide();
+									navigate('Specialists');
+								},
+							});
+						}}
 					>
 						<Text style={styles.textBtn}>Update Specialist</Text>
 					</TouchableOpacity>
@@ -153,4 +183,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default SpecialistEditScreen;
+const mapStateToProps = ({ specialistReducer: { specialists, loading } }) => ({
+	specialists,
+	loading,
+});
+
+const mapActionToProps = { updateSpecialist, getRecords };
+
+export default connect(mapStateToProps, mapActionToProps)(SpecialistEditScreen);

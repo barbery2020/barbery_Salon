@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	View,
 	ScrollView,
 	Text,
-	TouchableWithoutFeedback,
 	TouchableOpacity,
 	Image,
 	Switch,
@@ -15,61 +14,59 @@ import { Root, Popup } from 'popup-ui';
 import colors from '../../styles/colors';
 import Separator from '../../components/Separator';
 
-function SpecialistDetailsScreen(props) {
-	const [isSwitch, setSwitch] = React.useState(true);
+import { connect } from 'react-redux';
+import {
+	updateSpecialistStatus,
+	deleteSpecialist,
+} from '../../redux/actions/specialistAction';
+import { getRecords } from '../../redux/actions/mainRecords';
+
+function SpecialistDetailsScreen({
+	navigation: { navigate, goBack },
+	updateSpecialistStatus,
+	deleteSpecialist,
+	getRecords,
+	loading,
+	route,
+}) {
+	const [specialist, setSpecialist] = useState(route.params.Specialist);
 
 	return (
 		<Root>
 			<ScrollView>
 				<View>
-					<TouchableWithoutFeedback
-						onPress={() => props.navigation.navigate('Image View')}
-					>
-						<Image
-							style={styles.image}
-							source={require('../../assets/images/image_5.jpg')}
-						/>
-					</TouchableWithoutFeedback>
+					<Image
+						style={styles.image}
+						source={{
+							uri: `data:${specialist.picture.type};base64,${specialist.picture.data}`,
+						}}
+					/>
 					<View style={styles.detailsContainer}>
-						<Text style={styles.title}>Tuseeq Ahmed</Text>
+						<Text style={styles.title}>{specialist.name}</Text>
 						<Separator />
 						<View style={styles.switchContainer}>
 							<Text style={styles.status}>Specialist Status</Text>
 							<Switch
-								value={isSwitch}
-								onValueChange={(value) => setSwitch(value)}
+								value={specialist.status}
+								onValueChange={(value) => {
+									updateSpecialistStatus({
+										_id: specialist._id,
+										status: value,
+									});
+									setSpecialist({ ...specialist, status: value });
+								}}
 							/>
 						</View>
 						<Separator />
 						<Text style={styles.status}>About</Text>
-						<Text style={styles.description}>
-							Lorem Ipsum is simply dummy text of the printing and typesetting
-							industry. Lorem Ipsum has been the industry's standard dummy text
-							ever since the 1500s, when an unknown printer took a galley of
-							type and scrambled it to make a type specimen book. It has
-							survived not only five centuries, but also the leap into
-							electronic typesetting, remaining essentially unchanged. It was
-							popularised in the 1960s with the release of Letraset sheets
-							containing Lorem Ipsum passages, and more recently with desktop
-							publishing software like Aldus PageMaker including versions of
-							Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and
-							typesetting industry. Lorem Ipsum has been the industry's standard
-							dummy text ever since the 1500s, when an unknown printer took a
-							galley of type and scrambled it to make a type specimen book. It
-							has survived not only five centuries, but also the leap into
-							electronic typesetting, remaining essentially unchanged. It was
-							popularised in the 1960s with the release of Letraset sheets
-							containing Lorem Ipsum passages, and more recently with desktop
-							publishing software like Aldus PageMaker including versions of
-							Lorem Ipsum.
-						</Text>
+						<Text style={styles.description}>{specialist.description}</Text>
 						<View style={styles.editBtn}>
 							<LinearGradient
 								colors={[colors.orange, colors.red]}
 								style={styles.button}
 							>
 								<TouchableOpacity
-									onPress={() => props.navigation.navigate('Update Specialist')}
+									onPress={() => navigate('Update Specialist', { specialist })}
 								>
 									<Text style={styles.textBtn}>Edit</Text>
 								</TouchableOpacity>
@@ -79,16 +76,21 @@ function SpecialistDetailsScreen(props) {
 								style={styles.button}
 							>
 								<TouchableOpacity
-									onPress={() =>
+									onPress={() => {
+										deleteSpecialist({ _id: specialist._id });
+										getRecords();
 										Popup.show({
 											type: 'Success',
 											title: 'Specialist Deleted',
 											// button: false,
 											textBody: 'Specialist deleted successfully.',
 											buttonText: 'Ok',
-											callback: () => Popup.hide(),
-										})
-									}
+											callback: () => {
+												Popup.hide();
+												goBack();
+											},
+										});
+									}}
 								>
 									<Text style={styles.textBtn}>Delete</Text>
 								</TouchableOpacity>
@@ -162,4 +164,18 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default SpecialistDetailsScreen;
+const mapStateToProps = ({ specialistReducer: { specialists, loading } }) => ({
+	specialists,
+	loading,
+});
+
+const mapActionToProps = {
+	updateSpecialistStatus,
+	deleteSpecialist,
+	getRecords,
+};
+
+export default connect(
+	mapStateToProps,
+	mapActionToProps,
+)(SpecialistDetailsScreen);

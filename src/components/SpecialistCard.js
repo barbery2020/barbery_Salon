@@ -11,11 +11,6 @@ import {
 import colors from '../styles/colors';
 
 function SpecialistCard({ title, status, image, onPress }) {
-	const getStatus = (status) => {
-		if (status === 'Inactive') return false;
-		return true;
-	};
-
 	return (
 		<TouchableHighlight
 			style={styles.screen}
@@ -23,15 +18,10 @@ function SpecialistCard({ title, status, image, onPress }) {
 			onPress={onPress}
 		>
 			<View style={styles.card}>
-				<Image style={styles.image} source={image} />
+				<Image style={styles.image} source={{ uri: image }} />
 				<Text style={styles.title}>{title}</Text>
-				<Text
-					style={[
-						getStatus(status) ? styles.active : styles.inActive,
-						styles.status,
-					]}
-				>
-					{status}
+				<Text style={[status ? styles.active : styles.inActive, styles.status]}>
+					{status ? 'Active' : 'Inactive'}
 				</Text>
 			</View>
 		</TouchableHighlight>
@@ -46,9 +36,9 @@ const styles = StyleSheet.create({
 		color: colors.red,
 	},
 	screen: {
-		flex: 1,
-		paddingVertical: 8,
-		paddingHorizontal: 15,
+		flex: 1 / 2,
+		marginVertical: 8,
+		marginHorizontal: 15,
 	},
 	card: {
 		borderRadius: 15,

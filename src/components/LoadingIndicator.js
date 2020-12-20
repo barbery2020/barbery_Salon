@@ -14,7 +14,7 @@ export default function LoadingIndicator() {
 				height: '100%',
 				justifyContent: 'center',
 				alignItems: 'center',
-				backgroundColor: 'rgba(0, 0, 0, 0.8)',
+				backgroundColor: 'rgba(0, 0, 0, 0.4)',
 				// backgroundColor: colors.white,
 				zIndex: 60,
 			}}

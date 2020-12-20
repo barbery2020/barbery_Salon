@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	View,
 	FlatList,
@@ -8,112 +8,53 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+import LoadingIndicator from '../../components/LoadingIndicator';
 import SpecialistCard from '../../components/SpecialistCard';
 import colors from '../../styles/colors';
-//
 
-const listings = [
-	{
-		id: 1,
-		title: 'Tuseeq Ahmed',
-		status: 'Active',
-		image: require('../../assets/images/image_5.jpg'),
-	},
-	{
-		id: 2,
-		title: 'Ahmed Raza',
-		status: 'Active',
-		image: require('../../assets/images/image_2.jpg'),
-	},
-	{
-		id: 3,
-		title: 'Humza Jameel',
-		status: 'Inactive',
-		image: require('../../assets/images/image_3.jpg'),
-	},
-	{
-		id: 4,
-		title: 'Abdullah',
-		status: 'Active',
-		image: require('../../assets/images/image_9.jpg'),
-	},
-	{
-		id: 5,
-		title: 'Asim',
-		status: 'Active',
-		image: require('../../assets/images/image_6.jpg'),
-	},
-	{
-		id: 6,
-		title: 'Nadeem',
-		status: 'Active',
-		image: require('../../assets/images/image_7.jpg'),
-	},
-	{
-		id: 7,
-		title: 'Saran',
-		status: 'Inactive',
-		image: require('../../assets/images/image_8.jpg'),
-	},
-	{
-		id: 8,
-		title: 'Faisal',
-		status: 'Active',
-		image: require('../../assets/images/image_9.jpg'),
-	},
-	{
-		id: 9,
-		title: 'Awais',
-		status: 'Active',
-		image: require('../../assets/images/image_10.jpg'),
-	},
-	{
-		id: 10,
-		title: 'Tariq',
-		status: 'Active',
-		image: require('../../assets/images/image_1.jpg'),
-	},
-	{
-		id: 11,
-		title: 'Sajid',
-		status: 'Inactive',
-		image: require('../../assets/images/image_2.jpg'),
-	},
-	{
-		id: 12,
-		title: 'Talha',
-		status: 'Active',
-		image: require('../../assets/images/image_6.jpg'),
-	},
-];
+import { connect } from 'react-redux';
+import { getSpecialists } from '../../redux/actions/specialistAction';
 
 const noColumns = 2;
 
-function SpecialistScreen(props) {
+function SpecialistScreen({
+	navigation: { navigate },
+	specialists,
+	getSpecialists,
+	loading,
+}) {
+	useEffect(() => {
+		getSpecialists();
+		return () => {};
+	}, []);
+
 	return (
 		<View style={styles.screen}>
-			<FlatList
-				contentContainerStyle={{ paddingBottom: 15 }}
-				style={styles.card}
-				numColumns={noColumns}
-				data={listings}
-				keyExtractor={(listing) => listing.id.toString()}
-				renderItem={({ item }) => (
-					<SpecialistCard
-						title={item.title}
-						status={item.status}
-						image={item.image}
-						onPress={() => props.navigation.navigate('Specialist Details')}
-					/>
-				)}
-			/>
+			{loading && <LoadingIndicator />}
+			{!loading && (
+				<FlatList
+					contentContainerStyle={{ paddingBottom: 15 }}
+					style={styles.card}
+					numColumns={noColumns}
+					data={specialists}
+					keyExtractor={(Specialist, index) => index.toString()}
+					renderItem={({ item }) => (
+						<SpecialistCard
+							title={item.name}
+							status={item.status}
+							image={`data:${item.picture.type};base64,${item.picture.data}`}
+							onPress={() =>
+								navigate('Specialist Details', { Specialist: item })
+							}
+						/>
+					)}
+				/>
+			)}
 			<LinearGradient
 				colors={[colors.orange, colors.red]}
 				style={[styles.button]}
 			>
-				<TouchableOpacity
-					onPress={() => props.navigation.navigate('Add Specialist')}
-				>
+				<TouchableOpacity onPress={() => navigate('Add Specialist')}>
 					<Image
 						style={styles.icon}
 						source={require('../../assets/icons/plus.png')}
@@ -153,4 +94,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default SpecialistScreen;
+const mapStateToProps = ({ specialistReducer: { specialists, loading } }) => ({
+	specialists,
+	loading,
+});
+
+const mapActionToProps = { getSpecialists };
+
+export default connect(mapStateToProps, mapActionToProps)(SpecialistScreen);

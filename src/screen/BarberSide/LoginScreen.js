@@ -11,11 +11,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 
 import colors from '../../styles/colors';
+import LoadingIndicator from '../../components/LoadingIndicator';
+
 import { connect } from 'react-redux';
 import { login } from '../../redux/actions/user';
 import { useEffect } from 'react';
 
-function LoginScreen({ navigation: { navigate }, token, login }) {
+function LoginScreen({ navigation: { navigate }, token, loading, login }) {
 	const [email, setEmail] = React.useState('tuseeq@gmail.com');
 	const [password, setPassword] = React.useState('123456');
 
@@ -28,6 +30,7 @@ function LoginScreen({ navigation: { navigate }, token, login }) {
 
 	return (
 		<View style={styles.container}>
+			{loading && <LoadingIndicator />}
 			<LinearGradient
 				colors={[colors.orange, colors.red]}
 				style={styles.header}
@@ -175,7 +178,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ user: { token } }) => ({ token });
+const mapStateToProps = ({ user: { token, loading } }) => ({ token, loading });
 
 const mapActionToProps = { login };
 

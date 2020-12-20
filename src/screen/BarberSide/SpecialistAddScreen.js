@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Image,
 	Text,
@@ -13,10 +13,20 @@ import { Root, Popup } from 'popup-ui';
 
 import colors from '../../styles/colors';
 
-function SpecialistAddScreen(props) {
-	const [title, setTitle] = React.useState('');
-	const [description, setDescription] = React.useState('');
-	const [imagePicked, setImagePicked] = React.useState();
+import { connect } from 'react-redux';
+import { addSpecialist } from '../../redux/actions/specialistAction';
+import { getRecords } from '../../redux/actions/mainRecords';
+
+function SpecialistAddScreen({
+	navigation: { navigate, goBack },
+	specialists,
+	addSpecialist,
+	getRecords,
+}) {
+	const [apiMage, setApiMage] = useState({});
+	const [imagePicked, setImagePicked] = useState();
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
 
 	const selectFile = () => {
 		var options = {
@@ -28,22 +38,26 @@ function SpecialistAddScreen(props) {
 		};
 
 		ImagePicker.showImagePicker(options, (res) => {
-			// console.log('Response = ', res);
-
 			if (res.didCancel) {
 				console.log('User cancelled image picker');
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
-				const uri = res.uri;
-				const type = 'image/jpg';
-				const name = res.fileName;
-				const source = { uri, type, name };
-				setImagePicked({
-					imageURI: uri,
-				});
+				setApiMage({ type: res.type, data: res.data });
+				const uri = `data:${res.type};base64,${res.data}`;
+				setImagePicked(uri);
 			}
 		});
+	};
+
+	const addNewSpecialist = () => {
+		const newSpecialist = {
+			name: title,
+			picture: apiMage,
+			status: true,
+			description,
+		};
+		addSpecialist(newSpecialist);
 	};
 
 	return (
@@ -67,10 +81,7 @@ function SpecialistAddScreen(props) {
 				/>
 				{imagePicked && (
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image
-							style={styles.image}
-							source={{ uri: imagePicked.imageURI }}
-						/>
+						<Image style={styles.image} source={{ uri: imagePicked }} />
 					</View>
 				)}
 				<LinearGradient
@@ -86,16 +97,21 @@ function SpecialistAddScreen(props) {
 					style={[styles.button]}
 				>
 					<TouchableOpacity
-						onPress={() =>
+						onPress={() => {
+							addNewSpecialist();
+							getRecords();
 							Popup.show({
 								type: 'Success',
-								title: 'Package Added',
+								title: 'Specialist Added',
 								// button: false,
-								textBody: 'New Package Added successfully.',
+								textBody: 'New Specialist Added successfully.',
 								buttonText: 'Ok',
-								callback: () => Popup.hide(),
-							})
-						}
+								callback: () => {
+									Popup.hide();
+									goBack();
+								},
+							});
+						}}
 					>
 						<Text style={styles.textBtn}>Add Specialist</Text>
 					</TouchableOpacity>
@@ -153,4 +169,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default SpecialistAddScreen;
+const mapStateToProps = ({ specialistReducer: { specialists, loading } }) => ({
+	specialists,
+	loading,
+});
+
+const mapActionToProps = { addSpecialist, getRecords };
+
+export default connect(mapStateToProps, mapActionToProps)(SpecialistAddScreen);

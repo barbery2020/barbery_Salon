@@ -45,7 +45,7 @@ function HomeScreen({
 			<View style={styles.headerScreen}>
 				<Animatable.View animation="slideInDown">
 					<GradientHeader
-						title={`Hi, ${user?.firstName}`}
+						title={`Hi, ${user ? user.firstName : ''}`}
 						subtitle="Have a nice day!"
 						gradientColors={[colors.orange, colors.red]}
 						imageSource={{

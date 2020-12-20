@@ -99,7 +99,6 @@ const appointment1 = [
 ];
 
 function BarberAbout({ user, updateUser, loading }) {
-	// console.log(user.image);
 	const [apiMage, setApiMage] = useState({});
 	const [image, setImage] = useState(
 		user?.image
@@ -271,198 +270,200 @@ function BarberAbout({ user, updateUser, loading }) {
 	return (
 		<ScrollView style={styles.container}>
 			{loading && <LoadingIndicator />}
-			<TouchableOpacity style={styles.imageContainer} onPress={selectFile}>
-				<Image style={styles.profileImage} source={{ uri: image }} />
-			</TouchableOpacity>
 			{!loading && (
-				<View style={styles.profileData}>
-					<View style={styles.row}>
-						<View style={styles.rowInput}>
-							<Text style={styles.text}>First Name</Text>
-							<TextInput
-								style={styles.textInput}
-								placeholder={'Ahmed'}
-								maxLength={50}
-								onChangeText={(text) => setFirstName(text)}
-								value={firstName}
-							/>
+				<View style={{ width: '100%', height: '100%' }}>
+					<TouchableOpacity style={styles.imageContainer} onPress={selectFile}>
+						<Image style={styles.profileImage} source={{ uri: image }} />
+					</TouchableOpacity>
+					<View style={styles.profileData}>
+						<View style={styles.row}>
+							<View style={styles.rowInput}>
+								<Text style={styles.text}>First Name</Text>
+								<TextInput
+									style={styles.textInput}
+									placeholder={'Ahmed'}
+									maxLength={50}
+									onChangeText={(text) => setFirstName(text)}
+									value={firstName}
+								/>
+							</View>
+							<View style={styles.rowInput}>
+								<Text style={styles.text}>Last Name</Text>
+								<TextInput
+									style={styles.textInput}
+									placeholder={'Raza'}
+									maxLength={50}
+									onChangeText={(text) => setLastName(text)}
+									value={lastName}
+								/>
+							</View>
 						</View>
-						<View style={styles.rowInput}>
-							<Text style={styles.text}>Last Name</Text>
-							<TextInput
-								style={styles.textInput}
-								placeholder={'Raza'}
-								maxLength={50}
-								onChangeText={(text) => setLastName(text)}
-								value={lastName}
-							/>
-						</View>
-					</View>
-					<Text style={styles.text}>Email</Text>
-					<TextInput
-						style={styles.textInput}
-						placeholder={'e.g. abc@gmail.com'}
-						maxLength={50}
-						onChangeText={(text) => setEmail(text)}
-						value={email}
-					/>
-					<Text style={styles.text}>Phone no.</Text>
-					<TextInput
-						style={styles.textInput}
-						placeholder={'+92'}
-						keyboardType={'numeric'}
-						maxLength={13}
-						minLength={11}
-						onChangeText={(text) => setPhone(text)}
-						value={phone}
-					/>
-					<Text
-						style={[
-							styles.text,
-							{
-								fontSize: 20,
-								fontWeight: 'bold',
-								marginTop: 30,
-								marginBottom: 15,
-							},
-						]}
-					>
-						Salon Details
-					</Text>
-					<Text style={styles.text}>Shop/Saloon Name</Text>
-					<TextInput
-						style={styles.textInput}
-						placeholder={'e.g. HairoSol'}
-						maxLength={50}
-						onChangeText={(text) => setSalonName(text)}
-						value={salonName}
-					/>
-					<View style={styles.row}>
-						<View style={styles.rowInput}>
-							<Text style={styles.text}>Opening Time</Text>
-							<TouchableOpacity
-								onPress={showOpenTimePicker}
-								style={styles.rowInput}
-							>
-								<View style={styles.timeRow}>
-									<TextInput
-										style={{
-											color: colors.dark,
-										}}
-										editable={false}
-										maxLength={50}
-										value={
-											isOpenTime
-												? isOpenTime.Hours + ':' + isOpenTime.Minutes
-												: 'Select Time'
-										}
-									/>
-									<Icon
-										name="clock-o"
-										style={{ paddingVertical: 10 }}
-										color={colors.dark}
-										size={20}
-									/>
-								</View>
-							</TouchableOpacity>
-						</View>
-						<View style={styles.rowInput}>
-							<Text style={styles.text}>Closing Time</Text>
-							<TouchableOpacity
-								onPress={showCloseTimePicker}
-								style={styles.rowInput}
-							>
-								<View style={styles.timeRow}>
-									<TextInput
-										style={{
-											color: colors.dark,
-										}}
-										editable={false}
-										maxLength={50}
-										value={
-											isCloseTime
-												? isCloseTime.Hours + ':' + isCloseTime.Minutes
-												: 'Select Time'
-										}
-									/>
-									<Icon
-										name="clock-o"
-										style={{ paddingVertical: 10 }}
-										color={colors.dark}
-										size={20}
-									/>
-								</View>
-							</TouchableOpacity>
-						</View>
-					</View>
-
-					<DateTimePickerModal
-						isVisible={isOpenTimePickerVisible}
-						mode="time"
-						minuteInterval={30}
-						onConfirm={handleOpenTimeConfirm}
-						onCancel={hideOpenTimePicker}
-					/>
-
-					<DateTimePickerModal
-						isVisible={isCloseTimePickerVisible}
-						mode="time"
-						minuteInterval={30}
-						onConfirm={handleCloseTimeConfirm}
-						onCancel={hideCloseTimePicker}
-					/>
-					<Text style={styles.text}>Location</Text>
-					<TextInput
-						style={styles.textInput}
-						placeholder={'e.g. G-9, Lane 3, Islamabad '}
-						maxLength={50}
-						onChangeText={(text) => setLocation(text)}
-						value={location}
-					/>
-
-					<View style={styles.mapContainer}>
-						<MapView
-							provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-							style={[styles.map, { marginBottom: getmarginBottom }]}
-							region={{
-								latitude: getCoordinate.latitude,
-								longitude: getCoordinate.longitude,
-								latitudeDelta: getCoordinate.latitudeDelta,
-								longitudeDelta: getCoordinate.longitudeDelta,
-							}}
-							showsUserLocation={true}
-							showsMyLocationButton={true}
-							onMapReady={() => {
-								setMarginBottom(0);
-							}}
-							onRegionChangeComplete={(region) => onChangeLocation(region)}
-						></MapView>
-						<View
-							style={{
-								top: '50%',
-								left: '50%',
-								marginLeft: -24,
-								marginTop: -40,
-								position: 'absolute',
-							}}
+						<Text style={styles.text}>Email</Text>
+						<TextInput
+							style={styles.textInput}
+							placeholder={'e.g. abc@gmail.com'}
+							maxLength={50}
+							onChangeText={(text) => setEmail(text)}
+							value={email}
+						/>
+						<Text style={styles.text}>Phone no.</Text>
+						<TextInput
+							style={styles.textInput}
+							placeholder={'+92'}
+							keyboardType={'numeric'}
+							maxLength={13}
+							minLength={11}
+							onChangeText={(text) => setPhone(text)}
+							value={phone}
+						/>
+						<Text
+							style={[
+								styles.text,
+								{
+									fontSize: 20,
+									fontWeight: 'bold',
+									marginTop: 30,
+									marginBottom: 15,
+								},
+							]}
 						>
-							<Image
-								style={{ height: 40, width: 40 }}
-								source={require('../../assets/icons/pointer.png')}
-							/>
+							Salon Details
+						</Text>
+						<Text style={styles.text}>Shop/Saloon Name</Text>
+						<TextInput
+							style={styles.textInput}
+							placeholder={'e.g. HairoSol'}
+							maxLength={50}
+							onChangeText={(text) => setSalonName(text)}
+							value={salonName}
+						/>
+						<View style={styles.row}>
+							<View style={styles.rowInput}>
+								<Text style={styles.text}>Opening Time</Text>
+								<TouchableOpacity
+									onPress={showOpenTimePicker}
+									style={styles.rowInput}
+								>
+									<View style={styles.timeRow}>
+										<TextInput
+											style={{
+												color: colors.dark,
+											}}
+											editable={false}
+											maxLength={50}
+											value={
+												isOpenTime
+													? isOpenTime.Hours + ':' + isOpenTime.Minutes
+													: 'Select Time'
+											}
+										/>
+										<Icon
+											name="clock-o"
+											style={{ paddingVertical: 10 }}
+											color={colors.dark}
+											size={20}
+										/>
+									</View>
+								</TouchableOpacity>
+							</View>
+							<View style={styles.rowInput}>
+								<Text style={styles.text}>Closing Time</Text>
+								<TouchableOpacity
+									onPress={showCloseTimePicker}
+									style={styles.rowInput}
+								>
+									<View style={styles.timeRow}>
+										<TextInput
+											style={{
+												color: colors.dark,
+											}}
+											editable={false}
+											maxLength={50}
+											value={
+												isCloseTime
+													? isCloseTime.Hours + ':' + isCloseTime.Minutes
+													: 'Select Time'
+											}
+										/>
+										<Icon
+											name="clock-o"
+											style={{ paddingVertical: 10 }}
+											color={colors.dark}
+											size={20}
+										/>
+									</View>
+								</TouchableOpacity>
+							</View>
 						</View>
-					</View>
-					<LinearGradient
-						colors={[colors.orange, colors.red]}
-						style={styles.button}
-					>
-						<TouchableOpacity
-							style={{ width: '100%', alignItems: 'center' }}
-							onPress={update}
+
+						<DateTimePickerModal
+							isVisible={isOpenTimePickerVisible}
+							mode="time"
+							minuteInterval={30}
+							onConfirm={handleOpenTimeConfirm}
+							onCancel={hideOpenTimePicker}
+						/>
+
+						<DateTimePickerModal
+							isVisible={isCloseTimePickerVisible}
+							mode="time"
+							minuteInterval={30}
+							onConfirm={handleCloseTimeConfirm}
+							onCancel={hideCloseTimePicker}
+						/>
+						<Text style={styles.text}>Location</Text>
+						<TextInput
+							style={styles.textInput}
+							placeholder={'e.g. G-9, Lane 3, Islamabad '}
+							maxLength={50}
+							onChangeText={(text) => setLocation(text)}
+							value={location}
+						/>
+
+						<View style={styles.mapContainer}>
+							<MapView
+								provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+								style={[styles.map, { marginBottom: getmarginBottom }]}
+								region={{
+									latitude: getCoordinate.latitude,
+									longitude: getCoordinate.longitude,
+									latitudeDelta: getCoordinate.latitudeDelta,
+									longitudeDelta: getCoordinate.longitudeDelta,
+								}}
+								showsUserLocation={true}
+								showsMyLocationButton={true}
+								onMapReady={() => {
+									setMarginBottom(0);
+								}}
+								onRegionChangeComplete={(region) => onChangeLocation(region)}
+							></MapView>
+							<View
+								style={{
+									top: '50%',
+									left: '50%',
+									marginLeft: -24,
+									marginTop: -40,
+									position: 'absolute',
+								}}
+							>
+								<Image
+									style={{ height: 40, width: 40 }}
+									source={require('../../assets/icons/pointer.png')}
+								/>
+							</View>
+						</View>
+						<LinearGradient
+							colors={[colors.orange, colors.red]}
+							style={styles.button}
 						>
-							<Text style={styles.textBtn}>Save</Text>
-						</TouchableOpacity>
-					</LinearGradient>
+							<TouchableOpacity
+								style={{ width: '100%', alignItems: 'center' }}
+								onPress={update}
+							>
+								<Text style={styles.textBtn}>Save</Text>
+							</TouchableOpacity>
+						</LinearGradient>
+					</View>
 				</View>
 			)}
 		</ScrollView>
