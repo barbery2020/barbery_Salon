@@ -12,39 +12,53 @@ import ImagePicker from 'react-native-image-picker';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+import LoadingIndicator from '../../components/LoadingIndicator';
 import ImageGalleryCard from '../../components/ImageGalleryCard';
 import colors from '../../styles/colors';
 
-const photosList = [
-	{
-		id: 1,
-		uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
-	},
-	{
-		id: 2,
-		uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
-	},
-	{
-		id: 3,
-		uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
-	},
-];
+import { connect } from 'react-redux';
+import {
+	getCollection,
+	addPicture,
+	deletePicture,
+} from '../../redux/actions/galleryAction';
 
-export default function GalleryScreen(props) {
-	const [imageIndex, setImageIndex] = useState(0);
+function GalleryScreen({
+	navigation: { navigate },
+	collection,
+	getCollection,
+	addPicture,
+	deletePicture,
+	loading,
+}) {
+	const [apiMage, setApiMage] = useState({});
+	const [imagePicked, setImagePicked] = useState();
 	const [visible, setIsVisible] = useState(false);
 	const [photos, setPhotos] = useState([]);
+	const [imageIndex, setImageIndex] = useState(0);
 	const columns = 4;
 
 	useEffect(() => {
-		setPhotos(photosList);
+		getCollection();
+		console.log(collection);
+		return () => {};
 	}, []);
+	// +(
+	// useEffect(() => {
+	// 	setPhotos(photosList);
+	// }, []);
 
-	const deleteHandle = (id) => {
-		console.log(id + ' clicked');
-		const updatedPhotoList = photos.filter((photo) => photo.id !== id);
-		setPhotos(updatedPhotoList);
-	};
+	// const deleteHandle = (id) => {
+	// 	console.log(id + ' clicked');
+	// 	const updatedPhotoList = photos.filter((photo) => photo.id !== id);
+	// 	setPhotos(updatedPhotoList);
+	// };
+
+	// useEffect(() => {
+	// 	addPicture({ picture: apiMage });
+	// 	return () => {};
+	// }, [apiMage]);
+	// );
 
 	const selectFile = () => {
 		var options = {
@@ -56,44 +70,44 @@ export default function GalleryScreen(props) {
 		};
 
 		ImagePicker.showImagePicker(options, (res) => {
-			// console.log('Response = ', res);
-
 			if (res.didCancel) {
 				console.log('User cancelled image picker');
 			} else if (res.error) {
 				console.log('ImagePicker Error: ', res.error);
 			} else {
-				const newImg = {
-					id: uuidv4(),
-					uri: res.uri,
-				};
-				console.log(newImg);
-				setPhotos([...photos, newImg]);
-				console.log(photos);
+				// setApiMage({ type: res.type, data: res.data });
+				// const uri = `data:${res.type};base64,${res.data}`;
+				// setImagePicked(uri);
+				addPicture({ picture: { type: res.type, data: res.data } });
 			}
 		});
 	};
 
 	return (
 		<View style={styles.screen}>
-			<FlatList
-				style={{ flex: 1 }}
-				numColumns={columns}
-				showsVerticalScrollIndicator={false}
-				showsHorizontalScrollIndicator={false}
-				data={photos}
-				keyExtractor={(photo) => photo.id.toString()}
-				renderItem={({ item, index }) => (
-					<ImageGalleryCard
-						image={item.uri}
-						onPress={() => {
-							setIsVisible(true);
-							setImageIndex(index);
-						}}
-						onDelete={() => deleteHandle(item.id)}
-					/>
-				)}
-			/>
+			{loading && <LoadingIndicator />}
+			{!loading && (
+				<FlatList
+					style={{ flex: 1 }}
+					numColumns={columns}
+					showsVerticalScrollIndicator={false}
+					showsHorizontalScrollIndicator={false}
+					data={collection}
+					keyExtractor={(picture, index) => index.toString()}
+					renderItem={({ item, index }) => (
+						<ImageGalleryCard
+							image={`data:${item?.picture?.type};base64,${item?.picture?.data}`}
+							onPress={() => {
+								setIsVisible(true);
+								setImageIndex(index);
+							}}
+							onDelete={() => {
+								deletePicture({ _id: item._id });
+							}}
+						/>
+					)}
+				/>
+			)}
 			<LinearGradient
 				colors={[colors.orange, colors.red]}
 				style={[styles.button]}
@@ -106,11 +120,10 @@ export default function GalleryScreen(props) {
 				</TouchableOpacity>
 			</LinearGradient>
 			<ImageView
-				images={photos}
+				images={collection}
 				imageIndex={imageIndex}
 				visible={visible}
 				onRequestClose={() => setIsVisible(false)}
-				onLongPress={() => console.log('long pressed')}
 			/>
 		</View>
 	);
@@ -143,3 +156,12 @@ const styles = StyleSheet.create({
 		height: 40,
 	},
 });
+
+const mapStateToProps = ({ galleryReducer: { collection, loading } }) => ({
+	collection,
+	loading,
+});
+
+const mapActionToProps = { getCollection, addPicture, deletePicture };
+
+export default connect(mapStateToProps, mapActionToProps)(GalleryScreen);

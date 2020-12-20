@@ -7,6 +7,7 @@ import mainRecords from './reducers/mainRecords';
 import serviceReducer from './reducers/serviceReducer';
 import packageReducer from './reducers/packageReducer';
 import specialistReducer from './reducers/specialistReducer';
+import galleryReducer from './reducers/galleryReducer';
 
 const config = {
 	key: 'root',
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	serviceReducer,
 	packageReducer,
 	specialistReducer,
+	galleryReducer,
 });
 
 export default persistReducer(config, rootReducer);
