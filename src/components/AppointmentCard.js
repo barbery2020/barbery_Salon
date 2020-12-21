@@ -9,7 +9,7 @@ import {
 
 import colors from '../styles/colors';
 
-function Card({ title, subTitle, time, status, image, selectedDate, onPress }) {
+function Card({ title, subTitle, time, status, image, onPress }) {
 	// const getStatus = (status) => {
 	// 	if (status === 'Completed') return false;
 	// 	return true;

@@ -125,7 +125,7 @@ export default function AppointmentDetailScreen({
 
 				{item?.review && (
 					<View style={styles.reviewCard}>
-						<View style={{ paddingVertical: 30 }}>
+						<View style={{ paddingVertical: 10 }}>
 							<Separator />
 						</View>
 						<ReviewCard
