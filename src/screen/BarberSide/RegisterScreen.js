@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Text,
 	TextInput,
@@ -10,18 +10,18 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 
+import LoadingIndicator from '../../components/LoadingIndicator';
 import colors from '../../styles/colors';
 import { connect } from 'react-redux';
 import { signup } from '../../redux/actions/user';
-import { useEffect } from 'react';
 
-function RegisterScreen({ navigation: { navigate }, token, signup }) {
-	const [firstName, setFirstName] = React.useState('');
-	const [lastName, setLastName] = React.useState('');
-	const [email, setEmail] = React.useState('');
-	const [phone, setPhone] = React.useState('');
-	const [password, setPassword] = React.useState('');
-	const [conPassword, setConPassword] = React.useState('');
+function RegisterScreen({ navigation: { navigate }, token, loading, signup }) {
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [email, setEmail] = useState('');
+	const [phone, setPhone] = useState('');
+	const [password, setPassword] = useState('');
+	const [conPassword, setConPassword] = useState('');
 
 	useEffect(() => {
 		if (token) {
@@ -32,6 +32,7 @@ function RegisterScreen({ navigation: { navigate }, token, signup }) {
 
 	return (
 		<View style={styles.container}>
+			{loading && <LoadingIndicator />}
 			<LinearGradient
 				colors={[colors.orange, colors.red]}
 				style={styles.header}
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ user: { token } }) => ({ token });
+const mapStateToProps = ({ user: { token, loading } }) => ({ token, loading });
 
 const mapActionToProps = { signup };
 

@@ -31,8 +31,6 @@ function GalleryScreen({
 	deletePicture,
 	loading,
 }) {
-	const [apiMage, setApiMage] = useState({});
-	const [imagePicked, setImagePicked] = useState();
 	const [visible, setIsVisible] = useState(false);
 	const [photos, setPhotos] = useState([]);
 	const [imageIndex, setImageIndex] = useState(0);
@@ -40,9 +38,21 @@ function GalleryScreen({
 
 	useEffect(() => {
 		getCollection();
-		console.log(collection);
 		return () => {};
 	}, []);
+	useEffect(() => {
+		const photosList = collection?.map(({ picture }) => ({
+			uri: `data:${picture?.type};base64,${picture?.data}`,
+		}));
+		setPhotos(photosList);
+		return () => {};
+	}, [collection]);
+
+	// useEffect(() => {
+	// 	if (!visible) setIsVisible(true);
+	// 	return () => {};
+	// }, [imageIndex]);
+
 	// +(
 	// useEffect(() => {
 	// 	setPhotos(photosList);
@@ -98,8 +108,8 @@ function GalleryScreen({
 						<ImageGalleryCard
 							image={`data:${item?.picture?.type};base64,${item?.picture?.data}`}
 							onPress={() => {
-								setIsVisible(true);
 								setImageIndex(index);
+								setIsVisible(true);
 							}}
 							onDelete={() => {
 								deletePicture({ _id: item._id });
@@ -120,7 +130,7 @@ function GalleryScreen({
 				</TouchableOpacity>
 			</LinearGradient>
 			<ImageView
-				images={collection}
+				images={photos}
 				imageIndex={imageIndex}
 				visible={visible}
 				onRequestClose={() => setIsVisible(false)}

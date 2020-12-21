@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Text,
 	TextInput,
@@ -15,11 +15,10 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 
 import { connect } from 'react-redux';
 import { login } from '../../redux/actions/user';
-import { useEffect } from 'react';
 
 function LoginScreen({ navigation: { navigate }, token, loading, login }) {
-	const [email, setEmail] = React.useState('tuseeq@gmail.com');
-	const [password, setPassword] = React.useState('123456');
+	const [email, setEmail] = useState('tuseeq@gmail.com');
+	const [password, setPassword] = useState('123456');
 
 	useEffect(() => {
 		if (token) {

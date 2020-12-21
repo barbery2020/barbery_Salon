@@ -301,6 +301,8 @@ function BarberAbout({ user, updateUser, loading }) {
 						<Text style={styles.text}>Email</Text>
 						<TextInput
 							style={styles.textInput}
+							autoCapitalize="none"
+							keyboardType="email-address"
 							placeholder={'e.g. abc@gmail.com'}
 							maxLength={50}
 							onChangeText={(text) => setEmail(text)}
@@ -310,7 +312,7 @@ function BarberAbout({ user, updateUser, loading }) {
 						<TextInput
 							style={styles.textInput}
 							placeholder={'+92'}
-							keyboardType={'numeric'}
+							keyboardType={'phone-pad'}
 							maxLength={13}
 							minLength={11}
 							onChangeText={(text) => setPhone(text)}
