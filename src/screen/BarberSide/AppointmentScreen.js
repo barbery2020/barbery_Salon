@@ -11,9 +11,13 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import { Icon } from 'react-native-elements/FontAwesome';
+import { useIsFocused } from '@react-navigation/native';
 
+import LoadingIndicator from '../../components/LoadingIndicator';
 import Card from '../../components/AppointmentCard';
 import colors from '../../styles/colors';
+import axios from '../../../config';
+import { useEffect } from 'react';
 
 const appointment1 = [
 	{
@@ -153,69 +157,47 @@ function ActiveAppointmentsScreen(props) {
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [isDate, setDate] = useState('Select Date');
 
-	const showDatePicker = () => {
-		setDatePickerVisibility(true);
-	};
+	// const showDatePicker = () => {
+	// 	setDatePickerVisibility(true);
+	// };
 
-	const hideDatePicker = () => {
-		setDatePickerVisibility(false);
-	};
+	// const hideDatePicker = () => {
+	// 	setDatePickerVisibility(false);
+	// };
 
-	const handleConfirm = (selectedDate) => {
-		// console.warn('Selected Date: ', selectedDate);
-		const day = selectedDate.getDate();
-		const month = selectedDate.getMonth();
-		const year = selectedDate.getFullYear();
-		const date = day + '/' + month + '/' + year;
-		setDate(date);
-		console.warn('Selected Date: ', date);
-		hideDatePicker();
-	};
+	// const handleConfirm = (selectedDate) => {
+	// 	// console.warn('Selected Date: ', selectedDate);
+	// 	const day = selectedDate.getDate();
+	// 	const month = selectedDate.getMonth();
+	// 	const year = selectedDate.getFullYear();
+	// 	const date = day + '/' + month + '/' + year;
+	// 	setDate(date);
+	// 	console.warn('Selected Date: ', date);
+	// 	hideDatePicker();
+	// };
 
 	return (
 		<View style={styles.screen}>
-			<View style={styles.row}>
-				<TouchableOpacity onPress={showDatePicker} style={styles.rowInput}>
-					<View style={styles.textInput}>
-						<TextInput
-							style={{
-								fontSize: 16,
-								color: colors.dark,
-								paddingVertical: 8,
-							}}
-							editable={false}
-							maxLength={50}
-							value={isDate}
-						/>
-						<Icon
-							name="calendar"
-							style={{ paddingVertical: 8 }}
-							color={colors.dark}
-							size={20}
-						/>
-					</View>
-				</TouchableOpacity>
-			</View>
-			<DateTimePickerModal
-				isVisible={isDatePickerVisible}
-				mode="date"
-				onConfirm={handleConfirm}
-				onCancel={hideDatePicker}
-			/>
+			{props?.loading && <LoadingIndicator />}
 			<FlatList
 				contentContainerStyle={{ paddingBottom: 15 }}
 				style={styles.flatScreen}
-				data={appointment1}
-				keyExtractor={(appointment1) => appointment1.id.toString()}
+				data={props?.appointment}
+				keyExtractor={(appointment) => appointment.id.toString()}
 				renderItem={({ item }) => (
 					<Card
-						title={item.name}
+						title={item.title}
 						subTitle={'Rs.' + item.price}
-						time={item.time}
+						time={`${item.date} / ${item.time}`}
 						status={item.status}
 						image={item.image}
 						selectedDate={isDate}
-						onPress={() => props.navigation.navigate('Appointment Details')}
+						onPress={() =>
+							props.navigation.navigate('Appointment Details', {
+								item,
+								update: props?.update,
+							})
+						}
 					/>
 				)}
 			/>
@@ -223,22 +205,25 @@ function ActiveAppointmentsScreen(props) {
 	);
 }
 
-function CompletedAppointmentsScreen() {
+function CompletedAppointmentsScreen(props) {
 	return (
 		<View style={styles.screen}>
+			{props?.loading && <LoadingIndicator />}
 			<FlatList
 				contentContainerStyle={{ paddingBottom: 15 }}
 				style={styles.flatScreen}
-				data={appointment2}
-				keyExtractor={(appointment2) => appointment2.id.toString()}
+				data={props?.appointment}
+				keyExtractor={(appointment) => appointment.id.toString()}
 				renderItem={({ item }) => (
 					<Card
-						title={item.name}
+						title={item.title}
 						subTitle={'Rs.' + item.price}
-						time={item.time}
+						time={`${item.date} / ${item.time}`}
 						status={item.status}
 						image={item.image}
-						onPress={() => props.navigation.navigate('Appointment Details')}
+						onPress={() =>
+							props.navigation.navigate('Appointment Details', { item })
+						}
 					/>
 				)}
 			/>
@@ -249,6 +234,46 @@ function CompletedAppointmentsScreen() {
 const Tab = createMaterialBottomTabNavigator();
 
 export default function AppointmentScreen(props) {
+	const [appointments, setAppointments] = useState([]);
+	const [completed, setCompleted] = useState([]);
+	const [active, setActive] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	const isFocused = useIsFocused();
+
+	useEffect(() => {
+		if (isFocused) {
+			setLoading(true);
+			axios.get('/appointment/barber').then((res) => {
+				setAppointments(
+					res.data.map((SS) => ({
+						title: SS?.user?.firstName,
+						image: `data:${SS?.user?.image?.type};base64,${SS?.user?.image?.data}`,
+						status: SS?.status,
+						price: SS?.bill,
+						time: SS?.timing,
+						date: SS?.date?.split('T')[0],
+						id: SS?._id,
+						specialist: SS?.specialist,
+						services: SS?.services,
+						promo: SS?.promo,
+						bill: SS?.bill,
+						review: SS?.review,
+					})),
+				);
+				setLoading(false);
+			});
+		}
+		return () => {};
+	}, [isFocused]);
+
+	useEffect(() => {
+		setActive(appointments.filter((val) => val?.status));
+		setCompleted(appointments.filter((val) => !val?.status));
+
+		return () => {};
+	}, [appointments]);
+
 	return (
 		<Tab.Navigator
 			initialRouteName="Active"
@@ -258,24 +283,40 @@ export default function AppointmentScreen(props) {
 		>
 			<Tab.Screen
 				name="Active"
-				component={ActiveAppointmentsScreen}
+				// component={ActiveAppointmentsScreen}
 				options={{
 					tabBarLabel: 'Active',
 					tabBarIcon: ({ color }) => (
 						<Icon name="history" color={color} size={20} />
 					),
 				}}
-			/>
+			>
+				{(props) => (
+					<ActiveAppointmentsScreen
+						{...props}
+						appointment={active}
+						loading={loading}
+					/>
+				)}
+			</Tab.Screen>
 			<Tab.Screen
 				name="Completed"
-				component={CompletedAppointmentsScreen}
+				// component={CompletedAppointmentsScreen}
 				options={{
 					tabBarLabel: 'Completed',
 					tabBarIcon: ({ color }) => (
 						<Icon name="check" color={color} size={20} />
 					),
 				}}
-			/>
+			>
+				{(props) => (
+					<CompletedAppointmentsScreen
+						{...props}
+						appointment={completed}
+						loading={loading}
+					/>
+				)}
+			</Tab.Screen>
 		</Tab.Navigator>
 	);
 }

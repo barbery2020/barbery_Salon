@@ -1,106 +1,144 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { LogBox } from 'react-native';
 import {
 	StyleSheet,
 	Text,
 	View,
 	Image,
+	ScrollView,
+	SafeAreaView,
 	FlatList,
 	TouchableOpacity,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from '../../../config';
+import LoadingIndicator from '../../components/LoadingIndicator';
+import ReviewCard from '../../components/ReviewCard';
 
 import Separator from '../../components/Separator';
 
 import colors from '../../styles/colors';
 
-export default function AppoinmentDetailScreen() {
-	const [isCompleted, setCompleted] = React.useState(false);
+export default function AppointmentDetailScreen({
+	route: {
+		params: { item: itm },
+	},
+}) {
+	const [loading, setLoading] = React.useState(false);
+	const [item, setItem] = React.useState(itm);
 
-	const customer = [
-		{
-			image: require('../../assets/images/image_1.jpg'),
-			name: 'Masroor Ahmad',
-			time: 'Oct 23, 2020 4:50 PM',
-			package: 'nill',
-			promo: 'nill',
-			specialist: 'Humza Jameel',
-			specialistImage: require('../../assets/images/image_3.jpg'),
-		},
-	];
-	const services = [
-		{
-			id: 1,
-			service: 'hair cut',
-			price: 250,
-		},
-		{
-			id: 2,
-			service: 'shave',
-			price: 200,
-		},
-		{
-			id: 3,
-			service: "Men's service",
-			price: 400,
-		},
-	];
-	console.log(customer[0].name);
+	const markAsCompleted = () => {
+		setLoading(true);
+		axios.put('/appointment/' + item?.id, { status: false }).then((res) => {
+			console.log('response', res.data);
+			setItem({
+				title: res.data?.user?.firstName,
+				image: `data:${res.data?.user?.image?.type};base64,${res.data?.user?.image?.data}`,
+				status: res.data?.status,
+				price: res.data?.bill,
+				time: res.data?.timing,
+				date: res.data?.date?.split('T')[0],
+				id: res.data?._id,
+				specialist: res.data?.specialist,
+				services: res.data?.services,
+				promo: res.data?.promo,
+				bill: res.data?.bill,
+				review: res.data?.review,
+			});
+			setLoading(false);
+		});
+	};
+
+	useEffect(() => {
+		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+	}, []);
 
 	return (
-		<View style={styles.screen}>
-			<View style={styles.cardPerson}>
-				<Image style={styles.image} source={customer[0].image} />
-				<View style={styles.detailsContainer}>
-					<Text style={styles.title}>{customer[0].name}</Text>
-					<Text style={styles.time}>{customer[0].time}</Text>
-				</View>
-			</View>
-			<View style={styles.servicesDetails}>
-				<View style={styles.flatItemHeading}>
-					<Text style={styles.heading}>Services</Text>
-					<Text style={styles.heading}>Price</Text>
-				</View>
-				<View style={styles.card}>
-					<FlatList
-						style={styles.flatScreen}
-						data={services}
-						keyExtractor={(service) => service.id.toString()}
-						renderItem={({ item }) => (
-							<View style={styles.flatItem}>
-								<Text>{item.service}</Text>
-								<Text>{item.price}</Text>
-							</View>
-						)}
+		<>
+			{loading && <LoadingIndicator />}
+			<ScrollView style={styles.screen}>
+				<View style={styles.cardPerson}>
+					<Image
+						style={styles.image}
+						source={{
+							uri: item?.image,
+						}}
 					/>
+					<View style={styles.detailsContainer}>
+						<Text style={styles.title}>{item?.title}</Text>
+						<Text style={styles.time}>{`${item?.time} / ${item?.date}`}</Text>
+					</View>
 				</View>
-				<Separator />
-				<View style={styles.flatItem}>
-					<Text style={styles.heading}>Promo</Text>
-					<Text>-100</Text>
+				<View style={styles.servicesDetails}>
+					<View style={styles.flatItemHeading}>
+						<Text style={styles.heading}>Services</Text>
+						<Text style={styles.heading}>Price</Text>
+					</View>
+					<SafeAreaView style={styles.card}>
+						<FlatList
+							style={styles.flatScreen}
+							data={item?.services}
+							keyExtractor={(service) => service._id.toString()}
+							renderItem={({ item }) => (
+								<View style={styles.flatItem}>
+									<Text>{item?.name}</Text>
+									<Text>{item?.cost}</Text>
+								</View>
+							)}
+						/>
+					</SafeAreaView>
+					<View style={{ paddingHorizontal: 25, paddingVertical: 10 }}>
+						<Separator />
+					</View>
+					<View style={styles.flatItem}>
+						<Text style={styles.heading}>Promo</Text>
+						<Text>-{item?.promo != 0 && item?.promo}</Text>
+					</View>
+					<View style={styles.flatItem}>
+						<Text style={styles.heading}>Total</Text>
+						<Text>{item?.bill}</Text>
+					</View>
 				</View>
-				<View style={styles.flatItem}>
-					<Text style={styles.heading}>Total</Text>
-					<Text>750</Text>
+				<View style={styles.cardPerson}>
+					<Image
+						style={styles.image}
+						source={{
+							uri: `data:${item?.specialist?.picture?.type};base64,${item?.specialist?.picture?.data}`,
+						}}
+					/>
+					<View style={styles.detailsContainer}>
+						<Text style={styles.title}>{item?.specialist?.name}</Text>
+						<Text style={styles.time}>specialist</Text>
+					</View>
 				</View>
-			</View>
-			<View style={styles.cardPerson}>
-				<Image style={styles.image} source={customer[0].specialistImage} />
-				<View style={styles.detailsContainer}>
-					<Text style={styles.title}>{customer[0].specialist}</Text>
-					<Text style={styles.time}>specialist</Text>
-				</View>
-			</View>
-			{!isCompleted ? (
-				<LinearGradient
-					colors={[colors.orange, colors.red]}
-					style={[styles.button]}
-				>
-					<TouchableOpacity onPress={() => setCompleted(true)}>
-						<Text style={styles.textBtn}>Mark Complete</Text>
-					</TouchableOpacity>
-				</LinearGradient>
-			) : null}
-		</View>
+				{item?.status && (
+					<LinearGradient
+						colors={[colors.orange, colors.red]}
+						style={[styles.button]}
+					>
+						<TouchableOpacity onPress={() => markAsCompleted()}>
+							<Text style={styles.textBtn}>Mark Complete</Text>
+						</TouchableOpacity>
+					</LinearGradient>
+				)}
+
+				{item?.review && (
+					<View style={styles.reviewCard}>
+						<View style={{ paddingVertical: 30 }}>
+							<Separator />
+						</View>
+						<ReviewCard
+							title={item?.title}
+							image={item?.image}
+							time={item?.review?.date?.split('T')[0]}
+							text={item?.review?.userReview}
+							rated={Number(item?.review?.stars)}
+						/>
+					</View>
+				)}
+			</ScrollView>
+		</>
 	);
 }
 
@@ -112,6 +150,10 @@ const styles = StyleSheet.create({
 	card: {
 		backgroundColor: colors.white,
 		flexDirection: 'row',
+	},
+	reviewCard: {
+		flex: 1,
+		// marginTop: 30,
 	},
 	cardPerson: {
 		backgroundColor: colors.white,

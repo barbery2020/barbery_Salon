@@ -27,6 +27,7 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 
 import { connect } from 'react-redux';
 import { getUser, updateUser } from '../../redux/actions/mainRecords';
+import axios from '../../../config';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -473,13 +474,30 @@ function BarberAbout({ user, updateUser, loading }) {
 }
 
 function barberReviews(props) {
+	const [reviews, setReviews] = useState([]);
+
+	useEffect(() => {
+		axios.get('/barber/review').then((res) => {
+			setReviews(
+				res.data?.map((val) => ({
+					id: val?._id,
+					name: val?.user?.firstName,
+					time: val?.review?.date?.split('T')[0],
+					image: `data:${val?.user?.image?.type};base64,${val?.user?.image?.data}`,
+					text: val?.review?.userReview,
+					rated: Number(val?.review?.stars),
+				})),
+			);
+		});
+		return () => {};
+	}, []);
 	return (
 		<View style={styles.screen}>
 			<FlatList
 				contentContainerStyle={{ paddingBottom: 15 }}
 				style={styles.flatScreen}
-				data={appointment1}
-				keyExtractor={(appointment1) => appointment1.id.toString()}
+				data={reviews}
+				keyExtractor={(review) => review.id.toString()}
 				renderItem={({ item }) => (
 					<ReviewCard
 						title={item.name}

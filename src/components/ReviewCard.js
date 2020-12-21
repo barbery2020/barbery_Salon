@@ -19,7 +19,7 @@ function ReviewCard({ title, text, rated, time, image }) {
 			// onPress={onPress}
 		>
 			<View style={styles.card}>
-				<Image style={styles.image} source={image} />
+				<Image style={styles.image} source={{ uri: image }} />
 				<View style={{ flex: 1 }}>
 					<View style={styles.detailsContainer}>
 						<View style={styles.leftContainer}>
