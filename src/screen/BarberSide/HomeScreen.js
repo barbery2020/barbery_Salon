@@ -21,7 +21,7 @@ import { getUser, getRecords } from '../../redux/actions/mainRecords';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomeScreen({
-	navigation: { goBack },
+	navigation: { goBack, navigate },
 	user,
 	records,
 	loading,
@@ -78,7 +78,7 @@ function HomeScreen({
 						style={{ width: '100%', alignItems: 'center' }}
 						onPress={() => {
 							logout();
-							goBack();
+							navigate('Welcome');
 							AsyncStorage.removeItem('@Token');
 						}}
 					>

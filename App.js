@@ -10,11 +10,28 @@ import colors from './src/styles/colors';
 
 // axios.defaults.baseURL = 'http://barbery.herokuapp.com/api';
 
-function App({ token }) {
+// import Pusher from 'pusher-js/react-native';
+// Pusher.logToConsole = true;
+
+// const pusher = new Pusher('c40fc88b49979eb832b7', {
+// 	cluster: 'ap2',
+// });
+
+function App({ user }) {
 	// if (token) {
 	// 	console.log('object');
 	// 	setAuthToken(token);
 	// }
+	// if (user) {
+	// const channel = pusher.subscribe('notification');
+	// channel.bind('appointment', (data) => {
+	// 	console.log('appointment', data);
+	// });
+	// channel.bind('review', (data) => {
+	// 	console.log('review', data);
+	// });
+	// // }
+
 	return (
 		<>
 			<StatusBar backgroundColor={colors.red} />
@@ -24,6 +41,6 @@ function App({ token }) {
 	// return <Check />;
 }
 
-const mapStateToProps = ({ user: { token } }) => ({ token });
+const mapStateToProps = ({ mainRecords: { user } }) => ({ user });
 
 export default connect(mapStateToProps)(App);

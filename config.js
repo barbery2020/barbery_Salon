@@ -11,6 +11,7 @@ import Axios from 'axios';
 
 const axios = Axios.create({
 	baseURL: 'http://barbery.herokuapp.com/api',
+	// baseURL: 'http://192.168.1.100:5000/api',
 });
 
 axios.interceptors.request.use(
