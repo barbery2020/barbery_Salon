@@ -8,6 +8,12 @@ target 'barbery' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'barberyTests' do
     inherit! :complete
     # Pods for testing
